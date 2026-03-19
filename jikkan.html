@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>十干体質チェック | KAMPO STAND</title>
+  <meta property="og:title" content="十干体質チェック | KAMPO STAND">
+  <meta property="og:description" content="今の不調から、あなたに合う十干茶がわかります。">
+  <meta property="og:image" content="https://kampodesign3.netlify.app/panda_default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light only;
+      --sage:      #7a9e7e;
+      --sage-deep: #4a7350;
+      --sage-dark: #2e4d33;
+      --sage-mist: #e6ede5;
+      --sage-light:#c8dbc8;
+      --ink:       #2c2c2c;
+      --ink-soft:  #5a5a5a;
+      --muted:     #999;
+      --border:    #d8e2d6;
+      --white:     #fefefe;
+      --cream:     #faf8f4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ダークモード強制無効 */
+    @media (prefers-color-scheme: dark) {
+      html { filter: none !important; }
+      body { background: var(--cream) !important; color: var(--ink) !important; }
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(ellipse at 20% 20%, rgba(122,158,126,0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(160,128,96,0.06) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ヘッダー */
+    header {
+      position: relative;
+      z-index: 10;
+      background: rgba(254,254,254,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      text-align: center;
+    }
+    .header-sub { font-size: 0.6rem; letter-spacing: 0.25em; color: var(--sage); margin-bottom: 3px; }
+    header h1 { font-family: 'Shippori Mincho', serif; font-size: 1rem; color: var(--sage-dark); letter-spacing: 0.2em; font-weight: 600; }
+
+    #app {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      max-width: 460px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 28px 18px 48px;
+    }
+
+    /* ======== イントロ ======== */
+    #intro { text-align: center; }
+    .intro-herb { display: flex; justify-content: center; gap: 6px; margin-bottom: 24px; font-size: 1.4rem; opacity: 0.7; }
+    .intro-badge { display: inline-block; font-size: 0.65rem; letter-spacing: 0.2em; color: var(--sage); border: 1px solid var(--sage-light); padding: 4px 14px; border-radius: 20px; margin-bottom: 20px; }
+    .intro-title { font-family: 'Shippori Mincho', serif; font-size: 1.45rem; color: var(--sage-dark); line-height: 1.7; margin-bottom: 16px; letter-spacing: 0.05em; }
+    .intro-divider { width: 32px; height: 1px; background: var(--sage-light); margin: 0 auto 16px; }
+    .intro-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 2; margin-bottom: 28px; }
+    .intro-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 28px; text-align: left; }
+    .intro-card-title { font-size: 0.72rem; letter-spacing: 0.15em; color: var(--sage); margin-bottom: 12px; }
+    .intro-steps { display: flex; flex-direction: column; gap: 10px; }
+    .intro-step { display: flex; align-items: flex-start; gap: 12px; }
+    .step-num { width: 22px; height: 22px; background: var(--sage-mist); color: var(--sage-deep); border-radius: 50%; font-size: 0.72rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 500; margin-top: 1px; }
+    .intro-step p { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.6; }
+    .start-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--sage-dark); color: var(--white); font-family: 'Shippori Mincho', serif; font-size: 1rem; padding: 16px 44px; border-radius: 50px; border: none; cursor: pointer; letter-spacing: 0.15em; box-shadow: 0 6px 20px rgba(46,77,51,0.22); transition: transform 0.15s; }
+    .start-btn:active { transform: scale(0.97); }
+
+    /* ======== クイズ ======== */
+    #quiz { display: none; }
+    .quiz-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .quiz-step-label { font-size: 0.7rem; color: var(--muted); letter-spacing: 0.12em; }
+    .quiz-gogyo-tag { font-size: 0.72rem; color: var(--sage-deep); background: var(--sage-mist); padding: 3px 10px; border-radius: 20px; letter-spacing: 0.08em; }
+    .progress-track { height: 2px; background: var(--border); border-radius: 2px; margin-bottom: 24px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--sage), var(--sage-deep)); border-radius: 2px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+    .check-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; margin-bottom: 16px; animation: fadeSlide 0.3s ease; }
+    @keyframes fadeSlide { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+    .gogyo-header { padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; }
+    .gogyo-header.ki    { background: linear-gradient(135deg, #2e4d33, #4a7350); }
+    .gogyo-header.hi    { background: linear-gradient(135deg, #7a2e2e, #a05050); }
+    .gogyo-header.tuchi { background: linear-gradient(135deg, #5a4520, #8a6a35); }
+    .gogyo-header.kane  { background: linear-gradient(135deg, #2e4050, #4a6080); }
+    .gogyo-header.mizu  { background: linear-gradient(135deg, #1e3550, #2e5580); }
+    .gogyo-title-group { display: flex; flex-direction: column; gap: 3px; }
+    .gogyo-char { font-family: 'Shippori Mincho', serif; font-size: 1.4rem; color: white; line-height: 1; }
+    .gogyo-sub { font-size: 0.68rem; color: rgba(255,255,255,0.75); letter-spacing: 0.08em; }
+    .gogyo-decor { font-size: 1.5rem; opacity: 0.4; }
+
+    .check-card-body { padding: 14px 16px; }
+    .yin-yang-section { margin-bottom: 12px; }
+    .section-label { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
+    .label-badge { font-size: 0.66rem; padding: 2px 9px; border-radius: 20px; letter-spacing: 0.08em; font-weight: 500; }
+    .label-yo { background: #fff3e0; color: #8a5a00; }
+    .label-in { background: #e8f0fe; color: #2a4a8a; }
+    .label-name { font-size: 0.76rem; color: var(--ink-soft); }
+    .symptom-list { display: flex; flex-direction: column; gap: 7px; }
+    .symptom-item { display: flex; align-items: center; gap: 11px; padding: 10px 13px; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.18s ease; -webkit-tap-highlight-color: transparent; background: var(--cream); }
+    .symptom-item.checked { border-color: var(--sage); background: var(--sage-mist); }
+    .check-circle { width: 19px; height: 19px; border: 1.5px solid var(--sage-light); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; transition: all 0.18s ease; background: var(--white); }
+    .symptom-item.checked .check-circle { border-color: var(--sage); background: var(--sage); }
+    .check-dot { width: 6px; height: 6px; border-radius: 50%; background: white; opacity: 0; transition: opacity 0.18s; }
+    .symptom-item.checked .check-dot { opacity: 1; }
+    .symptom-text { font-size: 0.86rem; line-height: 1.45; color: var(--ink); }
+    .section-divider { height: 1px; background: var(--border); margin: 13px 0; }
+    .skip-note { font-size: 0.72rem; color: var(--muted); text-align: center; margin-top: 12px; }
+
+    .nav-row { display: flex; gap: 10px; margin-top: 16px; }
+    .btn-back { flex: 0 0 72px; padding: 13px; border-radius: 50px; border: 1px solid var(--border); background: var(--white); color: var(--muted); font-size: 0.82rem; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; }
+    .btn-back:active { opacity: 0.6; }
+    .btn-forward { flex: 1; padding: 13px; border-radius: 50px; border: none; background: var(--sage-dark); color: var(--white); font-size: 0.9rem; font-weight: 500; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; box-shadow: 0 4px 14px rgba(46,77,51,0.2); letter-spacing: 0.08em; transition: transform 0.15s; }
+    .btn-forward:active { transform: scale(0.97); }
+
+    /* ======== 結果 ======== */
+    #result { display: none; }
+    .result-top { text-align: center; margin-bottom: 24px; }
+    .result-eyebrow { font-size: 0.65rem; letter-spacing: 0.25em; color: var(--sage); margin-bottom: 6px; }
+    .result-heading { font-family: 'Shippori Mincho', serif; font-size: 1.3rem; color: var(--sage-dark); letter-spacing: 0.1em; }
+
+    .panda-area { text-align: center; margin-bottom: 22px; }
+    .panda-area img { width: 160px; height: auto; }
+
+    .balance-msg { background: var(--white); border: 1px solid var(--border); border-radius: 18px; padding: 28px 20px; text-align: center; margin-bottom: 14px; }
+    .balance-icon { font-size: 2rem; margin-bottom: 12px; }
+    .balance-title { font-family: 'Shippori Mincho', serif; font-size: 1.1rem; color: var(--sage-dark); margin-bottom: 10px; }
+    .balance-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.8; }
+
+    .res-card { background: var(--white); border: 1px solid var(--border); border-radius: 18px; overflow: hidden; margin-bottom: 14px; }
+    .res-card-top { padding: 16px 18px 14px; }
+    .res-card-top.card-yo { background: linear-gradient(135deg, var(--sage-dark) 0%, var(--sage-deep) 100%); }
+    .res-card-top.card-in { background: var(--sage-mist); }
+    .res-badge { display: inline-block; font-size: 0.65rem; letter-spacing: 0.12em; padding: 3px 10px; border-radius: 20px; margin-bottom: 8px; }
+    .badge-yo { background: rgba(255,255,255,0.2); color: var(--white); }
+    .badge-in { background: var(--sage-light); color: var(--sage-dark); }
+    .res-char-group { display: flex; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+    .res-char { font-family: 'Shippori Mincho', serif; font-size: 2rem; line-height: 1; }
+    .char-yo { color: var(--white); }
+    .char-in { color: var(--sage-dark); }
+    .res-yomi { font-size: 0.68rem; letter-spacing: 0.1em; }
+    .yomi-yo { color: rgba(255,255,255,0.7); }
+    .yomi-in { color: var(--sage); }
+    .res-type { font-size: 0.78rem; }
+    .type-yo { color: rgba(255,255,255,0.85); }
+    .type-in { color: var(--sage-deep); }
+    .res-card-body { padding: 16px 18px; }
+    .res-desc { font-size: 0.82rem; color: var(--ink-soft); line-height: 1.8; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px dashed var(--border); }
+    .res-recom-label { font-size: 0.7rem; letter-spacing: 0.12em; color: var(--sage); margin-bottom: 6px; }
+    .res-recom-name { font-family: 'Shippori Mincho', serif; font-size: 0.95rem; color: var(--sage-dark); line-height: 1.6; margin-bottom: 14px; }
+    .tea-btn { display: block; text-align: center; padding: 12px; border-radius: 50px; font-size: 0.85rem; font-weight: 500; text-decoration: none; letter-spacing: 0.06em; transition: transform 0.15s, opacity 0.15s; }
+    .tea-btn:active { transform: scale(0.97); opacity: 0.85; }
+    .tea-btn-yo { background: var(--sage-dark); color: var(--white); box-shadow: 0 4px 14px rgba(46,77,51,0.2); }
+    .tea-btn-in { background: var(--white); color: var(--sage-deep); border: 1.5px solid var(--sage-light); }
+
+    .result-note { font-size: 0.75rem; color: var(--muted); text-align: center; line-height: 1.7; margin: 12px 0 20px; }
+
+    .close-btn { display: block; width: 100%; padding: 12px; border-radius: 50px; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 0.82rem; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; letter-spacing: 0.05em; margin-top: 8px; }
+    .close-btn:active { background: var(--sage-mist); }
+
+    footer { position: relative; z-index: 1; text-align: center; padding: 20px; font-size: 0.68rem; color: #bbb; letter-spacing: 0.25em; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-sub">Kampo Stand</div>
+  <h1>十干体質チェック</h1>
+</header>
+
+<div id="app">
+
+  <!-- イントロ -->
+  <div id="intro">
+    <div class="intro-herb">🌿 🌱 🍃</div>
+    <div class="intro-badge">Body &amp; Herb Check</div>
+    <div class="intro-title">今の自分に合う<br>十干茶を見つける</div>
+    <div class="intro-divider"></div>
+    <div class="intro-desc">気になる症状にチェックを入れてください。<br>あなたの今の状態に合ったお茶をお伝えします。</div>
+    <div class="intro-card">
+      <div class="intro-card-title">チェックの流れ</div>
+      <div class="intro-steps">
+        <div class="intro-step"><div class="step-num">1</div><p>五行ごとに症状が表示されます（全5ページ）</p></div>
+        <div class="intro-step"><div class="step-num">2</div><p>気になる症状にチェックしてください（複数可・なしのまま次へもOK）</p></div>
+        <div class="intro-step"><div class="step-num">3</div><p>チェックが多かった順にお茶を2本ご提案します</p></div>
+      </div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">はじめる　→</button>
+  </div>
+
+  <!-- クイズ -->
+  <div id="quiz">
+    <div class="quiz-meta">
+      <span class="quiz-step-label">STEP <span id="step-num">1</span> / 5</span>
+      <span class="quiz-gogyo-tag" id="step-gogyo"></span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:20%"></div>
+    </div>
+    <div id="card-container"></div>
+    <div class="nav-row">
+      <button class="btn-back" id="btn-prev" onclick="prevStep()">← 戻る</button>
+      <button class="btn-forward" id="btn-next" onclick="nextStep()">次へ →</button>
+    </div>
+  </div>
+
+  <!-- 結果 -->
+  <div id="result">
+    <div class="result-top">
+      <div class="result-eyebrow">Your Result</div>
+      <div class="result-heading">診断結果</div>
+    </div>
+    <div class="panda-area">
+      <img id="panda-img" src="" alt="">
+    </div>
+    <div class="balance-msg" id="balance-msg" style="display:none;">
+      <div class="balance-icon">🌿</div>
+      <div class="balance-title">今は体調が安定しています</div>
+      <div class="balance-desc">症状の偏りが見られません。<br>気になる変化が出てきたら、またチェックしてみてください。</div>
+    </div>
+    <div id="result-cards"></div>
+    <p class="result-note" id="result-note"></p>
+    <button class="close-btn" onclick="liff.closeWindow()">診断を終了してトークに戻る</button>
+  </div>
+
+</div>
+
+<footer>KAMPO STAND</footer>
+
+<script>
+// ======== データ ========
+const gogyoData = [
+  {
+    key:"ki", label:"木（肝）", char:"木", color:"ki", decor:"🌳",
+    desc:"自律神経系・気の巡り",
+    yo:{ key:"甲", yomi:"きのえ", type:"イライラタイプ", symptoms:[
+      "ちょっとしたことでカッとなりやすい",
+      "目が充血しやすい",
+      "肩や頭が張るように痛むことがある",
+      "寝つきが悪く、夜中まで頭が冴えている",
+      "胸やわき腹が張って苦しい感じがある"
+    ]},
+    in:{ key:"乙", yomi:"きのと", type:"うつうつタイプ", symptoms:[
+      "気疲れしやすく、やる気がなかなか出ない",
+      "朝、体が重くてなかなか起き上がれない",
+      "お腹が張ってガスが溜まりやすい",
+      "下痢と便秘を繰り返しやすい",
+      "生理の周期が乱れやすい"
+    ]}
+  },
+  {
+    key:"hi", label:"火（心）", char:"火", color:"hi", decor:"🔥",
+    desc:"循環器系・精神の安定",
+    yo:{ key:"丙", yomi:"ひのえ", type:"ドキドキタイプ", symptoms:[
+      "脈が速く、動悸がして落ち着かない",
+      "汗をかきやすく、顔が赤くなりやすい",
+      "赤くてかゆいニキビや湿疹が出やすい",
+      "喉が腫れたり、炎症を起こしやすい",
+      "些細な物音で目が覚めやすい"
+    ]},
+    in:{ key:"丁", yomi:"ひのと", type:"はらはらタイプ", symptoms:[
+      "手足の先が冷えやすい",
+      "立ちくらみや息切れを感じることがある",
+      "なんとなく不安で、悪いことを考えてしまう",
+      "肌が乾燥してツヤがなくなってきた",
+      "生理痛や関節痛が同じ場所に続いて出る"
+    ]}
+  },
+  {
+    key:"tuchi", label:"土（脾）", char:"土", color:"tuchi", decor:"🌾",
+    desc:"消化器系・栄養の吸収",
+    yo:{ key:"戊", yomi:"つちのえ", type:"ガツガツタイプ", symptoms:[
+      "食欲が止まらず、ついつい食べすぎてしまう",
+      "胃痛や胸やけが出やすい",
+      "甘いものや味の濃いものをとても欲しがる",
+      "便秘がちで、吹き出物が出やすい",
+      "食べてもすぐにお腹が空く感じがある"
+    ]},
+    in:{ key:"己", yomi:"つちのと", type:"くよくよタイプ", symptoms:[
+      "疲れやすく、体がいつも重だるい",
+      "食後にひどく眠くなり、動けなくなる",
+      "胃がもたれやすく、軟便や下痢をしやすい",
+      "同じことをぐるぐると長く考えてしまう",
+      "少し食べただけで水太りしやすい"
+    ]}
+  },
+  {
+    key:"kane", label:"金（肺）", char:"金", color:"kane", decor:"🍂",
+    desc:"呼吸器系・バリア機能",
+    yo:{ key:"庚", yomi:"かのえ", type:"ムズムズタイプ", symptoms:[
+      "肌がかゆくなったり、ムズムズしやすい",
+      "気温の変化で鼻水やくしゃみが出やすい",
+      "喉がイガイガして、痰が絡みやすい",
+      "花粉症などアレルギーの症状が出やすい",
+      "体が重く、すっきりしない感じが続く"
+    ]},
+    in:{ key:"辛", yomi:"かのと", type:"ひりひりタイプ", symptoms:[
+      "肌や喉が乾燥してヒリヒリしやすい",
+      "声がかすれやすい",
+      "鼻が詰まりやすい",
+      "お腹が冷えやすく、便秘になりやすい",
+      "季節の変わり目になると必ず風邪をひく"
+    ]}
+  },
+  {
+    key:"mizu", label:"水（腎）", char:"水", color:"mizu", decor:"💧",
+    desc:"泌尿器系・生命力",
+    yo:{ key:"壬", yomi:"みずのえ", type:"ポヨポヨタイプ", symptoms:[
+      "体が重く、足腰がむくみやすい",
+      "胃からぽちゃぽちゃ音がして体がだるい",
+      "下半身が冷えやすく、腰が痛む",
+      "湿気の多い日や雨の日に体調が崩れやすい",
+      "残尿感がある、またはトイレが近い"
+    ]},
+    in:{ key:"癸", yomi:"みずのと", type:"からからタイプ", symptoms:[
+      "髪や肌にツヤがなく、乾燥している",
+      "足腰が疲れやすく、老けた感じがする",
+      "手足がほてりやすく、冷たいものを欲しがる",
+      "夜中にトイレで何度も目が覚める",
+      "耳鳴りがする"
+    ]}
+  }
+];
+
+const blendNames = {
+  "甲":"菊花茶×ミント",    "乙":"月桃茶×レモングラス",
+  "丙":"小豆茶×ルイボス",  "丁":"黒豆茶×紅花",
+  "戊":"カモミール茶×ウコン","己":"台湾金萱茶×なつめ",
+  "庚":"プーアル茶×みかんの皮","辛":"ハトムギ茶×ココナッツ",
+  "壬":"杜仲茶×シナモン",  "癸":"玄米茶×スパイス"
+};
+
+const descs = {
+  "甲":"気が頭に上がりやすく、目や頭に熱が出やすい状態です。\nイライラや充血が出てきたら、上に向かったエネルギーを下ろすサイン。菊花の清涼感とミントの爽やかさが、こもった熱をすっと散らしてくれます。",
+  "乙":"気がうまく巡らず、心も体も沈みがちな状態です。\nやる気が出ない・朝が重いと感じてきたら、滞った気を動かすサイン。月桃とレモングラスの香りが、内側にこもったものをじんわりほぐしてくれます。",
+  "丙":"熱がこもりすぎて、オーバーヒート気味の状態です。\n動悸や発汗が気になってきたら、心の火を落ち着かせるサイン。カカオニブの苦みと小豆の優しい甘みが、高ぶりをゆっくり静めてくれます。",
+  "丁":"血が不足して、心が落ち着かない状態です。\n冷えや不安感が続くようになったら、血を補ってめぐりを整えるサイン。黒豆のコクとサフラワーのぽかぽかした温かさが、内側からじんわり支えてくれます。",
+  "戊":"胃腸に熱がこもって、食欲が暴走しがちな状態です。\n食べすぎや胃のむかつきが続いてきたら、消化器の緊張をほぐすサイン。カモミールのやさしい香りとなつめの甘みが、力みをほどいてくれます。",
+  "己":"胃腸がバテて、エネルギーが作れない状態です。\n食後の眠気や体の重だるさが出てきたら、弱った脾を温めて気を補うサイン。金萱茶のバニラのような香りとなつめの滋養が、お腹からじんわり力を補ってくれます。",
+  "庚":"バリア機能が滞り、鼻や肌が過敏な状態です。\nかゆみや鼻水・詰まりが気になってきたら、滞った気を発散させるサイン。プーアル茶のコクとみかんの皮の柑橘の香りが、詰まりをすっきり流してくれます。",
+  "辛":"バリアが弱まって、乾燥や刺激に敏感な状態です。\n喉や肌のひりひり・乾燥が続いてきたら、内側から潤いを補うサイン。ハトムギの穏やかさとココナッツのしっとりした甘みが、繊細な体をやさしく包んでくれます。",
+  "壬":"水の巡りが停滞して、体が重だるい状態です。\nむくみや冷え・腰の重さが気になってきたら、水を温めて動かすサイン。杜仲茶の滋養とシナモンのぽかぽかした温かさが、体の芯からめぐりを整えてくれます。",
+  "癸":"体に必要な潤いが不足して、渇きやほてりが起きやすい状態です。\n疲れが抜けない・足腰がだるいと感じてきたら、腎の潤いを補うサイン。香ばしい玄米茶と3つのスパイスが、静かに体の芯から力を満たしてくれます。"
+};
+
+const storesUrls = {
+  "甲":"https://kampotakeru.stores.jp/items/62f733fdbef381335a0f6566",
+  "乙":"https://kampotakeru.stores.jp/items/631ecccb60bab44fabfbbbcf",
+  "丙":"https://kampotakeru.stores.jp/items/6326ba8723747f2c6461fbec",
+  "丁":"https://kampotakeru.stores.jp/items/6326bcb125c90669144d7165",
+  "戊":"https://kampotakeru.stores.jp/items/6326cdbec36dbe536f8c3b82",
+  "己":"https://kampotakeru.stores.jp/items/6326d166fd12d15177ab07cc",
+  "庚":"https://kampotakeru.stores.jp/items/6326d90ced4ab02ebbddc59f",
+  "辛":"https://kampotakeru.stores.jp/items/6326e1f62e745237abed5452",
+  "壬":"https://kampotakeru.stores.jp/items/6326e42923747f153b61f82f",
+  "癸":"https://kampotakeru.stores.jp/items/6326e6a0f3086568d563128d"
+};
+
+const pandaImages = {
+  "甲":"./panda_ko.png",  "乙":"./panda_otsu.png",
+  "丙":"./panda_hei.png", "丁":"./panda_tei.png",
+  "戊":"./panda_bo.png",  "己":"./panda_ki.png",
+  "庚":"./panda_ko2.png", "辛":"./panda_shin.png",
+  "壬":"./panda_jin.png", "癸":"./panda_ki2.png"
+};
+
+// 陽の十干リスト（カード色判定用）
+const yoKeys = ["甲","丙","戊","庚","壬"];
+
+// 同点タイブレーク：甲→乙→丙→丁→戊→己→庚→辛→壬→癸
+const gogyoOrder = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+
+// ======== 状態 ========
+let currentStep = 0;
+let checks = gogyoData.map(() => ({
+  yo: [false,false,false,false,false],
+  in: [false,false,false,false,false]
+}));
+
+// ======== クイズ ========
+function startQuiz() {
+  document.getElementById('intro').style.display = 'none';
+  document.getElementById('quiz').style.display = 'block';
+  renderStep();
+}
+
+function renderStep() {
+  const g = gogyoData[currentStep];
+  const c = checks[currentStep];
+
+  document.getElementById('step-num').innerText = currentStep + 1;
+  document.getElementById('step-gogyo').innerText = g.label;
+  document.getElementById('progress-fill').style.width = ((currentStep + 1) / 5 * 100) + '%';
+  document.getElementById('btn-prev').style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').innerText = currentStep === 4 ? '結果を見る' : '次へ →';
+
+  const container = document.getElementById('card-container');
+  container.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'check-card';
+  card.innerHTML = `
+    <div class="gogyo-header ${g.color}">
+      <div class="gogyo-title-group">
+        <div class="gogyo-char">${g.char}</div>
+        <div class="gogyo-sub">${g.label}　${g.desc}</div>
+      </div>
+      <div class="gogyo-decor">${g.decor}</div>
+    </div>`;
+
+  const body = document.createElement('div');
+  body.className = 'check-card-body';
+  body.appendChild(makeSection(g.yo, c.yo));
+
+  const divider = document.createElement('div');
+  divider.className = 'section-divider';
+  body.appendChild(divider);
+
+  body.appendChild(makeSection(g.in, c.in));
+
+  const skipNote = document.createElement('p');
+  skipNote.className = 'skip-note';
+  skipNote.innerText = '当てはまるものがなければそのまま次へ進めます';
+  body.appendChild(skipNote);
+
+  card.appendChild(body);
+  container.appendChild(card);
+}
+
+function makeSection(jikkan, bools) {
+  const isYo = yoKeys.includes(jikkan.key);
+  const sec = document.createElement('div');
+  sec.className = 'yin-yang-section';
+  sec.innerHTML = `
+    <div class="section-label">
+      <span class="label-badge ${isYo ? 'label-yo' : 'label-in'}">${isYo ? '陽' : '陰'}</span>
+      <span class="label-name">${jikkan.key}（${jikkan.yomi}）・${jikkan.type}</span>
+    </div>`;
+
+  const list = document.createElement('div');
+  list.className = 'symptom-list';
+
+  jikkan.symptoms.forEach((sym, i) => {
+    const item = document.createElement('div');
+    item.className = 'symptom-item' + (bools[i] ? ' checked' : '');
+    item.innerHTML = `<div class="check-circle"><div class="check-dot"></div></div><span class="symptom-text">${sym}</span>`;
+    item.addEventListener('click', () => {
+      bools[i] = !bools[i];
+      item.classList.toggle('checked', bools[i]);
+    });
+    list.appendChild(item);
+  });
+
+  sec.appendChild(list);
+  return sec;
+}
+
+function nextStep() {
+  if (currentStep < 4) { currentStep++; renderStep(); window.scrollTo(0,0); }
+  else { showResult(); }
+}
+
+function prevStep() {
+  if (currentStep > 0) { currentStep--; renderStep(); window.scrollTo(0,0); }
+}
+
+// ======== 説明文フォーマット ========
+function formatDesc(text) {
+  return text.split('\n').map(function(t, i) {
+    var style = i === 0 ? 'display:block;margin-bottom:8px;' : 'display:block;';
+    return '<span style="' + style + '">' + t + '</span>';
+  }).join('');
+}
+
+// ======== 判定 ========
+function calcResult() {
+  const scores = {};
+  gogyoData.forEach((g, i) => {
+    scores[g.yo.key] = checks[i].yo.filter(Boolean).length;
+    scores[g.in.key] = checks[i].in.filter(Boolean).length;
+  });
+
+  const total = Object.values(scores).reduce((a,b) => a+b, 0);
+  if (total === 0) return { balanced: true };
+
+  const ranked = Object.keys(scores)
+    .filter(k => scores[k] > 0)
+    .sort((a, b) => {
+      if (scores[b] !== scores[a]) return scores[b] - scores[a];
+      return gogyoOrder.indexOf(a) - gogyoOrder.indexOf(b);
+    })
+    .slice(0, 2);
+
+  return { balanced: false, ranked, scores };
+}
+
+// ======== 結果表示 ========
+function showResult() {
+  document.getElementById('quiz').style.display = 'none';
+  document.getElementById('result').style.display = 'block';
+  window.scrollTo(0,0);
+
+  const result = calcResult();
+  const cardsEl = document.getElementById('result-cards');
+  cardsEl.innerHTML = '';
+
+  if (result.balanced) {
+    document.getElementById('panda-img').src = './panda_default.png';
+    document.getElementById('balance-msg').style.display = 'block';
+    document.getElementById('result-note').innerText = '';
+    return;
+  }
+
+  const { ranked, scores } = result;
+  document.getElementById('balance-msg').style.display = 'none';
+  document.getElementById('panda-img').src = pandaImages[ranked[0]];
+
+  ranked.forEach((key, idx) => {
+    const allJikkan = gogyoData.flatMap(g => [g.yo, g.in]);
+    const j = allJikkan.find(j => j.key === key);
+    const isYo = yoKeys.includes(key);
+    cardsEl.appendChild(makeResultCard(key, j, isYo, scores[key], idx));
+  });
+
+  document.getElementById('result-note').innerText = ranked.length > 1
+    ? '※チェックが多かった順に2本ご提案しています。'
+    : '※メインのお茶で心地よさをキープしましょう。';
+}
+
+function makeResultCard(key, jikkan, isYo, score, idx) {
+  const card = document.createElement('div');
+  card.className = 'res-card';
+  card.innerHTML = `
+    <div class="res-card-top ${isYo ? 'card-yo' : 'card-in'}">
+      <div class="res-badge ${isYo ? 'badge-yo' : 'badge-in'}">${idx === 0 ? '1位' : '2位'}　${score}項目</div>
+      <div class="res-char-group">
+        <span class="res-char ${isYo ? 'char-yo' : 'char-in'}">${key}</span>
+        <span class="res-yomi ${isYo ? 'yomi-yo' : 'yomi-in'}">${jikkan.yomi}</span>
+      </div>
+      <div class="res-type ${isYo ? 'type-yo' : 'type-in'}">${jikkan.type}</div>
+    </div>
+    <div class="res-card-body">
+      <div class="res-desc">${formatDesc(descs[key])}</div>
+      <div class="res-recom-label">${idx === 0 ? 'おすすめの十干茶' : 'あわせておすすめ'}</div>
+      <div class="res-recom-name">${key}・${jikkan.yomi}ブレンド（${blendNames[key]}）</div>
+      <a href="${storesUrls[key]}" class="tea-btn ${isYo ? 'tea-btn-yo' : 'tea-btn-in'}" target="_blank">STORESで見る</a>
+    </div>`;
+  return card;
+}
+
+// ======== LIFF初期化 ========
+try {
+  liff.init({ liffId: "2008811102-LlqEOxq1" })
+    .then(() => { try { if (!liff.isLoggedIn()) liff.login(); } catch(e) {} })
+    .catch(() => {});
+} catch(e) {}
+</script>
+</body>
+</html>

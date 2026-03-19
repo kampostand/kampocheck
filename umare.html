@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="ja" style="background-color:#f0faf8!important;">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="only light">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>生まれの体質鑑定 — KAMPO STAND</title>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    color-scheme: only light;
+    --teal:      #00a89d;
+    --teal-dark: #007f76;
+    --teal-pale: #e0f5f3;
+    --teal-mid:  #b2e4e0;
+    --ink:       #1a2e2c;
+    --muted:     #4a6b68;
+    --white:     #ffffff;
+    --bg:        #f0faf8;
+    --gold:      #c49a00;
+  }
+  @media (prefers-color-scheme: dark) {
+    html, body { background-color: #f0faf8 !important; color: #1a2e2c !important; }
+    * { color-scheme: light !important; }
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Noto Sans JP', sans-serif;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ヘッダー */
+  .header {
+    background: linear-gradient(160deg, #004d47 0%, #00a89d 60%, #00c9bc 100%);
+    padding: 48px 24px 52px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header-deco {
+    font-size: 11px;
+    letter-spacing: 0.5em;
+    color: rgba(255,255,255,0.5);
+    display: block;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+  }
+  .header-kanji {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 42px;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 0.3em;
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1;
+    text-shadow: 0 2px 20px rgba(0,0,0,0.15);
+  }
+  .header-title-sub {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    letter-spacing: 0.35em;
+    display: block;
+    margin-bottom: 20px;
+  }
+  .header-divider {
+    width: 40px; height: 1px;
+    background: rgba(255,255,255,0.4);
+    margin: 0 auto 18px;
+  }
+  .header-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.8);
+    line-height: 2;
+    letter-spacing: 0.05em;
+    position: relative; z-index: 1;
+  }
+  .header-brand {
+    font-size: 10px;
+    letter-spacing: 0.5em;
+    color: rgba(255,255,255,0.4);
+    display: block;
+    margin-top: 20px;
+    text-transform: uppercase;
+    position: relative; z-index: 1;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 32px 16px 80px;
+  }
+
+  /* 入力フォーム */
+  .form-card {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 32px 24px;
+    box-shadow: 0 4px 32px rgba(0,168,157,0.12);
+    margin-bottom: 28px;
+  }
+  .form-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--teal);
+    font-weight: 700;
+    text-align: center;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .form-card h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+  }
+  .form-card-desc {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.8;
+    margin-bottom: 24px;
+    letter-spacing: 0.03em;
+  }
+  .date-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label {
+    font-size: 11px; font-weight: 700;
+    color: var(--teal); letter-spacing: 0.2em;
+    text-align: center;
+  }
+  .field input {
+    width: 100%; padding: 14px 10px;
+    background: var(--bg);
+    border: 2px solid var(--teal-mid);
+    border-radius: 12px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px; font-weight: 600;
+    color: var(--ink); text-align: center;
+    outline: none; transition: border-color 0.2s, background 0.2s;
+    -webkit-appearance: none; -moz-appearance: textfield;
+  }
+  .field input::-webkit-inner-spin-button,
+  .field input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .field input:focus { border-color: var(--teal); background: #fff; }
+  .btn-diagnose {
+    width: 100%; padding: 18px;
+    background: linear-gradient(135deg, #004d47 0%, #00a89d 100%);
+    color: #fff;
+    border: none; border-radius: 14px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 17px; font-weight: 500;
+    letter-spacing: 0.2em; cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn-diagnose:hover { opacity: 0.9; }
+  .btn-diagnose:active { transform: scale(0.98); }
+  .privacy-note {
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-top: 14px;
+    opacity: 0.8;
+  }
+  .error-msg {
+    text-align: center; color: #c0392b;
+    font-size: 13px; margin-top: 10px; min-height: 18px;
+  }
+
+  /* 結果エリア */
+  #result {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    pointer-events: none;
+  }
+  #result.visible {
+    opacity: 1; transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  /* 命式バッジ */
+  .meishiki-badge {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 20px 16px;
+    box-shadow: 0 2px 12px rgba(0,168,157,0.08);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .pillar-item {
+    flex: 1;
+    text-align: center;
+  }
+  .pillar-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .eto-block {
+    width: 100%;
+    border-radius: 8px;
+    padding: 10px 4px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 4px;
+  }
+  .eto-attr { font-size: 9px; color: rgba(255,255,255,0.8); letter-spacing: 0.08em; }
+  .eto-char {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 28px; font-weight: 600; color: #fff; line-height: 1;
+  }
+  .eto-symbol { font-size: 10px; color: rgba(255,255,255,0.85); }
+  .pillar-role {
+    font-size: 10px;
+    color: var(--teal);
+    letter-spacing: 0.05em;
+    font-weight: 700;
+    margin-top: 2px;
+    display: block;
+  }
+
+  /* 結果カード */
+  .result-card {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,168,157,0.1);
+    margin-bottom: 28px;
+  }
+
+  /* カードヘッダー */
+  .card-header {
+    padding: 24px 20px 20px;
+  }
+  .pillar-role-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    border: 1px solid rgba(255,255,255,0.4);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.95);
+    margin-bottom: 6px;
+  }
+  .pillar-role-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 12px;
+    line-height: 1.6;
+  }
+  .group-badge-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .kanshi-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 20px;
+    padding: 4px 11px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(255,255,255,0.5);
+  }
+  .badge-hero    { background: rgba(255,200,0,0.25);  color: #fff; }
+  .badge-ruler   { background: rgba(80,40,120,0.35);  color: #fff; }
+  .badge-fairy   { background: rgba(255,120,180,0.3); color: #fff; }
+  .badge-warrior { background: rgba(200,50,50,0.3);   color: #fff; }
+  .badge-alien   { background: rgba(0,200,180,0.25);  color: #fff; }
+
+  .group-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 6px;
+  }
+  .kan-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 12px;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.2em;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .catch-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.7;
+    letter-spacing: 0.04em;
+  }
+
+  /* オノマトペバー */
+  .onoma-bar {
+    display: flex;
+    gap: 8px;
+    padding: 14px 16px;
+    background: var(--teal-pale);
+  }
+  .onoma-item {
+    flex: 1;
+    background: var(--white);
+    border-radius: 10px;
+    padding: 10px 10px;
+    text-align: center;
+  }
+  .onoma-type {
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .onoma-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .onoma-keys {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  .onoma-key {
+    font-size: 10px;
+    color: var(--teal-dark);
+    background: var(--teal-pale);
+    border-radius: 10px;
+    padding: 2px 7px;
+    font-weight: 500;
+  }
+
+  /* セクション */
+  .section {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--teal-pale);
+  }
+  .section:last-child { border-bottom: none; }
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--teal);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+  }
+  .section-text {
+    font-size: 14px;
+    line-height: 2.0;
+    color: var(--muted);
+  }
+  .section-text b {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  /* お茶セクション */
+  .tea-section {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,168,157,0.1);
+    margin-bottom: 28px;
+  }
+  .tea-header {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    padding: 20px;
+    text-align: center;
+  }
+  .tea-header-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .tea-header-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 0.05em;
+  }
+  .tea-item {
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--teal-pale);
+  }
+  .tea-item:last-child { border-bottom: none; }
+  .tea-item-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+  .tea-color-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%; flex-shrink: 0;
+  }
+  .tea-role {
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    color: var(--teal);
+    font-weight: 700;
+  }
+  .tea-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .tea-kan {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    display: block;
+    margin-bottom: 6px;
+  }
+  .tea-blend {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: block;
+  }
+  .tea-desc {
+    font-size: 14px;
+    line-height: 1.9;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .tea-link {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    border-radius: 20px;
+    padding: 7px 18px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .tea-link:hover { background: var(--teal-dark); }
+
+  .btn-line {
+    width: 100%; padding: 18px;
+    background: #06C755; color: #fff;
+    border: none; border-radius: 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.05em;
+    display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+    transition: background 0.2s, transform 0.1s;
+  }
+  .btn-line:hover { background: #05a847; }
+  .btn-line:active { transform: scale(0.98); }
+
+  /* CTAエリア */
+  .cta-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+  }
+  .share-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .btn-share {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: #000; color: #fff;
+    transition: opacity 0.2s;
+  }
+  .btn-share:active { opacity: 0.8; }
+  .btn-counsel {
+    width: 100%; padding: 18px;
+    background: var(--teal); color: #fff;
+    border: none; border-radius: 12px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.05em;
+    text-decoration: none;
+    display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+    transition: background 0.2s;
+  }
+  .btn-counsel:hover { background: var(--teal-dark); }
+
+  .footer {
+    text-align: center;
+    font-size: 12px; color: var(--muted);
+    line-height: 2; margin-top: 40px;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <span class="header-deco">Kampo Stand</span>
+  <span class="header-kanji">漢方占い</span>
+  <span class="header-title-sub">生まれの体質鑑定</span>
+  <div class="header-divider"></div>
+  <p class="header-desc">生年月日に宿る十干十二支から<br>あなたの本質と体質を読み解きます</p>
+  <span class="header-brand">by おちゃぱんさん</span>
+</div>
+
+<div class="container">
+  <div class="form-card">
+    <span class="form-eyebrow">DIAGNOSIS</span>
+    <h2>生年月日を入力する</h2>
+    <p class="form-card-desc">日柱・月柱・年柱の3つの干支を算出します。</p>
+    <div class="date-row">
+      <div class="field">
+        <label>年（西暦）</label>
+        <input type="number" id="year" placeholder="1985" min="1900" max="2100">
+      </div>
+      <div class="field">
+        <label>月</label>
+        <input type="number" id="month" placeholder="7" min="1" max="12">
+      </div>
+      <div class="field">
+        <label>日</label>
+        <input type="number" id="day" placeholder="15" min="1" max="31">
+      </div>
+    </div>
+    <button class="btn-diagnose" onclick="diagnose()">鑑　定　す　る</button>
+    <p class="error-msg" id="error"></p>
+  </div>
+
+  <div id="result">
+    <div class="meishiki-badge" id="meishiki-badge"></div>
+    <div id="section-day"></div>
+    <div id="section-month"></div>
+    <div id="section-year"></div>
+    <div id="section-tea"></div>
+
+    <div class="cta-area">
+      <button class="btn-line" id="btn-line" onclick="sendToLine()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.84 1.36 5.37 3.5 7.06L4.5 22l4.25-1.42C9.96 20.84 10.97 21 12 21c5.52 0 10-4.02 10-9S17.52 2 12 2z"/></svg>
+        鑑定結果をLINEで受け取る
+      </button>
+      <div class="share-row">
+        <a id="btn-x" class="btn-share" href="#" target="_blank" rel="noopener">𝕏 でシェア</a>
+        <a id="btn-threads" class="btn-share" href="#" target="_blank" rel="noopener">Threads</a>
+      </div>
+    </div>
+
+    <p class="footer">
+      KAMPO STAND ／ 漢方占い by おちゃぱんさん<br>
+      詳しい鑑定は公式LINEからどうぞ
+    </p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// LIFF初期化
+// ============================================================
+const LIFF_ID = 'YOUR_LIFF_ID';
+(async () => {
+  try { await liff.init({ liffId: LIFF_ID }); } catch(e) {}
+})();
+
+// ============================================================
+// 定数
+// ============================================================
+const KAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+const SHI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+const KAN_SYMBOL = {
+  '甲':'大木','乙':'草花','丙':'太陽','丁':'灯火','戊':'山岳',
+  '己':'大地','庚':'岩石','辛':'宝石','壬':'海洋','癸':'雨水'
+};
+const SHI_SYMBOL = {
+  '子':'海洋','丑':'大地','寅':'大木','卯':'草花',
+  '辰':'山岳','巳':'灯火','午':'太陽','未':'大地',
+  '申':'岩石','酉':'宝石','戌':'山岳','亥':'雨水'
+};
+const SHI_SEASON = {
+  '寅':'春','卯':'春','辰':'春','巳':'夏','午':'夏','未':'夏',
+  '申':'秋','酉':'秋','戌':'秋','亥':'冬','子':'冬','丑':'冬'
+};
+const KAN_COLOR = {
+  '甲':'#2e7d4f','乙':'#6db33f','丙':'#d4006e','丁':'#e8507a','戊':'#e07020',
+  '己':'#c49a00','庚':'#6e3ea8','辛':'#1a3560','壬':'#1a8fc0','癸':'#2ab8b0'
+};
+const SHI_COLOR = {
+  '子':'#1a8fc0','丑':'#c49a00','寅':'#2e7d4f','卯':'#6db33f',
+  '辰':'#e07020','巳':'#e8507a','午':'#d4006e','未':'#c49a00',
+  '申':'#6e3ea8','酉':'#1a3560','戌':'#e07020','亥':'#2ab8b0'
+};
+const KAN_ATTR = {
+  '甲':'木＋','乙':'木－','丙':'火＋','丁':'火－','戊':'土＋',
+  '己':'土－','庚':'金＋','辛':'金－','壬':'水＋','癸':'水－'
+};
+const SHI_ATTR = {
+  '子':'水＋','丑':'土－','寅':'木＋','卯':'木－','辰':'土＋','巳':'火－',
+  '午':'火＋','未':'土－','申':'金＋','酉':'金－','戌':'土＋','亥':'水－'
+};
+
+// ============================================================
+// 十干データ
+// ============================================================
+const KAN_DATA = {
+  '甲': { onoma:'イライラ', keys:['自立','直進'] },
+  '乙': { onoma:'うつうつ', keys:['協調','柔軟'] },
+  '丙': { onoma:'ドキドキ', keys:['表現','高揚'] },
+  '丁': { onoma:'はらはら', keys:['感性','繊細'] },
+  '戊': { onoma:'ガツガツ', keys:['獲得','拡張'] },
+  '己': { onoma:'くよくよ', keys:['蓄積','育成'] },
+  '庚': { onoma:'ムズムズ', keys:['変革','突破'] },
+  '辛': { onoma:'ひりひり', keys:['洗練','防衛'] },
+  '壬': { onoma:'ポヨポヨ', keys:['自由','冒険'] },
+  '癸': { onoma:'からから', keys:['浸透','伝統'] }
+};
+
+// ============================================================
+// 十二支データ
+// ============================================================
+const SHI_DATA = {
+  '子': { onoma:'むっつり', keys:['順応性','洞察力'] },
+  '丑': { onoma:'むっちり', keys:['保守性','忍耐力'] },
+  '寅': { onoma:'ぐんぐん', keys:['積極性','決断力'] },
+  '卯': { onoma:'ほいほい', keys:['社交性','計画力'] },
+  '辰': { onoma:'みっちり', keys:['信頼性','統率力'] },
+  '巳': { onoma:'ねっちり', keys:['追求性','集中力'] },
+  '午': { onoma:'がっつり', keys:['瞬発性','直感力'] },
+  '未': { onoma:'きっちり', keys:['献身性','調整力'] },
+  '申': { onoma:'さっくり', keys:['合理性','改革力'] },
+  '酉': { onoma:'つんつん', keys:['感受性','審美力'] },
+  '戌': { onoma:'ぐいぐい', keys:['安定性','持久力'] },
+  '亥': { onoma:'どんどん', keys:['純粋性','探求力'] }
+};
+
+// ============================================================
+// 60干支データ
+// ============================================================
+const KANSHI_DATA = {
+  '甲子': { num:1,  group:'燥 DRY ／ 芸術家',  catch:'純粋でまっすぐで、ちょっとヌケているけど憎めないお人好しな人。', personality:'本能的に筋がよく、一度のめり込んだら誰よりも深く追求します。嘘がつけない正直さがあるのに、なぜか誤解されやすい不思議な人。根はさみしがり屋でわがままなところもありますが、悪気はまったくないのでなぜか憎めない。たまには「仕方ないよね」と流せるようになると、ぐっと生きやすくなります。', constitution:'「イライラ」は気が上昇しやすい肝実の素材。エネルギーが上に向かい、頭の回転が速い。「むっつり」は水が滞りやすい腎実のリズム。エネルギーを内側に深く蓄えながら、じっくり本質を見抜く力がある。この2つが重なることで、肝の推進力と腎の蓄積力を同時に持つ、思考力と持久力の強いフィジカルです。' },
+  '乙丑': { num:2,  group:'燥 DRY ／ 芸術家',  catch:'華やかに見えても、実は静かでインドアなマイペースな人。', personality:'内心はわりと強情で、自分の思うように物事を選びたいタイプ。警戒心からか明るく振る舞って、適当に合わせていたりします。好きなことを見つけると、どんどん掘り下げる一途さがあります。大器晩成型なので、しっかり根が張るまでじっくり続けていくのが合っています。', constitution:'「うつうつ」は気を内側に溜め込みやすい肝虚の素材。柔軟に受け流しながら、静かに力を蓄える。「むっちり」は脾が弱まりやすい脾虚のリズム。エネルギーの生産が遅く、じっくり時間をかけるほどに底力が出る。この2つが重なることで、深く蓄えながら着実に成長していく、大器晩成型のフィジカルです。' },
+  '丙寅': { num:3,  group:'燥 DRY ／ 芸術家',  catch:'明るく愛にあふれて、まわりに光と温かみをふりまく人。', personality:'何でもやればこなせちゃう、負けず嫌いで万能なすごい人。勢いが良すぎて、細かいところが見えない時があります。情熱的で自己主張が激しいので、ちょっとコワがられることも。気持ちばかりにとらわれず、物事の本質を追求するようになるとさらに輝きます。', constitution:'「ドキドキ」は熱を外へ放ち続ける心実の素材。血流が活発で、高揚感とエネルギーがみなぎりやすい。「ぐんぐん」は肝の気が上昇しやすい肝実のリズム。前へ直進する力が強く、スタートダッシュが際立つ。この2つが重なることで、心と肝の両方から火が燃え上がる、行動力と発信力が自然と周囲を動かすフィジカルです。' },
+  '丁卯': { num:4,  group:'燥 DRY ／ 芸術家',  catch:'ちょっとアブないフェロモンを持った、神秘的な秘密主義者。', personality:'温厚で誠実な性格で、保守的なところもあるやや堅苦しい人。かなりの慎重派なので、行動するまでに時間がかかります。自分の夢や理想には、とてつもなく力強い意志で叶えます。口は悪いけど、身内にはとても優しい人情と愛情の人です。', constitution:'「はらはら」は血が不足しやすい心虚の素材。繊細な感受性を持ち、人の気持ちを敏感に拾う。「ほいほい」は肝血が虚しやすい肝虚のリズム。軽やかに周囲と共鳴しながら、内側では繊細に揺れている。この2つが重なることで、心と肝どちらも血を必要とする、繊細な感性と深い共感力を持つフィジカルです。' },
+  '戊辰': { num:5,  group:'燥 DRY ／ 芸術家',  catch:'自分の道を自ら切り開いて進んでいく、勇敢なチャレンジャー。', personality:'淡々としたイメージなのに、なぜか不思議なオーラがあります。たくましい生活力と精神力で、内に強い自己主張を秘めています。納得がいかない時は、周りが驚くくらいのキレ方をします。負けん気の強さと愛嬌を持っていれば、てっぺんに登れます。', constitution:'「ガツガツ」はあらゆるものを吸収したい脾実の素材。消化吸収力が強く、知識も経験もどんどん力になる。「みっちり」は胃に熱が溜まりやすい脾実のリズム。やり切るまでエネルギーが切れない完遂力がある。この2つが重なることで、素材とリズムどちらも土の陽が重なる、吸収力と統率力が極まったフィジカルです。土性が強いぶん、過剰になると胃腸への負担として出やすい。' },
+  '己巳': { num:6,  group:'燥 DRY ／ 芸術家',  catch:'さらっとしてそうなのに、論理的に物事をじっくり分析する人。', personality:'柔らかい雰囲気の中身は、自分の信念を曲げない頑固な人。表と裏のギャップに、自分で悩んじゃうようなところもあります。好き嫌いが激しくて、嫌いな人にはあからさまになります。自意識過剰にならずに粘り強く続ければ、いつかうまくいきます。', constitution:'「くよくよ」は深く蓄積する脾虚の素材。じっくり分析しながら内側に積み上げていく力がある。「ねっちり」は心虚で血が滞りやすいリズム。一点に集中して熱を蓄積し、深く追求する力が強い。この2つが重なることで、思考と集中力が深く噛み合う、じっくり掘り下げるほどに力を発揮するフィジカルです。' },
+  '庚午': { num:7,  group:'燥 DRY ／ 芸術家',  catch:'強そうに見えて、実はさみしがりで怖がりな見栄張りさん。', personality:'考え方は意外と単純でさっぱりしてるので、分かりやすい人。人の気持ちに同情しやすく、つい批判的になったりします。自分のテリトリーを乱すような人には、果敢に立ち向かいます。不安と心配が多いけど、落ち着いてクリアすれば運が開けます。', constitution:'「ムズムズ」は外への反応が鋭い肺実の素材。バリア力と突破力が強く、変革を求めるエネルギーがある。「がっつり」は心実で血流が盛んなリズム。直感で動いて一気に燃やし切る瞬発力が際立つ。この2つが重なることで、金の鋭さと火の瞬発力が重なる、直感と突破力が同時に働くフィジカルです。' },
+  '辛未': { num:8,  group:'燥 DRY ／ 芸術家',  catch:'庶民的な中にも、気品と自信のある落ち着いたしっかりさん。', personality:'物事をよく考えて、慎重に計画を立ててから進めたい人です。何も考えてないように見えて、実はしっかり人を見抜きます。どんな環境でも地道に努力する忍耐力は、誰にも負けません。頑固だけど押しに弱いので、意地にならず素直になるとうまくいきます。', constitution:'「ひりひり」は繊細な感受性を持つ肺虚の素材。外部の刺激を細部まで感じ取り、審美眼が磨かれる。「きっちり」は脾虚で気が不足しやすいリズム。献身的に整え続けるなかで、じわじわと力を蓄える。この2つが重なることで、繊細な感受性と確かな実行力を持つ、縁の下で信頼を積み上げるフィジカルです。' },
+  '壬申': { num:9,  group:'燥 DRY ／ 芸術家',  catch:'明るくて愛のある、夢とロマンの向上心あふれる冒険家。', personality:'知的好奇心が強く、どうしてこうなるのか知りたがります。行動力があって軽い人と思われるけど、ちゃんと考えてます。調子に乗るとぐんぐん波に乗っちゃうので、誰かに止めてもらうのが吉。気に入られ方を知っているので、それを生かせるとうまくいきます。', constitution:'「ポヨポヨ」は水が広く滞りやすい腎実の素材。スケールの大きな発想と、深い共感力がある。「さっくり」は肺実で気の巡りが活発なリズム。無駄を省いて最短距離で動く合理性がある。この2つが重なることで、腎の大きな包容力と肺の合理的な行動力が重なる、自由に動ける場面で輝くフィジカルです。' },
+  '癸酉': { num:10, group:'燥 DRY ／ 芸術家',  catch:'しっとり穏やかにしてても、頭のキレる効率重視なエコな人。', personality:'いろんな幅広い知識を持ち、事細かに計算してからやります。完全主義でムダを嫌うので、融通が利かないことがあります。頭が良くて手先が器用なので、上辺だけで終わりがちです。自分のことよりも、人を助ける気持ちを持つとうまくいきます。', constitution:'「からから」は内側から乾きやすい腎虚の素材。知識と感性を精密に処理して本質を抽出する力がある。「つんつん」は肺虚で潤いが不足しやすいリズム。極限まで研ぎ澄ませながら磨き続ける。この2つが重なることで、腎と肺どちらも潤いを必要とする、深い知性と洗練された感性を持つフィジカルです。' },
+  '甲戌': { num:11, group:'暑 HEAT ／ 芸能人', catch:'ここぞという時に頑張り過ぎちゃう、合理的な完璧主義者。', personality:'勝ち気な性格なので、自分を強く見せたくなりがちです。性格はまじめな正直者で、いつも夢見るロマンチスト。たまに思ったことをストレートに言って、引かれたりします。ハマりすぎることがあるので、お金や体力の使いすぎには注意が必要です。', constitution:'「イライラ」は気が上昇しやすい肝実の素材。エネルギーが上に向かい、直進する推進力がある。「ぐいぐい」は脾実で胃に熱が溜まりやすいリズム。地に根を張って押し続ける持久力がある。この2つが重なることで、肝の突破力と脾の持久力が重なる、目標に向かって一直線に進み続けるフィジカルです。' },
+  '乙亥': { num:12, group:'暑 HEAT ／ 芸能人', catch:'たくましく時間をかけて、一つのことを追求して身にする人。', personality:'自信はあるけどそれをひけらかさず、ここぞという時にこっそり出してきます。誰とでも平等でいたいので、自分と同じ目線で話します。ちょっとエラそうに見られることもありますが、先が見えてしまうだけなんです。頭の回転の早さを協調性につなげられれば、うまくいきます。', constitution:'「うつうつ」は気を内側に溜め込みやすい肝虚の素材。柔軟に受け流しながら、静かに力を積み上げる。「どんどん」は腎虚で精気が枯渇しやすいリズム。深みへ踏み込む純粋な探求心がある。この2つが重なることで、肝の蓄積力と腎の探求力が重なる、時間とともに深みと力が増すフィジカルです。' },
+  '丙子': { num:13, group:'暑 HEAT ／ 芸能人', catch:'持って生まれた才能と、ほがらかな個性が魅力的な人。', personality:'自分の強さを知っているので、ムリをしない働き方ができます。余裕のある自由で無邪気な雰囲気が、共感を得られます。気まぐれだけど変化に強く、どんな時も乗り越えられます。自分は普通のつもりでも、変すぎる時があるので気をつけましょう。', constitution:'「ドキドキ」は熱を外へ放ち続ける心実の素材。高揚感とエネルギーが自然とみなぎり、存在感を放つ。「むっつり」は水が滞りやすい腎実のリズム。内側に深く蓄えながら、本質を見抜く洞察力がある。この2つが重なることで、火の輝きと水の深さが共存する、個性の強い独自のフィジカルです。' },
+  '丁丑': { num:14, group:'暑 HEAT ／ 芸能人', catch:'人に優しく自分にきびしい、情熱を内に秘めた穏やかな人。', personality:'熱しやすく冷めやすいので、感情がイマイチつかめないところがあります。我慢できなくなると激情が飛び出すので、大やけどに注意。物事に対して異常にこだわるので、優しく見守ってください。急がずに小さなことからコツコツとやると、うまくいきます。', constitution:'「はらはら」は血が不足しやすい心虚の素材。繊細な感受性を持ち、人の気持ちを敏感に拾う。「むっちり」は脾虚で気が不足しやすいリズム。じっくり着実に積み上げる忍耐力が強い。この2つが重なることで、心の繊細さと脾の粘り強さが噛み合う、情熱を静かに燃やし続けるフィジカルです。' },
+  '戊寅': { num:15, group:'暑 HEAT ／ 芸能人', catch:'向上心と上昇志向が強く、ひそかに人の上に立ちたい人。', personality:'全体の中で自分の立ち位置を、客観的に見ながら行動します。プライドと自意識の高さを隠せない不器用なところもあります。社長や芸能人など、見栄が大事な仕事ならうまくいきます。いつも謙虚な姿勢を忘れずにいれば、よく引き立てられます。', constitution:'「ガツガツ」はあらゆるものを吸収したい脾実の素材。吸収力が高く、知識も経験もどんどん力に変えていく。「ぐんぐん」は肝実で気が上昇しやすいリズム。躊躇なく前へ突き進む決断力がある。この2つが重なることで、脾の吸収力と肝の推進力が重なる、吸収しながら突き進む推進型のフィジカルです。' },
+  '己卯': { num:16, group:'暑 HEAT ／ 芸能人', catch:'表立って勝負はせずに、裏で策略を巡らせるひかえめな人。', personality:'触れるとじっくり熱せられた土のようにアツい感情の持ち主。粘り強い性格だけど、我慢してストレスをため込みやすいかも。新しくて楽しめることを見つけると、夢中になって頑張れます。落ち着いているのに軽快で、そのギャップが好かれやすい人です。', constitution:'「くよくよ」は深く考えながら蓄積する脾虚の素材。表面は穏やかでも内側では常に思考を積み重ねている。「ほいほい」は肝虚で気血が不足しやすいリズム。軽やかに周囲と共鳴しながら人を引き寄せる。この2つが重なることで、脾の深さと肝の軽やかさが共存する、内側の重さを感じさせない独自の魅力を持つフィジカルです。' },
+  '庚辰': { num:17, group:'暑 HEAT ／ 芸能人', catch:'天真爛漫で豪快で頑固なところもあるけど、なぜか好かれる人。', personality:'物静かそうに見えるのは、強い意志と警戒心があるからです。裏表がなく自分の気持ちに正直なので、腹黒さなんてゼロです。物事をやり遂げる根性とパワーが、人々に尊敬されます。大きな舞台で活躍できるようなところで、力を発揮します。', constitution:'「ムズムズ」は外への反応が鋭い肺実の素材。変革を求めるエネルギーと正義感が強い。「みっちり」は脾実で湿熱が溜まりやすいリズム。やり切るまで統率し続ける完遂力がある。この2つが重なることで、肺の突破力と脾の統率力が重なる、変革しながらやり切る力を持つフィジカルです。' },
+  '辛巳': { num:18, group:'暑 HEAT ／ 芸能人', catch:'自分自身と感性を研ぎ澄まし続ける、シュッとしたストイックな人。', personality:'精神世界と現実世界を結びつけられる、独特な感性の変人。理想を求めすぎて、できないことに手を出しがちです。インスピレーションが強く、思ったことが現実になったりします。人への偏見がなく、自由な発想ができる社交性もあります。', constitution:'「ひりひり」は繊細な感受性を持つ肺虚の素材。感受性と審美眼が極限まで研ぎ澄まされている。「ねっちり」は心虚で血が滞りやすいリズム。一点に集中して深く追求する力が人一倍強い。この2つが重なることで、肺の繊細さと心の集中力が極まった、独自の世界を深く掘り下げるフィジカルです。' },
+  '壬午': { num:19, group:'暑 HEAT ／ 芸能人', catch:'真冬の海のように、急激に感情が変化するお天気屋さん。', personality:'いろんなことを思いつくけど、気分が変わるので続きません。一目会っただけで、どんな人か分かっちゃう特技があります。人の言うことより自分のことを信じる方が、やる気が出ます。人生も感情も波は激しいけど、流れに乗ればうまくいきます。', constitution:'「ポヨポヨ」は水が広く滞りやすい腎実の素材。スケールの大きな発想と共感力がある。「がっつり」は心実で血流が盛んなリズム。直感で動いて一気に燃やし切る瞬発力が際立つ。この2つが重なることで、水の大きさと火の瞬発力が同時に働く、流れに乗ったときに誰よりも輝くフィジカルです。' },
+  '癸未': { num:20, group:'暑 HEAT ／ 芸能人', catch:'甘えたがりなくせに、芯は強くて中身は意外と頑固な人。', personality:'自分の想いとやり方があるので、うまくいかないと悩みます。外の明るさと中身の生真面目さは、優しさの表れなんです。たまにヤケくそになって、衝動的になってしまうところがあります。自分の性格を自覚して、自制するようにするとうまくいきます。', constitution:'「からから」は内側から乾きやすい腎虚の素材。知識と感性を精密に処理して本質を伝える力がある。「きっちり」は脾虚で気が不足しやすいリズム。人のために整え続ける献身性と調整力が高い。この2つが重なることで、腎の深さと脾の献身性が重なる、縁の下で場を支えながら力を蓄えるフィジカルです。' },
+  '甲申': { num:21, group:'熱 HOT ／ 技術者',  catch:'何でもできちゃうけど、エネルギーがデカすぎて持て余す人。', personality:'いつもパワフルに働いている方が、元気でいられます。器用貧乏なので、一つに集中して頑張ればスペシャリストに。根はまじめで愛嬌があり、人懐っこいのでよく愛されます。いろんなことに手を出さず、長く続けられることを大事にするとうまくいきます。', constitution:'「イライラ」は気が上昇しやすい肝実の素材。エネルギーが上に向かい、直進する推進力がある。「さっくり」は肺実で気の巡りが活発なリズム。無駄を省いて最短距離で動く合理性がある。この2つが重なることで、肝の突破力と肺の合理性が同時に働く、動いているときほど力を発揮するフィジカルです。' },
+  '乙酉': { num:22, group:'熱 HOT ／ 技術者',  catch:'裏表がなく、ほのぼの親しみやすくて一本気で底抜けな人。', personality:'自分の経験したことがすべてで、人の言うことを聞きません。鋭い観察力で、大事な押さえどころはきっちりと押さえます。気取らずに嫌みのない明るい性格は、みんなの人気者です。やや独りよがりのところもあるので、協調性も持ちましょう。', constitution:'「うつうつ」は気を内側に溜め込みやすい肝虚の素材。柔軟に受け流しながら、場の空気をよく吸収する。「つんつん」は肺虚で潤いが不足しやすいリズム。審美眼と完成度へのこだわりが人一倍強い。この2つが重なることで、肝の繊細な感受性と肺の鋭い観察眼が重なる、独自のセンスが際立つフィジカルです。' },
+  '丙戌': { num:23, group:'熱 HOT ／ 技術者',  catch:'開けっぴろげで人懐っこく社交的なコミュニケーション名人。', personality:'いつも人を慕って、たくさんの友達を連れて楽しく遊びます。社交の場で培ったセンスを発揮できる仕事が向いてます。本能に忠実なところがあって、明るくハメを外しがちです。真正面からでなく、負けて勝つようなやり方が得意です。', constitution:'「ドキドキ」は熱を外へ放ち続ける心実の素材。高揚感とエネルギーが自然とみなぎり、周囲を明るくする。「ぐいぐい」は脾実で胃熱が溜まりやすいリズム。地に根を張って継続する粘り強さがある。この2つが重なることで、心の明るさと脾の持久力が重なる、人を引き寄せながら長く走り続けるフィジカルです。' },
+  '丁亥': { num:24, group:'熱 HOT ／ 技術者',  catch:'人が思いつかない発想と、鋭いインスピレーションを持つ人。', personality:'繊細で感受性が強いので、人にはとっても優しくなれます。たまに60パターンの中で一番強い霊感を持つ人がいます。精神性を大事にしながら、巧みに表現できるアーティスト肌。一人で自分の世界を広げるような生き方が、気楽で好きです。', constitution:'「はらはら」は血が不足しやすい心虚の素材。人の気持ちや見えないものを敏感に感じ取る。「どんどん」は腎虚で精気が枯渇しやすいリズム。純粋な探求心で深みへ踏み込む力がある。この2つが重なることで、心の感受性と腎の探求力が重なる、唯一無二の世界観と深い洞察力を持つフィジカルです。' },
+  '戊子': { num:25, group:'熱 HOT ／ 技術者',  catch:'人を寄せつけないオーラを持った、感情の激しい堅気な人。', personality:'強烈な個性を持っているので、流されずに自分流を貫きます。気まぐれな性格で、普通に育つと普通じゃなくなります。態度はデカくても、気は小さいせいか多少威張りがちです。自分だけの型を見つけて、一芸に秀でれば成功します。', constitution:'「ガツガツ」はあらゆるものを吸収したい脾実の素材。吸収力が高く、経験や知識がどんどん力になる。「むっつり」は水が滞りやすい腎実のリズム。内側に深く蓄えながら、本質を見抜く洞察力がある。この2つが重なることで、脾の吸収力と腎の洞察力が同時に働く、一度つかんだことを深く自分のものにするフィジカルです。' },
+  '己丑': { num:26, group:'熱 HOT ／ 技術者',  catch:'人に媚びず、もくもくとマイペースに自己流で生きている人。', personality:'時々熱くなると、自己主張しすぎて引かれる時があります。ガツガツせず、軽やかに平和な日々を過ごせれば満足です。じっくり焦らず、コツコツ積み上げてきた経験が花開きます。ムリをせず食べ物に気をつければ、わりと長生きできます。', constitution:'「くよくよ」は深く考えながら蓄積する脾虚の素材。じっくり分析して内側に積み上げていく力がある。「むっちり」は脾虚でエネルギーが不足しやすいリズム。時間をかけるほどに力が蓄積される。この2つが重なることで、素材とリズムどちらも土の陰が重なる、深く蓄えながら着実に積み上げるフィジカルです。脾虚が重なりやすいため、胃腸を温める食材が特に力を引き出す。' },
+  '庚寅': { num:27, group:'熱 HOT ／ 技術者',  catch:'夢と人情を大事に掲げる、パワーと正義感あふれる理想家。', personality:'型にはまらない空想力と、切れ味鋭い感性でばっさりいきます。たまに理想が高すぎて、そのギャップで現実逃避しがちです。それでも諦めない向上心が、みんなに応援されて頑張れます。気分屋なところがあるので、カッとなる前に深呼吸しましょう。', constitution:'「ムズムズ」は外への反応が鋭い肺実の素材。現状を打ち破るエネルギーと正義感が強い。「ぐんぐん」は肝実で気が上昇しやすいリズム。躊躇なく前へ突き進む決断力がある。この2つが重なることで、肺の突破力と肝の推進力が重なる、理想に向かって誰よりも力強く動き出すフィジカルです。' },
+  '辛卯': { num:28, group:'熱 HOT ／ 技術者',  catch:'シンプルにこだわって、自分を磨き続ける超ストイックな人。', personality:'内面のプライドと自意識の高さが、成功へと導いてくれます。面倒くさがりで、いつも決まったものを身につけています。愛情にあふれていて面倒見がいいので、人が寄ってきます。たまにキャパオーバーになるので、ほどほどにしてください。', constitution:'「ひりひり」は繊細な感受性を持つ肺虚の素材。細部まで感じ取る審美眼と鋭い観察力がある。「ほいほい」は肝虚で気血が不足しやすいリズム。軽やかに周囲と共鳴しながら人を引き寄せる社交性がある。この2つが重なることで、肺の繊細さと肝の軽やかさが重なる、磨かれるほどに人を惹きつけるフィジカルです。' },
+  '壬辰': { num:29, group:'熱 HOT ／ 技術者',  catch:'嵐の前の静けさと、いざとなったら火を噴く冷静と度胸の人。', personality:'大人しそうに見えて、内面は巨大な台風並みの激しさを持つ。なんでもありの柔軟性で、どんなところにも飛び込みます。不器用そうに見えて、人の気持ちが分かる優しさがあります。いきなり動き出すので、びっくりさせないようにしましょう。', constitution:'「ポヨポヨ」は水が広く滞りやすい腎実の素材。スケールの大きな発想と、人の感情をよく吸収する共感力がある。「みっちり」は脾実で湿熱が溜まりやすいリズム。やり切るまで統率し続ける完遂力がある。この2つが重なることで、腎の大きな包容力と脾の統率力が重なる、どっしり構えながら人を動かすフィジカルです。' },
+  '癸巳': { num:30, group:'熱 HOT ／ 技術者',  catch:'感受性が豊かで、表と裏を使い分けるちょっと変わった人。', personality:'かわいげがありほっとけないので、なぜか変な人が集まります。人と人との間に立って、利益を生み出すことができます。少し疑い深く思い込みやすいので、思い切りも必要です。移り気なところがあるので、粘り強くあたれば成功します。', constitution:'「からから」は内側から乾きやすい腎虚の素材。知識と感性を精密に処理して本質を伝える力がある。「ねっちり」は心虚で血が滞りやすいリズム。一点に集中して深く追求する力が人一倍強い。この2つが重なることで、腎の浸透力と心の集中力が重なる、独自の世界を静かに掘り下げるフィジカルです。' },
+  '甲午': { num:31, group:'湿 HUMID ／ 実業家', catch:'ピュアで人を疑うことを知らない、優しすぎるお人好しな人。', personality:'こう見えて繊細なので、何かあるとすぐ引きこもります。人に対する思いやりは強く、惜しげもなく愛情を注ぎます。自分のことよりも他人を大事にすると、運が開けます。スタイルが良くて、個性的な人を好きになりがちです。', constitution:'「イライラ」は気が上昇しやすい肝実の素材。エネルギーが上に向かい、直進する推進力がある。「がっつり」は心実で血流が盛んなリズム。直感で動いて一気に燃やし切る瞬発力が際立つ。この2つが重なることで、肝の推進力と心の瞬発力が重なる、純粋なエネルギーが一気に放出されるフィジカルです。' },
+  '乙未': { num:32, group:'湿 HUMID ／ 実業家', catch:'どんなところでもきっちり仕上げる、安心円満な楽天家。', personality:'いつも平常心で、慌てたりハメを外したりしない方です。マジメすぎる印象だが、好きなことへの好奇心は強いです。理性的で礼儀正しいので、目上からは気に入られやすいです。安定感は抜群なので、一緒にいると穏やかに過ごせます。', constitution:'「うつうつ」は気を内側に溜め込みやすい肝虚の素材。柔軟に受け流しながら、場の空気をよく吸収する。「きっちり」は脾虚で気が不足しやすいリズム。人のために整え続ける献身性と確かな実行力がある。この2つが重なることで、肝の気配りと脾の実行力が重なる、周囲から自然と頼られるフィジカルです。' },
+  '丙申': { num:33, group:'湿 HUMID ／ 実業家', catch:'夢やロマンが大好きで、やや現実離れしたメルヘンな人。', personality:'感受性が豊かで、自分の直感を信じて行動しがちです。どこで見つけたのか分からない、すごいものを隠してます。夢も大事ですが、現実のステップも着実に踏みましょう。自由に夢を見させてのびのびさせると、才能が開花されます。', constitution:'「ドキドキ」は熱を外へ放ち続ける心実の素材。高揚感とエネルギーが自然とみなぎり、発信力が強い。「さっくり」は肺実で気の巡りが活発なリズム。合理的な判断力と切り替えの速さがある。この2つが重なることで、心の豊かな発想力と肺の合理的な実行力が重なる、夢を現実に変えていくフィジカルです。' },
+  '丁酉': { num:34, group:'湿 HUMID ／ 実業家', catch:'闘志を秘めつつ自分の思いをぶつけてくる、義理と人情の人。', personality:'怖いもの知らずで無鉄砲なくせに、絶叫系はキライです。ほのぼのとして明るく、ビジネスでは頭がキレる策士です。敵に回したくないNo.1だけど、仲間にしたら頼れるNo.1。機嫌が悪くなったら、誰か褒めちぎって立ててあげてください。', constitution:'「はらはら」は血が不足しやすい心虚の素材。人の気持ちや場の変化を敏感に感じ取る力がある。「つんつん」は肺虚で潤いが不足しやすいリズム。審美眼と完成度へのこだわりが人一倍強い。この2つが重なることで、心の鋭い感性と肺の深いこだわりが重なる、独特の世界観と義理人情を持つフィジカルです。' },
+  '戊戌': { num:35, group:'湿 HUMID ／ 実業家', catch:'自分の意見は決して曲げない信念と、強情で不器用な人。', personality:'好き嫌いが激しく、夢中になると納得がいくまでやります。プライドと自尊心は高く、常に自分を良く見せがちです。できれば高い山の上とか、タワマンに住みたいと思ってます。みんなを集めて、ワイワイお山の大将をするのが大好きです。', constitution:'「ガツガツ」はあらゆるものを吸収したい脾実の素材。吸収力が高く、経験や知識がどんどん力になる。「ぐいぐい」は脾実で胃熱が溜まりやすいリズム。一度決めたら最後まで圧をかけ続ける持久力がある。この2つが重なることで、素材とリズムどちらも土の陽が重なる、吸収力と持久力が極まったフィジカルです。積み上げたものを手放さない強さがある一方、過剰になると胃腸への負担として出やすい。' },
+  '己亥': { num:36, group:'湿 HUMID ／ 実業家', catch:'安定をなぜか覆したくなっちゃう、あまのじゃくなカメレオン。', personality:'誠実で素直な人だけど、周りの変化を察知して即キャラ変。考えを態度に出さないまま、実は水面下で進めています。自分の居場所を求めてさまよいながら、一人で行動します。波乱の道をめげずに進めば、やがて大きなものが実ります。', constitution:'「くよくよ」は深く考えながら蓄積する脾虚の素材。表面は穏やかでも内側では常に思考を積み重ねている。「どんどん」は腎虚で精気が枯渇しやすいリズム。純粋な探求心で深みへ踏み込む力がある。この2つが重なることで、脾の蓄積力と腎の探求力が重なる、表に見えない力を深く蓄え続けるフィジカルです。' },
+  '庚子': { num:37, group:'湿 HUMID ／ 実業家', catch:'かなり心配性だけど、ずば抜けた直感力と空想力のある人。', personality:'自分を客観視しながら、常に先を見据えて行動します。シャープでキレすぎる頭脳と、繊細でデリケートな精神。小さい頃に過保護に育てられると、健康面で問題が出ます。精神的なつながりを、目に見える形で表されると安心できます。', constitution:'「ムズムズ」は外への反応が鋭い肺実の素材。変革を求めるエネルギーと鋭い判断力がある。「むっつり」は水が滞りやすい腎実のリズム。内側で深く蓄えながら本質を見抜く洞察力がある。この2つが重なることで、肺の鋭さと腎の洞察力が重なる、先を読みながら変革を起こすフィジカルです。' },
+  '辛丑': { num:38, group:'湿 HUMID ／ 実業家', catch:'能ある鷹は爪を隠して、いつも無邪気にふるまう癒しの人。', personality:'聡明で論理的かつ、ユーモアセンスを持つタレント性。裏ではコツコツと自分を律しながら、地道に努力を続ける。ボーッとしているように見えて、実は意外と結構頑張ってます。のんびりした雰囲気は、自然と周りをなごませてくれます。', constitution:'「ひりひり」は繊細な感受性を持つ肺虚の素材。細部まで感じ取る審美眼と鋭い観察力がある。「むっちり」は脾虚でエネルギーが不足しやすいリズム。時間をかけるほどに力が蓄積される忍耐力がある。この2つが重なることで、肺の繊細な感性と脾の揺るぎない忍耐力が重なる、じっくり磨かれるほどに輝くフィジカルです。' },
+  '壬寅': { num:39, group:'湿 HUMID ／ 実業家', catch:'のんびり見えるけど、アクティブな目立ちたがり屋さん。', personality:'すぐれた直感力とパワーで、いろんな人に頼られがちです。自意識とおしゃれ度が高く、単独で行動する方が好きです。苦境に立たされても、果敢に立ち向かい解決しようとします。見た目は大人しそうなのに、秘めたるパワーは最強です。', constitution:'「ポヨポヨ」は水が広く滞りやすい腎実の素材。スケールの大きな発想と、深い共感力がある。「ぐんぐん」は肝実で気が上昇しやすいリズム。躊躇なく前へ突き進む決断力がある。この2つが重なることで、腎の大きな視野と肝の力強い行動力が重なる、スケールの大きな挑戦に向いたフィジカルです。' },
+  '癸卯': { num:40, group:'湿 HUMID ／ 実業家', catch:'陰で責任感が強く、縁の下を支えるしっかり者の実力者。', personality:'前へは出ないけど、マジメさで周りから引き立てられます。聡明で気品のある人柄で、中身はこだわりの完全主義者。人に気を遣いすぎて、ちょっとストレスになりやすいです。現実と守りをしっかり意識すると、平穏な暮らしができます。', constitution:'「からから」は内側から乾きやすい腎虚の素材。知識と感性を精密に処理して本質を伝える力がある。「ほいほい」は肝虚で気血が不足しやすいリズム。軽やかに周囲と共鳴しながら人を引き寄せる。この2つが重なることで、腎の浸透力と肝の軽やかな社交性が重なる、縁の下で場を支えながら人をつなぐフィジカルです。' },
+  '甲辰': { num:41, group:'風 WIND ／ 会社員',  catch:'好きなことにひたすらまっしぐらにのめり込んで追求する人。', personality:'あまり器用ではないので、同時にいろんなことはできません。気持ちはのびのびしてるけど、行動はかなり慎重です。自分への甘えは許せないので、地道にコツコツ努力を重ねます。信じやすいところがあるけど、それが原動力になってます。', constitution:'「イライラ」は気が上昇しやすい肝実の素材。エネルギーが上に向かい、直進する推進力がある。「みっちり」は脾実で湿熱が溜まりやすいリズム。やり切るまで統率し続ける完遂力がある。この2つが重なることで、肝の突破力と脾の完遂力が重なる、のめり込んだら誰よりも深く追求し続けるフィジカルです。' },
+  '乙巳': { num:42, group:'風 WIND ／ 会社員',  catch:'穏やかで明るさがあり、人からの注目を浴びる人です。', personality:'内面は感受性が強く、表とは裏腹に警戒心が強いです。人情が深く、不安と近いから多少周りに気を遣いすぎます。さみしがり屋のせいか、行動力はめちゃくちゃあります。裏で手を回して、人をつないでまとめることが得意です。', constitution:'「うつうつ」は気を内側に溜め込みやすい肝虚の素材。柔軟に受け流しながら、場の空気をよく吸収する。「ねっちり」は心虚で血が滞りやすいリズム。一点に集中して深く追求する力が人一倍強い。この2つが重なることで、肝の感受性と心の集中力が重なる、人の心をつかみながら静かに追求し続けるフィジカルです。' },
+  '丙午': { num:43, group:'風 WIND ／ 会社員',  catch:'周りを犠牲にするほど自分が強くなる、ジャイアンな人。', personality:'若い頃にめちゃくちゃ苦労をすると、仕事で大成できます。大人しそうに見えて、人のことはよく見ています。どんな時でも、オンとオフはきっちり分けさせてもらいます。仕事で世の中に貢献することに、生きがいを感じます。', constitution:'「ドキドキ」は熱を外へ放ち続ける心実の素材。高揚感とエネルギーが自然とみなぎり、存在感を放つ。「がっつり」は心実で血流が最も盛んなリズム。直感で動いて一気に燃やし切る瞬発力が際立つ。この2つが重なることで、素材とリズムどちらも火の陽が重なる、圧倒的なエネルギーと存在感を持つフィジカルです。心実が強く出やすいため、熱を冷ます苦味の食材が力を引き出す。' },
+  '丁未': { num:44, group:'風 WIND ／ 会社員',  catch:'気さくで愛嬌があり、その場の雰囲気に合わせられる人。', personality:'本心は謎めいていて、何を考えているか伝わりづらいです。たまに思いついて、核心を突いた毒舌が急に飛びだします。軽やかなのに芯の持ち主で、一度決めたらやり抜きます。スタートは遅いけど、じわじわ追い返す持久力があります。', constitution:'「はらはら」は血が不足しやすい心虚の素材。人の気持ちや場の変化を敏感に感じ取る力がある。「きっちり」は脾虚で気が不足しやすいリズム。枠組みを守りながら確実にやり遂げる実行力がある。この2つが重なることで、心の繊細な感性と脾の確かな実行力が重なる、場の空気を読みながら着実にやり遂げるフィジカルです。' },
+  '戊申': { num:45, group:'風 WIND ／ 会社員',  catch:'決着がつくまで見守ってから出てくるラスボス的な人。', personality:'冷静に全体を把握して、自分の出方を考えて行動します。そんなつもりはないのに、周りには計算高いと言われます。口はうまいけど、たまにちょっと強引なところがあります。その日その日で判断して、いつでも柔軟に対応できます。', constitution:'「ガツガツ」はあらゆるものを吸収したい脾実の素材。吸収力が高く、経験や知識がどんどん力になる。「さっくり」は肺実で気の巡りが活発なリズム。無駄を省いて最短距離で動く合理性がある。この2つが重なることで、脾の蓄積力と肺の合理性が重なる、全体を把握しながら最適なタイミングで動くフィジカルです。' },
+  '己酉': { num:46, group:'風 WIND ／ 会社員',  catch:'自分の努力や経験をすべて土台にして切り開いていく人。', personality:'新しくてワクワクするような事にやりがいを感じます。地道にコツコツやるのは好きだけど、面倒なのは嫌いです。人に何と言われようと、できると思ったことはやり遂げます。スピードは遅いけど、一歩一歩着実に足場を固めます。', constitution:'「くよくよ」は深く考えながら蓄積する脾虚の素材。じっくり分析して内側に積み上げていく力がある。「つんつん」は肺虚で潤いが不足しやすいリズム。審美眼と完成度へのこだわりが人一倍強い。この2つが重なることで、脾の蓄積力と肺の高い精度が重なる、経験を積むほどに洗練されていくフィジカルです。' },
+  '庚戌': { num:47, group:'風 WIND ／ 会社員',  catch:'いざという時にキャラ変して、本心がお目見えする頭脳派。', personality:'物静かだけど、内面には強い信念を隠し持っています。基本的にまじめで、いつも周りを気にしながら行動します。頭脳を武器に静かに主張しながら、自分の世界を確立します。小さなことよりも、何かスケールのデカいことをさせてください。', constitution:'「ムズムズ」は外への反応が鋭い肺実の素材。変革を求めるエネルギーと強い信念がある。「ぐいぐい」は脾実で胃熱が溜まりやすいリズム。地に根を張って持続的に押し続ける持久力がある。この2つが重なることで、肺の変革する力と脾の揺るぎない持久力が重なる、静かに構えながら大きな舞台で力を発揮するフィジカルです。' },
+  '辛亥': { num:48, group:'風 WIND ／ 会社員',  catch:'ゆるく見えて、人の本質を見抜く不思議な力を持ってる人。', personality:'繊細でデリケートな感性の中から、第六感が磨かれます。性格は明るく気さくで、いい感じに力を抜ける大人です。本人はリラックスしてても、なぜか存在感があります。賢そうに見えて、どこか抜けてるのが愛されポイントです。', constitution:'「ひりひり」は繊細な感受性を持つ肺虚の素材。細部まで感じ取り、人の本質を見抜く力がある。「どんどん」は腎虚で精気が枯渇しやすいリズム。純粋な探求心で底まで掘り下げる力がある。この2つが重なることで、肺の鋭い感性と腎の純粋な探求力が重なる、見えないものを感じ取りながら深く掘り下げるフィジカルです。' },
+  '壬子': { num:49, group:'風 WIND ／ 会社員',  catch:'みんなに愛されながら、豪快に引っ張っていく親分肌な人。', personality:'考えてるスケールがデカすぎて、たまについていけません。勉強だけでなく、世間で身につけた独自の良さを持ちます。頼まれるとイヤと言えない、全方位的にみんなにやさしい人。既成概念にとらわれないような生き方をするのが合います。', constitution:'「ポヨポヨ」は水が広く滞りやすい腎実の素材。スケールの大きな発想と、人の感情をよく吸収する共感力がある。「むっつり」は腎実で水が最も溜まりやすいリズム。内側で深く蓄えながら本質を見抜く洞察力がある。この2つが重なることで、素材とリズムどちらも水の陽が重なる、広い包容力と深い洞察力が極まったフィジカルです。水が滞りやすいため、水の巡りを整える食材が力を引き出す。' },
+  '癸丑': { num:50, group:'風 WIND ／ 会社員',  catch:'若いのになぜか落ち着いてるギャップがかわいらしい人。', personality:'人情味があって、お酒を飲むと朝までずっと語りだします。ちょっと気になることがあると、急にムキになったりします。でも悪気はないので、大丈夫だよって言ってあげてください。へこむたびにメンタルが鍛えられて、堂々としていきます。', constitution:'「からから」は内側から乾きやすい腎虚の素材。知識と感性を精密に処理して本質を伝える力がある。「むっちり」は脾虚でエネルギーが不足しやすいリズム。時間をかけるほどに力が蓄積される。この2つが重なることで、腎の浸透力と脾の揺るぎない忍耐力が重なる、時間をかけるほどに深みと風格が増すフィジカルです。' },
+  '甲寅': { num:51, group:'寒 COLD ／ 表現者',  catch:'前向きでポジティブで明るい、マイペースな愛されキャラタイプ。', personality:'来る者は拒まず、どんな人でも受け入れる器のビッグな人です。イヤなことがあっても、寝て起きればわりとすぐ忘れます。イケイケどんどんな精神で、人の言うことは聞いてないかも？いろんな人と出会う中で人脈ができれば、うまくいきます。', constitution:'「イライラ」は気が上昇しやすい肝実の素材。エネルギーが上に向かい、直進する推進力がある。「ぐんぐん」は肝実で気が最も上昇しやすいリズム。前へ突き進む力が最も強く、スタートを切ったら止まらない。この2つが重なることで、素材とリズムどちらも木の陽が重なる、誰よりも力強く前へ進み続けるフィジカルです。肝実が強く出やすいため、気の巡りを整える酸味や菊花が力を引き出す。' },
+  '乙卯': { num:52, group:'寒 COLD ／ 表現者',  catch:'気さくでほんわか癒し系の内側に、しぶといパワーを持つ人。', personality:'一つ一つ着実に物事を積み重ねていく、堅実な努力派です。いつの間にか自分のペースに巻き込む才能があります。上下関係を大事にするので、中間管理職的な役が多いです。テキパキとそつなくこなせるので、余裕を持つとよいです。', constitution:'「うつうつ」は気を内側に溜め込みやすい肝虚の素材。柔軟に受け流しながら、場の空気をよく吸収する。「ほいほい」は肝虚で気血が最も不足しやすいリズム。軽やかに周囲と共鳴しながら人を引き寄せる社交性がある。この2つが重なることで、素材とリズムどちらも木の陰が重なる、柔らかく広がりながら深く根付いていくフィジカルです。肝虚が重なりやすいため、血を補う赤い食材が力を引き出す。' },
+  '丙辰': { num:53, group:'寒 COLD ／ 表現者',  catch:'少しお節介だけど、人情味にあふれたパワフルなお助けマン。', personality:'しっかり者で迷いが少ないので、はっきりと意見を言います。お世辞とかは言えないけど、その正直さが共感を呼びます。エネルギーが強く、一度走り出すと自分では止められません。自分の直感やスタイルを大事にすれば、うまくいきます。', constitution:'「ドキドキ」は熱を外へ放ち続ける心実の素材。高揚感とエネルギーが自然とみなぎり、発信力が強い。「みっちり」は脾実で湿熱が溜まりやすいリズム。信頼を集めながら最後まで完遂する力がある。この2つが重なることで、心の情熱と脾の統率力が重なる、人を動かしながらやり切る力を持つフィジカルです。' },
+  '丁巳': { num:54, group:'寒 COLD ／ 表現者',  catch:'自尊心が強くプライドの高い、孤高で堂々とした潔癖な人。', personality:'堂々としてて開けっぴろげで大胆なので、わりとモテます。求めるレベルが高すぎるので、自分で全部やりがちです。自分の感覚のセンスを分かってくれる人と一緒にいたいです。自分なりの世界を追求していると、いつの間にか注目されます。', constitution:'「はらはら」は血が不足しやすい心虚の素材。人の気持ちや場の変化を敏感に感じ取る力がある。「ねっちり」は心虚で血が最も滞りやすいリズム。一点に集中して深く追求する力が強い。この2つが重なることで、素材とリズムどちらも火の陰が重なる、繊細な感性と深い集中力が極まったフィジカルです。血虚が重なりやすいため、血を補う黒い食材が力を引き出す。' },
+  '戊午': { num:55, group:'寒 COLD ／ 表現者',  catch:'どっしりと落ち着いた雰囲気の中に、強い個性と信念を持つ人。', personality:'冷静にデータを分析して、実行に移せる行動力があります。いざとなると、革命を起こせるくらいのパワーを持ってます。様々な分野の教養を身につけると、スケールが広がります。年齢を重ねるごとに深みを増し、だんだん運が強くなります。', constitution:'「ガツガツ」はあらゆるものを吸収したい脾実の素材。吸収力が高く、経験や知識がどんどん力になる。「がっつり」は心実で血流が盛んなリズム。直感で動いて一気に燃やし切る瞬発力が際立つ。この2つが重なることで、脾の蓄積力と心の瞬発力が重なる、どっしり構えながらここぞという場面で爆発的な力を発揮するフィジカルです。' },
+  '己未': { num:56, group:'寒 COLD ／ 表現者',  catch:'素朴な明るさの中にも、強い自信と度胸を持つゆとりの人。', personality:'自分に合うかどうかをじっくり見極めて、人と付き合います。不満がたまってくると、つい感情的になって爆発しちゃいます。大人の階段を上る途中のどこかで、突如生まれ変わります。人の意見にとらわれず、負けない気持ちを持てるとよいです。', constitution:'「くよくよ」は深く考えながら蓄積する脾虚の素材。じっくり分析して内側に積み上げていく力がある。「きっちり」は脾虚で気が不足しやすいリズム。人のために整え続ける献身性と調整力が高い。この2つが重なることで、素材とリズムどちらも土の陰が重なる、深く考えながら確実にこなす力を持つフィジカルです。脾虚が重なりやすいため、胃腸を温める甘みの食材が力を引き出す。' },
+  '庚申': { num:57, group:'寒 COLD ／ 表現者',  catch:'人の言葉の裏を読める、シャープな知性と直感力の勝負師。', personality:'見よう見まねでいいところを盗んで、自分の戦力にします。鉄壁の防御本能を持ってるので、逃げ足は軽いです。一本気で負けん気が強いので、みんなの先頭となって挑みます。知性と直感で勝負できれば、どこでも負け知らずで過ごせます。', constitution:'「ムズムズ」は外への反応が鋭い肺実の素材。変革を求めるエネルギーと鋭い判断力がある。「さっくり」は肺実で気の巡りが最も活発なリズム。無駄を省いて最短距離で動く合理性がある。この2つが重なることで、素材とリズムどちらも金の陽が重なる、鋭い知性と突破力が極まった勝負強いフィジカルです。肺実が強く出やすいため、気を発散させる辛味の食材が力を引き出す。' },
+  '辛酉': { num:58, group:'寒 COLD ／ 表現者',  catch:'知的なセンスと、どこか洗練された雰囲気を持つ理数系な人。', personality:'人の気持ちにはやや鈍感なので、お世辞とかは言えません。真面目な姿勢と、裏づいた信憑性のある言動で信頼されます。一つのことに真摯に向き合って、追求することが得意です。周りよりも自分は自分のスタンスでいくと、うまくいきます。', constitution:'「ひりひり」は繊細な感受性を持つ肺虚の素材。感受性と審美眼が鋭く、細部まで感じ取る力がある。「つんつん」は肺虚で潤いが最も不足しやすいリズム。完成度へのこだわりが人一倍強い。この2つが重なることで、素材とリズムどちらも金の陰が重なる、感性と精度が極まった唯一無二の洗練を持つフィジカルです。肺陰虚が重なりやすいため、潤いを補う白い食材が力を引き出す。' },
+  '壬戌': { num:59, group:'寒 COLD ／ 表現者',  catch:'五感でなんでも吸収してしまう才能を持った、感覚的な人。', personality:'思い立ったら理屈より行動するけど、なぜか勘は当たります。行動する時の、まわりを巻き込んでいく影響力はすごいです。困っている人を見ると、なんとかしてでも助けたくなります。時に荒々しいところもあるけど、誠実なので好かれます。', constitution:'「ポヨポヨ」は水が広く滞りやすい腎実の素材。スケールの大きな発想と、人の感情をよく吸収する共感力がある。「ぐいぐい」は脾実で胃熱が溜まりやすいリズム。地に根を張って継続する粘り強さがある。この2つが重なることで、腎の広い共感力と脾の揺るぎない持久力が重なる、人を巻き込みながら長く走り続けるフィジカルです。' },
+  '癸亥': { num:60, group:'寒 COLD ／ 表現者',  catch:'普通じゃない道を行く、強靭な精神力と忍耐力のある超人。', personality:'相手の心理を読み、状況や流れを感じて自分を表現します。派手そうに見えて、意外と平和で庶民的な生活を好みます。何度でも這い上がれる人なので、挑戦する気持ちが大事です。世の中の主流よりも、人生の裏側を行くとうまくいきます。', constitution:'「からから」は内側から乾きやすい腎虚の素材。知識と感性を精密に処理して本質を伝える力がある。「どんどん」は腎虚で精気が最も枯渇しやすいリズム。純粋な探求心で底まで掘り下げる力がある。この2つが重なることで、素材とリズムどちらも水の陰が重なる、深く浸透しながら底なしに探求し続けるフィジカルです。腎虚が重なりやすいため、腎を補う黒い食材が力を引き出す。' }
+};
+
+// ============================================================
+// 柱の役割説明
+// ============================================================
+const PILLAR_INFO = {
+  day: {
+    badge: '日柱 ／ あなたの本質・基本設定',
+    desc: '生まれ持った、あなたそのものの性質です。'
+  },
+  month: {
+    badge: '月柱 ／ プライベート・個人でのあなた',
+    desc: '家族や親しい人との間で出やすい顔です。'
+  },
+  year: {
+    badge: '年柱 ／ ソーシャル・社会でのあなた',
+    desc: '初対面や職場など、社会的な場面で出やすい顔です。'
+  }
+};
+
+// ============================================================
+// 節入り日テーブル
+// ============================================================
+const SETSU_TABLE = {"1900":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1910":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1911":{"1":6,"2":5,"3":7,"4":6,"5":7,"6":7,"7":8,"8":9,"9":9,"10":9,"11":8,"12":8},"1912":{"1":7,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1913":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1920":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1930":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1940":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1950":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1960":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1970":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1980":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1981":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1982":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1983":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1984":{"1":6,"2":5,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1985":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1986":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1987":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1988":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1989":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1990":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1991":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1992":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1993":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1994":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1995":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1996":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1997":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1998":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1999":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2000":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2001":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2002":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2003":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2004":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2005":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2006":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2007":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2008":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2009":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2010":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2011":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2012":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2013":{"1":5,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2014":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2015":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2016":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2017":{"1":5,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2018":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2019":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2020":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2021":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2022":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2023":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2024":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":7},"2025":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2026":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2027":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2028":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":6},"2029":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2030":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7}};
+
+function getSetsubi(year, solarMonth) {
+  const y = String(year), m = String(solarMonth);
+  if (SETSU_TABLE[y] && SETSU_TABLE[y][m]) return SETSU_TABLE[y][m];
+  const avg = [0,6,4,6,5,5,6,7,8,8,8,7,7];
+  return avg[solarMonth];
+}
+
+function getYearKanShi(year) {
+  const base = ((year - 4) % 60 + 60) % 60;
+  return { kan: KAN[base % 10], shi: SHI[base % 12] };
+}
+
+function getDayKanShi(year, month, day) {
+  const base = new Date(1900, 0, 1);
+  const target = new Date(year, month - 1, day);
+  const diff = Math.round((target - base) / 86400000);
+  const idx = ((diff + 10) % 60 + 60) % 60;
+  return { kan: KAN[idx % 10], shi: SHI[idx % 12] };
+}
+
+function getMonthShi(year, month, day) {
+  const setsu = getSetsubi(year, month);
+  const monthToShi = [1,2,3,4,5,6,7,8,9,10,11,0];
+  let mIdx = month - 1;
+  if (day < setsu) mIdx = (mIdx - 1 + 12) % 12;
+  return SHI[monthToShi[mIdx]];
+}
+
+function getMonthKan(yearKan, monthShi) {
+  const yearKanIdx = KAN.indexOf(yearKan);
+  const monthShiIdx = SHI.indexOf(monthShi);
+  const baseKan = [2,4,6,8,0];
+  const base = baseKan[yearKanIdx % 5];
+  const offset = (monthShiIdx - 2 + 12) % 12;
+  return KAN[(base + offset) % 10];
+}
+
+// ============================================================
+// レンダリング
+// ============================================================
+function renderEtoBlock(char, attr, symbol, color) {
+  return `<div class="eto-block" style="background:${color}">
+    <span class="eto-attr">${attr}</span>
+    <span class="eto-char">${char}</span>
+    <span class="eto-symbol">${symbol}</span>
+  </div>`;
+}
+
+function renderCard(kan, shi, pillarType) {
+  const key = kan + shi;
+  const data = KANSHI_DATA[key];
+  const kd = KAN_DATA[kan];
+  const sd = SHI_DATA[shi];
+  const kanColor = KAN_COLOR[kan];
+  const shiColor = SHI_COLOR[shi];
+  const info = PILLAR_INFO[pillarType];
+
+  const catchText = data ? data.catch : `${KAN_SYMBOL[kan]}と${SHI_SEASON[shi]}のリズムが重なる、独自の輝きを持つ人。`;
+  const personality = data ? data.personality : `${KAN_SYMBOL[kan]}の素材に、${sd.onoma}のリズムが組み合わさります。`;
+  const constitution = data ? data.constitution : `「${kd.onoma}」と「${sd.onoma}」が重なる、独自のフィジカルです。`;
+  const group = data ? data.group : '';
+  const num = data ? data.num : '';
+
+  // bodyのテキストをboldに変換
+  const constFormatted = constitution
+    .replace(/「([^」]+)」/g, '<b>「$1」</b>');
+
+  // バッジ
+  const badges = BADGE_DATA[key] || [];
+  const badgeHtml = badges.length > 0
+    ? `<div class="badge-row">${badges.map(b => `<span class="kanshi-badge badge-${b.type}">${b.label}</span>`).join('')}</div>`
+    : '';
+
+  return `
+    <div class="result-card">
+      <div class="card-header" style="background: linear-gradient(135deg, ${kanColor} 0%, ${shiColor} 100%);">
+        <div class="pillar-role-badge">${info.badge}</div>
+        <span class="pillar-role-desc">${info.desc}</span>
+        <div class="group-badge-row">
+          ${group ? `<div class="group-badge">${group}</div>` : ''}
+          ${badgeHtml}
+        </div>
+        <span class="kan-name">${num ? num + ' ／ ' : ''}${kan}${shi}（${readingKanShi(kan, shi)}）</span>
+        <p class="catch-text">${catchText}</p>
+      </div>
+      <div class="onoma-bar">
+        <div class="onoma-item">
+          <span class="onoma-type">十干 ／ ${kan}・${KAN_SYMBOL[kan]}</span>
+          <span class="onoma-text">${kd.onoma}</span>
+          <div class="onoma-keys">
+            ${kd.keys.map(k=>`<span class="onoma-key">${k}</span>`).join('')}
+          </div>
+        </div>
+        <div class="onoma-item">
+          <span class="onoma-type">十二支 ／ ${shi}・${SHI_SYMBOL[shi]}</span>
+          <span class="onoma-text">${sd.onoma}</span>
+          <div class="onoma-keys">
+            ${sd.keys.map(k=>`<span class="onoma-key">${k}</span>`).join('')}
+          </div>
+        </div>
+      </div>
+      <div class="section">
+        <span class="section-label">きっとこんな人かも</span>
+        <p class="section-text">${personality}</p>
+      </div>
+      <div class="section">
+        <span class="section-label">あなたの本来の体質</span>
+        <p class="section-text">${constFormatted}</p>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// バッジデータ
+// ============================================================
+const BADGE_DATA = {
+  '己巳': [{type:'hero',    label:'☀️ 主人公'}],
+  '甲戌': [{type:'alien',   label:'🛸 宇宙人'}],
+  '乙亥': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'}],
+  '丙子': [{type:'fairy',   label:'🧚 妖精'},  {type:'alien',   label:'🛸 宇宙人'}],
+  '丁丑': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'}],
+  '庚辰': [{type:'warrior', label:'⚔️ 勇者'}],
+  '辛巳': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'}],
+  '壬午': [{type:'fairy',   label:'🧚 妖精'},  {type:'alien',   label:'🛸 宇宙人'}],
+  '癸未': [{type:'ruler',   label:'🌙 支配者'}],
+  '甲申': [{type:'fairy',   label:'🧚 妖精'}],
+  '乙酉': [{type:'fairy',   label:'🧚 妖精'}],
+  '丙戌': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'}],
+  '丁亥': [{type:'fairy',   label:'🧚 妖精'},  {type:'alien',   label:'🛸 宇宙人'}],
+  '戊子': [{type:'fairy',   label:'🧚 妖精'},  {type:'alien',   label:'🛸 宇宙人'}],
+  '己丑': [{type:'ruler',   label:'🌙 支配者'}],
+  '庚寅': [{type:'fairy',   label:'🧚 妖精'}],
+  '辛卯': [{type:'fairy',   label:'🧚 妖精'}],
+  '壬辰': [{type:'ruler',   label:'🌙 支配者'},{type:'warrior', label:'⚔️ 勇者'}],
+  '癸巳': [{type:'fairy',   label:'🧚 妖精'},  {type:'alien',   label:'🛸 宇宙人'}],
+  '甲午': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'}],
+  '戊戌': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'},{type:'warrior',label:'⚔️ 勇者'}],
+  '己亥': [{type:'fairy',   label:'🧚 妖精'},  {type:'alien',   label:'🛸 宇宙人'}],
+  '庚子': [{type:'ruler',   label:'🌙 支配者'},{type:'alien',   label:'🛸 宇宙人'}],
+  '辛丑': [{type:'alien',   label:'🛸 宇宙人'}],
+  '丙午': [{type:'hero',    label:'☀️ 主人公'}],
+  '庚戌': [{type:'warrior', label:'⚔️ 勇者'}],
+  '辛亥': [{type:'alien',   label:'🛸 宇宙人'}],
+  '壬子': [{type:'hero',    label:'☀️ 主人公'}],
+  '甲寅': [{type:'hero',    label:'☀️ 主人公'}],
+  '乙卯': [{type:'hero',    label:'☀️ 主人公'}],
+  '丁巳': [{type:'hero',    label:'☀️ 主人公'},{type:'alien',   label:'🛸 宇宙人'}],
+  '戊午': [{type:'hero',    label:'☀️ 主人公'}],
+  '庚申': [{type:'hero',    label:'☀️ 主人公'}],
+  '辛酉': [{type:'hero',    label:'☀️ 主人公'}],
+  '癸亥': [{type:'hero',    label:'☀️ 主人公'}],
+};
+
+// 干支の読み仮名
+const KAN_READ = {
+  '甲':'きのえ','乙':'きのと','丙':'ひのえ','丁':'ひのと','戊':'つちのえ',
+  '己':'つちのと','庚':'かのえ','辛':'かのと','壬':'みずのえ','癸':'みずのと'
+};
+const SHI_READ = {
+  '子':'ね','丑':'うし','寅':'とら','卯':'う','辰':'たつ','巳':'み',
+  '午':'うま','未':'ひつじ','申':'さる','酉':'とり','戌':'いぬ','亥':'い'
+};
+function readingKanShi(kan, shi) {
+  return `${KAN_READ[kan]}・${SHI_READ[shi]}`;
+}
+
+// ============================================================
+// 十干茶データ
+// ============================================================
+const TEA_DATA = {
+  '甲': {
+    name: 'きのえブレンド',
+    blend: '菊花茶 × 2種のミント',
+    desc: '清々しい菊花に、2種のミントとレモングラスが重なる、すっきりとした一杯。まっすぐ前へ向かう力が詰まって「イライラ」してきたら、上に上がった熱をスーッと逃がすサイン。香りを一口含むと、頭の中がすっと晴れていく。',
+    url: 'https://kampotakeru.stores.jp/items/62f733fdbef381335a0f6566'
+  },
+  '乙': {
+    name: 'きのとブレンド',
+    blend: '月桃茶 × レモングラス',
+    desc: '南国の月桃とレモングラスに、バタフライピーの青が美しく溶ける一杯。周りに気を配りすぎて「うつうつ」してきたら、滞った気を動かすサイン。爽やかな香りがふわっと広がるたびに、心の重さが少し軽くなる。',
+    url: 'https://kampotakeru.stores.jp/items/631ecccb60bab44fabfbbbcf'
+  },
+  '丙': {
+    name: 'ひのえブレンド',
+    blend: '小豆茶 × ルイボス',
+    desc: 'カカオニブの甘い香りに、まろやかな小豆茶とルイボスが寄り添う赤い一杯。熱が高ぶって「ドキドキ」してきたら、心の火をそっと落ち着かせるサイン。ゆっくり飲むほどに、高揚が深い安らぎに変わっていく。',
+    url: 'https://kampotakeru.stores.jp/items/6326ba8723747f2c6461fbec'
+  },
+  '丁': {
+    name: 'ひのとブレンド',
+    blend: '黒豆茶 × サフラワー',
+    desc: '香ばしく焙煎した黒豆に、サフラワーがぽかぽかと温かみを添える一杯。「はらはら」と不安が募ってきたら、血を補ってめぐりを整えるサイン。じんわりした温かさが、繊細な感性を内側からやさしく支えてくれる。',
+    url: 'https://kampotakeru.stores.jp/items/6326bcb125c90669144d7165'
+  },
+  '戊': {
+    name: 'つちのえブレンド',
+    blend: 'カモミール茶 × ウコン',
+    desc: 'フルーティーなカモミールに、なつめとウコンが穏やかに溶け込む一杯。「ガツガツ」頑張りすぎて胃が張ってきたら、消化器の緊張をほぐすサイン。ひと息ついて飲むと、力みがほどけて自然な余裕が戻ってくる。',
+    url: 'https://kampotakeru.stores.jp/items/6326cdbec36dbe536f8c3b82'
+  },
+  '己': {
+    name: 'つちのとブレンド',
+    blend: '台湾金萱茶 × なつめ',
+    desc: 'バニラのような甘い香りの金萱茶に、なつめとキンモクセイが懐かしく香る一杯。体が重く「くよくよ」してきたら、弱った胃腸を温めて気を補うサイン。ゆっくり蓄えるこの体質に、じんわり沁みていく。',
+    url: 'https://kampotakeru.stores.jp/items/6326d166fd12d15177ab07cc'
+  },
+  '庚': {
+    name: 'かのえブレンド',
+    blend: 'プーアル茶 × みかんの皮',
+    desc: 'コクのあるプーアル茶に、陳皮とコリアンダーの柑橘系の香りが弾ける一杯。「ムズムズ」と何かを打ち破りたい衝動が出てきたら、詰まった気を外へ発散させるサイン。すっきりとした後味が、次の一手を軽くする。',
+    url: 'https://kampotakeru.stores.jp/items/6326d90ced4ab02ebbddc59f'
+  },
+  '辛': {
+    name: 'かのとブレンド',
+    blend: 'ハトムギ茶 × ココナッツ',
+    desc: 'ハトムギとココナッツの不思議なコンビが、しっとりとクセになる白い一杯。「ひりひり」と乾きを感じてきたら、内側から潤いを補うサイン。飲むほどに肌も心も滑らかになる、繊細な感性のためのお茶。',
+    url: 'https://kampotakeru.stores.jp/items/6326e1f62e745237abed5452'
+  },
+  '壬': {
+    name: 'みずのえブレンド',
+    blend: '杜仲茶 × シナモン',
+    desc: '杜仲茶とジャスミンに、シナモンのふんわりとした温かさが広がる一杯。「ポヨポヨ」と重だるさを感じてきたら、水の巡りを温めて動かすサイン。体の芯がほんわか温まると、自由に動き出したいエネルギーが戻ってくる。',
+    url: 'https://kampotakeru.stores.jp/items/6326e42923747f153b61f82f'
+  },
+  '癸': {
+    name: 'みずのとブレンド',
+    blend: '玄米茶 × スパイス',
+    desc: '香ばしい玄米茶に、3つのスパイスがきりっと引き締める黒い一杯。「からから」と乾いて力が湧かなくなってきたら、腎の精気を補うサイン。じんわり体の芯から温まるほどに、しなやかな力が静かに満ちてくる。',
+    url: 'https://kampotakeru.stores.jp/items/6326e6a0f3086568d563128d'
+  }
+};
+
+// 地支→五行→対応干（陽支→陽干、陰支→陰干）
+const SHI_TO_KAN = {
+  '子':'壬','丑':'己','寅':'甲','卯':'乙','辰':'戊','巳':'丁',
+  '午':'丙','未':'己','申':'庚','酉':'辛','戌':'戊','亥':'癸'
+};
+
+function getSecondTea(dayKan, monthShi, dayShi, yearShi) {
+  const candidates = [monthShi, dayShi, yearShi];
+  for (const shi of candidates) {
+    const kan = SHI_TO_KAN[shi];
+    if (kan !== dayKan) return kan;
+  }
+  // すべて同じ場合は陰陽反対
+  const idx = KAN.indexOf(dayKan);
+  return KAN[(idx % 2 === 0) ? idx + 1 : idx - 1];
+}
+
+function renderTeaSection(dayKan, monthShi, dayShi, yearShi) {
+  const kan1 = dayKan;
+  const kan2 = getSecondTea(dayKan, monthShi, dayShi, yearShi);
+  const t1 = TEA_DATA[kan1];
+  const t2 = TEA_DATA[kan2];
+
+  return `
+    <div class="tea-section">
+      <div class="tea-header">
+        <span class="tea-header-title">🌿 おすすめの十干茶</span>
+        <span class="tea-header-sub">あなたの体質に寄り添う2つのブレンド</span>
+      </div>
+      <div class="tea-item">
+        <div class="tea-item-header">
+          <div class="tea-color-dot" style="background:${KAN_COLOR[kan1]}"></div>
+          <span class="tea-role">1本目 ／ 日干・${kan1}に対応</span>
+        </div>
+        <span class="tea-name">${kan1} ${t1.name}</span>
+        <span class="tea-kan">${KAN_SYMBOL[kan1]} ／ ${KAN_DATA[kan1].onoma}</span>
+        <span class="tea-blend">${t1.blend}</span>
+        <p class="tea-desc">${t1.desc}</p>
+        <a class="tea-link" href="${t1.url}" target="_blank" rel="noopener">ストアで見る →</a>
+      </div>
+      <div class="tea-item">
+        <div class="tea-item-header">
+          <div class="tea-color-dot" style="background:${KAN_COLOR[kan2]}"></div>
+          <span class="tea-role">2本目 ／ 月支・${monthShi}の十干に対応</span>
+        </div>
+        <span class="tea-name">${kan2} ${t2.name}</span>
+        <span class="tea-kan">${KAN_SYMBOL[kan2]} ／ ${KAN_DATA[kan2].onoma}</span>
+        <span class="tea-blend">${t2.blend}</span>
+        <p class="tea-desc">${t2.desc}</p>
+        <a class="tea-link" href="${t2.url}" target="_blank" rel="noopener">ストアで見る →</a>
+      </div>
+    </div>
+  `;
+}
+
+// ============================================================
+// 診断メイン
+// ============================================================
+function diagnose() {
+  const year  = parseInt(document.getElementById('year').value);
+  const month = parseInt(document.getElementById('month').value);
+  const day   = parseInt(document.getElementById('day').value);
+  const errEl = document.getElementById('error');
+
+  if (!year || !month || !day || year < 1900 || year > 2100
+      || month < 1 || month > 12 || day < 1 || day > 31) {
+    errEl.textContent = '正しい生年月日を入力してください';
+    return;
+  }
+  errEl.textContent = '';
+
+  const d = getDayKanShi(year, month, day);
+  const mShi = getMonthShi(year, month, day);
+  const y = getYearKanShi(year);
+  const mKan = getMonthKan(y.kan, mShi);
+
+  // 命式バッジ
+  document.getElementById('meishiki-badge').innerHTML = `
+    <div class="pillar-item">
+      <span class="pillar-label">日 柱</span>
+      ${renderEtoBlock(d.kan, KAN_ATTR[d.kan], KAN_SYMBOL[d.kan], KAN_COLOR[d.kan])}
+      ${renderEtoBlock(d.shi, SHI_ATTR[d.shi], SHI_SYMBOL[d.shi], SHI_COLOR[d.shi])}
+      <span class="pillar-role">本 質</span>
+    </div>
+    <div class="pillar-item">
+      <span class="pillar-label">月 柱</span>
+      ${renderEtoBlock(mKan, KAN_ATTR[mKan], KAN_SYMBOL[mKan], KAN_COLOR[mKan])}
+      ${renderEtoBlock(mShi, SHI_ATTR[mShi], SHI_SYMBOL[mShi], SHI_COLOR[mShi])}
+      <span class="pillar-role">プライベート</span>
+    </div>
+    <div class="pillar-item">
+      <span class="pillar-label">年 柱</span>
+      ${renderEtoBlock(y.kan, KAN_ATTR[y.kan], KAN_SYMBOL[y.kan], KAN_COLOR[y.kan])}
+      ${renderEtoBlock(y.shi, SHI_ATTR[y.shi], SHI_SYMBOL[y.shi], SHI_COLOR[y.shi])}
+      <span class="pillar-role">ソーシャル</span>
+    </div>
+  `;
+
+  // 3柱カード
+  document.getElementById('section-day').innerHTML   = renderCard(d.kan, d.shi, 'day');
+  document.getElementById('section-month').innerHTML = renderCard(mKan, mShi, 'month');
+  document.getElementById('section-year').innerHTML  = renderCard(y.kan, y.shi, 'year');
+
+  // おすすめ十干茶
+  document.getElementById('section-tea').innerHTML = renderTeaSection(d.kan, mShi, d.shi, y.shi);
+
+  // グローバルに鑑定結果を保存（LINE送信用）
+  window._result = { year, month, day, d, mKan, mShi, y };
+
+  // シェア文（日柱ベース）
+  const dayData = KANSHI_DATA[d.kan + d.shi];
+  const catchLine = dayData ? dayData.catch : `${KAN_SYMBOL[d.kan]}と${SHI_SEASON[d.shi]}のリズムを持つ人。`;
+  const shareText =
+    `【あなたの本質】${d.kan}${d.shi}・${KAN_SYMBOL[d.kan]}×${SHI_SYMBOL[d.shi]}\n\n` +
+    `${catchLine}\n\n` +
+    `${KAN_DATA[d.kan].onoma} × ${SHI_DATA[d.shi].onoma}\n` +
+    `${KAN_DATA[d.kan].keys.join('・')} ／ ${SHI_DATA[d.shi].keys.join('・')}\n\n` +
+    `🌿 漢方占いで生まれの体質を鑑定しました\n` +
+    `#漢方占い #KAMPOSTAND #生まれの体質鑑定`;
+  const shareUrl = encodeURIComponent(location.href);
+  const shareEnc = encodeURIComponent(shareText);
+  document.getElementById('btn-x').href =
+    `https://twitter.com/intent/tweet?text=${shareEnc}&url=${shareUrl}`;
+  document.getElementById('btn-threads').href =
+    `https://www.threads.net/intent/post?text=${shareEnc + '%0A' + shareUrl}`;
+
+  const result = document.getElementById('result');
+  result.classList.add('visible');
+  setTimeout(() => result.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Enter') diagnose(); });
+
+// ============================================================
+// LINE送信
+// ============================================================
+async function sendToLine() {
+  const r = window._result;
+  if (!r) return;
+
+  const { year, month, day, d, mKan, mShi, y } = r;
+
+  const msg =
+    `【生まれの体質鑑定】\n\n` +
+    `生年月日：${year}年${month}月${day}日\n\n` +
+    `───────────────\n` +
+    `日柱（本質）　${d.kan}${d.shi}\n` +
+    `　${KAN_SYMBOL[d.kan]} × ${SHI_SYMBOL[d.shi]}\n` +
+    `　${KAN_DATA[d.kan].onoma}｜${KAN_DATA[d.kan].keys.join('・')}\n` +
+    `　${SHI_DATA[d.shi].onoma}｜${SHI_DATA[d.shi].keys.join('・')}\n\n` +
+    `月柱（プライベート）　${mKan}${mShi}\n` +
+    `　${KAN_SYMBOL[mKan]} × ${SHI_SYMBOL[mShi]}\n` +
+    `　${KAN_DATA[mKan].onoma}｜${KAN_DATA[mKan].keys.join('・')}\n` +
+    `　${SHI_DATA[mShi].onoma}｜${SHI_DATA[mShi].keys.join('・')}\n\n` +
+    `年柱（ソーシャル）　${y.kan}${y.shi}\n` +
+    `　${KAN_SYMBOL[y.kan]} × ${SHI_SYMBOL[y.shi]}\n` +
+    `　${KAN_DATA[y.kan].onoma}｜${KAN_DATA[y.kan].keys.join('・')}\n` +
+    `　${SHI_DATA[y.shi].onoma}｜${SHI_DATA[y.shi].keys.join('・')}\n` +
+    `───────────────\n\n` +
+    `詳しい鑑定をご希望の方は、\n漢方占いカウンセリングをご利用ください。`;
+
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    if (liff.isInClient()) {
+      await liff.sendMessages([{ type: 'text', text: msg }]);
+      alert('LINEに鑑定結果を送りました 🌿');
+    } else {
+      // LIFF外（ブラウザ）の場合はクリップボードにコピー
+      await navigator.clipboard.writeText(msg);
+      alert('鑑定結果をコピーしました。LINEに貼り付けてください 🌿');
+    }
+  } catch(e) {
+    // フォールバック：テキスト選択でコピー促す
+    const ta = document.createElement('textarea');
+    ta.value = msg;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('鑑定結果をコピーしました。LINEに貼り付けてください 🌿');
+  }
+}
+</script>
+</body>
+</html>

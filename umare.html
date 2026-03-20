@@ -800,8 +800,13 @@ function getSetsubi(year, solarMonth) {
   return avg[solarMonth];
 }
 
-function getYearKanShi(year) {
-  const base = ((year - 4) % 60 + 60) % 60;
+function getYearKanShi(year, month, day) {
+  // 立春（2月節入り）前なら前年扱い
+  const setsu2 = getSetsubi(year, 2);
+  const effectiveYear = (month === 1 || (month === 2 && day < setsu2))
+    ? year - 1
+    : year;
+  const base = ((effectiveYear - 4) % 60 + 60) % 60;
   return { kan: KAN[base % 10], shi: SHI[base % 12] };
 }
 
@@ -1099,7 +1104,7 @@ function diagnose() {
 
   const d = getDayKanShi(year, month, day);
   const mShi = getMonthShi(year, month, day);
-  const y = getYearKanShi(year);
+  const y = getYearKanShi(year, month, day);
   const mKan = getMonthKan(y.kan, mShi);
 
   // 命式バッジ
@@ -1145,7 +1150,7 @@ function diagnose() {
     `${catchLine}\n\n` +
     `${KAN_DATA[d.kan].onoma} × ${SHI_DATA[d.shi].onoma}\n` +
     `${KAN_DATA[d.kan].keys.join('・')} ／ ${SHI_DATA[d.shi].keys.join('・')}\n\n` +
-    `LINEで鑑定できるので試してみてくださいね！🍀\n` +
+    `LINEから無料で鑑定できます。\n` +
     `#漢方占い @ochapansan`;
   const shareEnc = encodeURIComponent(shareText);
   document.getElementById('btn-x').href =

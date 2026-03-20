@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja" style="background-color:#f0faf8!important;">
 <head>
@@ -630,7 +629,7 @@
 // ============================================================
 // LIFF初期化
 // ============================================================
-const LIFF_ID = 'YOUR_LIFF_ID';
+const LIFF_ID = '2008811102-HiCrMzRG';
 (async () => {
   try { await liff.init({ liffId: LIFF_ID }); } catch(e) {}
 })();
@@ -1138,20 +1137,21 @@ function diagnose() {
 
   // シェア文（日柱ベース）
   const dayData = KANSHI_DATA[d.kan + d.shi];
-  const catchLine = dayData ? dayData.catch : `${KAN_SYMBOL[d.kan]}と${SHI_SEASON[d.shi]}のリズムを持つ人。`;
+  const catchLine = dayData ? dayData.catch : `${KAN_SYMBOL[d.kan]}と${SHI_SYMBOL[d.shi]}のリズムを持つ人。`;
   const shareText =
-    `【あなたの本質】${d.kan}${d.shi}・${KAN_SYMBOL[d.kan]}×${SHI_SYMBOL[d.shi]}\n\n` +
+    `漢方占いで生まれの体質を鑑定してみました🐼\n\n` +
+    `わたしの本質タイプは…\n` +
+    `「${d.kan}${d.shi}（${readingKanShi(d.kan, d.shi)}）」${KAN_SYMBOL[d.kan]} × ${SHI_SYMBOL[d.shi]}\n` +
     `${catchLine}\n\n` +
     `${KAN_DATA[d.kan].onoma} × ${SHI_DATA[d.shi].onoma}\n` +
     `${KAN_DATA[d.kan].keys.join('・')} ／ ${SHI_DATA[d.shi].keys.join('・')}\n\n` +
-    `🌿 漢方占いで生まれの体質を鑑定しました\n` +
-    `#漢方占い #KAMPOSTAND #生まれの体質鑑定`;
-  const shareUrl = encodeURIComponent(location.href);
+    `LINEから無料で鑑定できます。\n` +
+    `#漢方占い @ochapansan`;
   const shareEnc = encodeURIComponent(shareText);
   document.getElementById('btn-x').href =
-    `https://twitter.com/intent/tweet?text=${shareEnc}&url=${shareUrl}`;
+    `https://twitter.com/intent/tweet?text=${shareEnc}`;
   document.getElementById('btn-threads').href =
-    `https://www.threads.net/intent/post?text=${shareEnc + '%0A' + shareUrl}`;
+    `https://www.threads.net/intent/post?text=${shareEnc}`;
 
   const result = document.getElementById('result');
   result.classList.add('visible');
@@ -1188,25 +1188,38 @@ async function sendToLine() {
     `───────────────\n\n` +
     `詳しい鑑定をご希望の方は、\n漢方占いカウンセリングをご利用ください。`;
 
-  try {
-    await liff.init({ liffId: LIFF_ID });
-    if (liff.isInClient()) {
-      await liff.sendMessages([{ type: 'text', text: msg }]);
-      alert('LINEに鑑定結果を送りました 🌿');
-    } else {
-      // LIFF外（ブラウザ）の場合はクリップボードにコピー
+  // デバッグ用：LIFFの状態をalertで確認
+  const inClient = liff.isInClient();
+  const loggedIn = liff.isLoggedIn();
+  console.log('isInClient:', inClient, 'isLoggedIn:', loggedIn);
+
+  if (!inClient) {
+    // ブラウザからのアクセス：クリップボードにコピー
+    try {
       await navigator.clipboard.writeText(msg);
-      alert('鑑定結果をコピーしました。LINEに貼り付けてください 🌿');
+    } catch(e) {
+      const ta = document.createElement('textarea');
+      ta.value = msg;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
     }
-  } catch(e) {
-    // フォールバック：テキスト選択でコピー促す
-    const ta = document.createElement('textarea');
-    ta.value = msg;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
     alert('鑑定結果をコピーしました。LINEに貼り付けてください 🌿');
+    return;
+  }
+
+  // LINEアプリ内：sendMessagesで送信
+  try {
+    if (!loggedIn) {
+      liff.login();
+      return;
+    }
+    await liff.sendMessages([{ type: 'text', text: msg }]);
+    alert('LINEに鑑定結果を送りました 🌿');
+  } catch(e) {
+    console.error('sendMessages error:', e);
+    alert('送信エラー：' + e.message + '\nコードを長押ししてコピーしてください。');
   }
 }
 </script>

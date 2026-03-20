@@ -1152,11 +1152,13 @@ function diagnose() {
     `${KAN_DATA[d.kan].keys.join('・')} ／ ${SHI_DATA[d.shi].keys.join('・')}\n\n` +
     `LINEから無料で鑑定できます。\n` +
     `#漢方占い @ochapansan`;
+  const shareTextThreads = shareText.replace('@ochapansan', '@kampostand');
   const shareEnc = encodeURIComponent(shareText);
+  const shareEncThreads = encodeURIComponent(shareTextThreads);
   document.getElementById('btn-x').href =
     `https://twitter.com/intent/tweet?text=${shareEnc}`;
   document.getElementById('btn-threads').href =
-    `https://www.threads.net/intent/post?text=${shareEnc}`;
+    `https://www.threads.net/intent/post?text=${shareEncThreads}`;
 
   const result = document.getElementById('result');
   result.classList.add('visible');

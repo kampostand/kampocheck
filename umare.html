@@ -631,7 +631,7 @@
   }
   .style-card-header {
     background: linear-gradient(135deg, #004d47 0%, #00a89d 100%);
-    padding: 16px 20px;
+    padding: 18px 20px 16px;
     text-align: center;
   }
   .style-card-title {
@@ -641,72 +641,71 @@
     color: #fff;
     letter-spacing: 0.1em;
     display: block;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
   }
-  .style-card-sub {
+  .style-card-intro {
     font-size: 11px;
-    color: rgba(255,255,255,0.7);
+    color: rgba(255,255,255,0.75);
     letter-spacing: 0.05em;
+    line-height: 1.7;
   }
   .style-item-new {
-    display: flex;
-    gap: 14px;
-    padding: 16px 18px;
+    padding: 18px 20px;
     border-bottom: 1px solid var(--teal-pale);
-    align-items: flex-start;
   }
   .style-item-new:last-child { border-bottom: none; }
-  .style-left {
-    flex-shrink: 0;
-    width: 88px;
-    text-align: center;
+  .style-item-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
   }
-  .style-role-tag {
+  .style-role-badge {
     font-size: 9px;
     letter-spacing: 0.2em;
     color: var(--teal-dark);
     font-weight: 700;
     background: var(--teal-pale);
     border-radius: 20px;
-    padding: 3px 8px;
-    display: inline-block;
+    padding: 3px 10px;
+    flex-shrink: 0;
+  }
+  .style-pillar-note {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+  .style-onoma-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
     margin-bottom: 6px;
   }
   .style-onoma-big {
     font-family: 'Shippori Mincho', serif;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: 600;
     color: var(--ink);
-    display: block;
-    margin-bottom: 6px;
     line-height: 1;
+  }
+  .style-shi-label {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
   }
   .style-keys-row {
     display: flex;
-    gap: 3px;
-    justify-content: center;
+    gap: 4px;
     flex-wrap: wrap;
+    margin-bottom: 8px;
   }
   .style-key-tag {
-    font-size: 9px;
+    font-size: 10px;
     color: var(--teal-dark);
     background: var(--teal-pale);
     border-radius: 10px;
-    padding: 2px 6px;
+    padding: 2px 8px;
     font-weight: 500;
-  }
-  .style-right {
-    flex: 1;
-    padding-top: 4px;
-  }
-  .style-shi-name {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--ink);
-    display: block;
-    margin-bottom: 5px;
-    letter-spacing: 0.05em;
   }
   .style-desc-new {
     font-size: 12px;
@@ -1340,28 +1339,29 @@ function diagnose() {
   document.getElementById('section-style').innerHTML = `
     <div class="style-card">
       <div class="style-card-header">
-        <span class="style-card-title">行動スタイル</span>
-        <span class="style-card-sub">3つの柱から読み解く、あなたの動き方</span>
+        <span class="style-card-title">あなたの行動スタイル</span>
+        <span class="style-card-intro">生まれた日・月・年の干支が、<br>あなたの3つの顔を教えてくれます。</span>
       </div>
       ${[
-        { label:'本質', shi: d.shi, role:'日柱' },
-        { label:'プライベート', shi: mShi, role:'月柱' },
-        { label:'ソーシャル', shi: y.shi, role:'年柱' },
+        { label:'本来の自分', note:'日柱 ／ 素のあなた',       shi: d.shi },
+        { label:'プライベート', note:'月柱 ／ 親しい人の前で', shi: mShi },
+        { label:'ソーシャル',   note:'年柱 ／ 社会・仕事での顔', shi: y.shi },
       ].map(item => {
         const sd = SHI_DATA[item.shi];
         const keys = SHI_KEYS[item.shi] || [];
         return `<div class="style-item-new">
-          <div class="style-left">
-            <div class="style-role-tag">${item.label}</div>
-            <div class="style-onoma-big">${sd.onoma}</div>
-            <div class="style-keys-row">
-              ${keys.map(k => `<span class="style-key-tag">${k}</span>`).join('')}
-            </div>
+          <div class="style-item-top">
+            <span class="style-role-badge">${item.label}</span>
+            <span class="style-pillar-note">${item.note}</span>
           </div>
-          <div class="style-right">
-            <span class="style-shi-name">${item.shi}（${SHI_SYMBOL[item.shi]}）</span>
-            <span class="style-desc-new">${sd.desc}</span>
+          <div class="style-onoma-row">
+            <span class="style-onoma-big">${sd.onoma}</span>
+            <span class="style-shi-label">${item.shi}（${SHI_SYMBOL[item.shi]}）</span>
           </div>
+          <div class="style-keys-row">
+            ${keys.map(k => `<span class="style-key-tag">${k}</span>`).join('')}
+          </div>
+          <span class="style-desc-new">${sd.desc}</span>
         </div>`;
       }).join('')}
     </div>`;
@@ -1461,9 +1461,11 @@ async function sendToLine() {
     `（${(kt.foods || []).join('・')}）\n\n` +
     `🍵 おすすめの十干茶\n` +
     `🌱${kan1}・${t1.name}\n` +
-    `（${t1.blend}）\n\n` +
+    `（${t1.blend}）\n` +
+    `${t1.url}\n\n` +
     `🌱${kan2}・${t2.name}\n` +
-    `（${t2.blend}）\n\n` +
+    `（${t2.blend}）\n` +
+    `${t2.url}\n\n` +
     `────────────────\n` +
     `📊 命式データ（確認用）\n` +
     `日：${d.kan}${d.shi}\n` +

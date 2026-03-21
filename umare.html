@@ -1456,18 +1456,14 @@ async function sendToLine() {
     `🔮 わたしの本質\n` +
     `${numD} ${d.kan}${d.shi}（${kanRead(d.kan)}・${shiRead(d.shi)}）\n` +
     `「${dataD.catchphrase || ''}」\n\n` +
-    `🐼 行動スタイル\n` +
-    `・本来（日）：${SHI_DATA[d.shi].onoma}\n` +
-    `・プライベート（月）：${SHI_DATA[mShi].onoma}\n` +
-    `・社会（年）：${SHI_DATA[y.shi].onoma}\n\n` +
-    `🛒 おすすめの養生\n` +
+    `🍡 おすすめの食材\n` +
     `${kt.foodText || ''}\n` +
     `（${(kt.foods || []).join('・')}）\n\n` +
-    `☕ おすすめの十干茶\n` +
-    `🌿1本目（${kan1}に対応）\n` +
-    `${t1.name}（${t1.blend}）\n\n` +
-    `🌿2本目（${kan2}に対応）\n` +
-    `${t2.name}（${t2.blend}）\n\n` +
+    `🍵 おすすめの十干茶\n` +
+    `🌱${kan1}・${t1.name}\n` +
+    `（${t1.blend}）\n\n` +
+    `🌱${kan2}・${t2.name}\n` +
+    `（${t2.blend}）\n\n` +
     `────────────────\n` +
     `📊 命式データ（確認用）\n` +
     `日：${d.kan}${d.shi}\n` +

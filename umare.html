@@ -1405,18 +1405,16 @@ function diagnose() {
   // シェア文
   const catchphrase = dataD.catchphrase || '';
   const shortText = kt.shortText || '';
-  const shareText =
-    `生年月日でわかる【漢方占い】やってみた🐼🌿\n\n` +
-    `🌿メインの体質：【 ${typeName} タイプ 】\n` +
-    `👉 ${shortText}\n\n` +
-    `「${catchphrase}」\n\n` +
-    `自分のタイプを知りたい方は → @ochapansan\n` +
-    `#漢方占い`;
-  const shareTextThreads = shareText.replace('@ochapansan', '@kampostand');
-  const shareEncX = encodeURIComponent(shareText);
-  const shareEncThreads = encodeURIComponent(shareTextThreads);
-  document.getElementById('btn-x').href = `https://twitter.com/intent/tweet?text=${shareEncX}`;
-  document.getElementById('btn-threads').href = `https://www.threads.net/intent/post?text=${shareEncThreads}`;
+  const shareBase =
+    `【漢方占い】生まれの体質鑑定をやってみた🐼\n\n` +
+    `✦ メインの体質｜${typeName}タイプ\n` +
+    `（${shortText}）\n\n` +
+    `── ${catchphrase}\n\n` +
+    `LINEで生まれの体質をチェックできます🌿️\n`;
+  const shareTextX       = shareBase + `→ @ochapansan`;
+  const shareTextThreads = shareBase + `→ @kampostand`;
+  document.getElementById('btn-x').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTextX)}`;
+  document.getElementById('btn-threads').href = `https://www.threads.net/intent/post?text=${encodeURIComponent(shareTextThreads)}`;
 
   const result = document.getElementById('result');
   result.classList.add('visible');
@@ -1431,18 +1429,53 @@ document.addEventListener('keydown', e => { if (e.key === 'Enter') diagnose(); }
 async function sendToLine() {
   const r = window._result;
   if (!r) return;
-  const { year, month, day, d, mKan, mShi, y, season, typeName } = r;
+  const { year, month, day, d, mKan, mShi, y, season, typeName, numD } = r;
+
+  const kt = KAN_TAISITSU[d.kan];
+  const dataD = (() => {
+    const num = (() => {
+      for (let i = 0; i < 60; i++) {
+        if (i % 10 === KAN.indexOf(d.kan) && i % 12 === SHI.indexOf(d.shi)) return String(i + 1);
+      }
+      return '';
+    })();
+    return KANSHI_DATA[num] || {};
+  })();
+
+  const kan1 = d.kan;
+  const kan2 = getSecondTea(d.kan, mShi, d.shi, y.shi);
+  const t1 = TEA_DATA[kan1];
+  const t2 = TEA_DATA[kan2];
 
   const msg =
-    `【生まれの体質鑑定 結果】\n\n` +
+    `【生まれの体質鑑定 結果】🐼🌿\n\n` +
     `📅 生年月日：${year}年${month}月${day}日\n\n` +
-    `🌿 メイン体質：【 ${typeName} タイプ 】\n\n` +
-    `🔮 命式\n` +
-    `・日柱：${d.kan}${d.shi}（本質：${SHI_DATA[d.shi].onoma}）\n` +
-    `・月柱：${mKan}${mShi}（プライベート：${SHI_DATA[mShi].onoma}）\n` +
-    `・年柱：${y.kan}${y.shi}（ソーシャル：${SHI_DATA[y.shi].onoma}）\n\n` +
+    `🌿 メイン体質\n` +
+    `【 ${typeName} タイプ 】\n` +
+    `👉 ${kt.shortText || ''}\n\n` +
+    `🔮 わたしの本質\n` +
+    `${numD} ${d.kan}${d.shi}（${kanRead(d.kan)}・${shiRead(d.shi)}）\n` +
+    `「${dataD.catchphrase || ''}」\n\n` +
+    `🐼 行動スタイル\n` +
+    `・本来（日）：${SHI_DATA[d.shi].onoma}\n` +
+    `・プライベート（月）：${SHI_DATA[mShi].onoma}\n` +
+    `・社会（年）：${SHI_DATA[y.shi].onoma}\n\n` +
+    `🛒 おすすめの養生\n` +
+    `${kt.foodText || ''}\n` +
+    `（${(kt.foods || []).join('・')}）\n\n` +
+    `☕ おすすめの十干茶\n` +
+    `🌿1本目（${kan1}に対応）\n` +
+    `${t1.name}（${t1.blend}）\n\n` +
+    `🌿2本目（${kan2}に対応）\n` +
+    `${t2.name}（${t2.blend}）\n\n` +
     `────────────────\n` +
-    `おすすめの漢方茶や気になる体調のことなど、\nさらに詳しく知りたい方は、\nこのLINEで気軽に聞いてくださいね🌿`;
+    `📊 命式データ（確認用）\n` +
+    `日：${d.kan}${d.shi}\n` +
+    `月：${mKan}${mShi}\n` +
+    `年：${y.kan}${y.shi}\n` +
+    `────────────────\n\n` +
+    `この結果を読んでみて、思い当たる不調や、気になっていることはありませんか？\n\n` +
+    `鑑定結果についてのご質問や、今のあなたにぴったりの養生法など、いつでもお気軽にメッセージでお尋ねくださいね🐼`;
 
   const inClient = liff.isInClient();
   if (!inClient) {

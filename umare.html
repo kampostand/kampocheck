@@ -140,7 +140,7 @@
   }
   .date-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1.5fr 1fr 1fr;
     gap: 10px;
     margin-bottom: 20px;
   }
@@ -303,7 +303,7 @@
     letter-spacing: 0.03em;
   }
 
-  /* きっとこんな人かも（箇条書き） */
+  /* きっとこんな人かも */
   .bullets-list {
     display: flex;
     flex-direction: column;
@@ -329,7 +329,7 @@
   .taisitsu-type-block {
     background: var(--teal-pale);
     border-radius: 14px;
-    padding: 18px 20px;
+    padding: 16px 20px;
     text-align: center;
     margin-bottom: 16px;
   }
@@ -349,118 +349,240 @@
     letter-spacing: 0.15em;
     display: block;
     line-height: 1.4;
+    margin-bottom: 10px;
   }
   .taisitsu-type-name span {
     font-size: 14px;
     color: var(--muted);
     letter-spacing: 0.1em;
   }
-
-  /* サインボックス */
-  .sign-box {
-    background: var(--teal-pale);
-    border-radius: 12px;
-    padding: 14px 16px;
-    border-left: 3px solid var(--teal);
-    margin-top: 16px;
+  .onoma-badge {
+    display: inline-block;
+    background: var(--teal-dark);
+    color: #fff;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    border-radius: 20px;
+    padding: 4px 14px;
   }
-  .sign-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
+
+
+
+
+
+
+
+  /* 行動スタイル */
+  .style-item-new {
+    padding: 10px 16px 10px 12px;
+    border-bottom: 1px solid var(--teal-pale);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .style-item-new:last-child { border-bottom: none; }
+  .style-left-compact {
+    flex-shrink: 0;
+    width: 58px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  .style-role-badge {
+    font-size: 9px;
+    letter-spacing: 0.1em;
     color: var(--teal-dark);
+    font-weight: 700;
+    background: var(--teal-pale);
+    border-radius: 20px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    display: block;
+    text-align: center;
+  }
+  .style-onoma-big {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    white-space: nowrap;
+    display: block;
+  }
+  .style-right-compact { flex: 1; padding-top: 2px; }
+  .style-sub-note {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 3px;
+    opacity: 0.8;
+  }
+  .style-shi-label {
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 500;
+    display: block;
+    margin-bottom: 5px;
+    letter-spacing: 0.05em;
+  }
+  .style-keys-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .style-key-tag {
+    font-size: 10px;
+    color: var(--teal-dark);
+    background: var(--teal-pale);
+    border-radius: 10px;
+    padding: 2px 8px;
+    font-weight: 500;
+  }
+  .style-desc-new {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.8;
+    display: block;
+  }
+
+  /* 行動スタイルコンパクト版 */
+  .style-compact-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .style-compact-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 12px;
+    border-left: 3px solid var(--teal-mid);
+  }
+  .style-compact-left {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    min-width: 54px;
+  }
+  .style-compact-label {
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--teal-dark);
+    font-weight: 700;
+    background: var(--white);
+    border: 1px solid var(--teal-mid);
+    border-radius: 20px;
+    padding: 2px 8px;
+    white-space: nowrap;
+    text-align: center;
+    display: block;
+  }
+  .style-compact-onoma {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .style-compact-right {
+    flex: 1;
+    padding-top: 1px;
+  }
+  .style-compact-meta {
+    font-size: 10px;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
+    letter-spacing: 0.05em;
+  }
+  .style-compact-keys {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+  }
+  .style-compact-desc {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  /* 本質カード説明一文 */
+  .honshitsu-note {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+    padding: 2px 0;
+  }
+
+  /* 体質カード説明一文 */
+  .taisitsu-intro-note {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.03em;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    padding: 0 4px;
+  }
+
+  /* 体質BOX：役割ごとの背景色 */
+  .taisitsu-box { margin-bottom: 14px; }
+  .taisitsu-box-explain {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0,168,157,0.08);
+  }
+  .taisitsu-box-balance {
+    background: #fffdf5;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #e8d8a0;
+    box-shadow: 0 2px 12px rgba(196,154,0,0.08);
+  }
+  .taisitsu-box-yojo {
+    background: #f0faf8;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--teal-mid);
+    box-shadow: 0 2px 12px rgba(0,168,157,0.08);
+  }
+  .taisitsu-box-section {
+    padding: 18px 20px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  .taisitsu-box-section:last-child { border-bottom: none; }
+  .taisitsu-box-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--teal);
     font-weight: 700;
     display: block;
     margin-bottom: 10px;
   }
-  .sign-list {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  .taisitsu-box-balance .taisitsu-box-label {
+    color: #8a6800;
   }
-  .sign-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    font-size: 12px;
-    line-height: 1.7;
-    color: var(--muted);
+  .strength-label-mark {
+    color: var(--teal);
+    margin-right: 4px;
   }
-  .sign-dot {
-    width: 5px; height: 5px;
-    border-radius: 50%;
-    background: var(--teal);
-    flex-shrink: 0;
-    margin-top: 8px;
-  }
-
-  /* 養生ヒント */
-  .hint-text {
-    display: block;
-    margin-top: 14px;
-    font-size: 13px;
-    color: var(--teal-dark);
-    font-weight: 600;
-    letter-spacing: 0.03em;
-    line-height: 1.8;
-  }
-  .food-text {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.9;
-    margin-top: 10px;
-  }
-  .food-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-  }
-  .food-tag {
-    background: var(--white);
-    border: 1px solid var(--teal-mid);
-    color: var(--teal-dark);
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 11px;
-    font-weight: 500;
-  }
-
-  /* 行動スタイル */
-  .style-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .style-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-  }
-  .style-label-box {
-    background: var(--teal-pale);
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 10px;
-    color: var(--teal-dark);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    flex-shrink: 0;
-    text-align: center;
-    min-width: 60px;
-  }
-  .style-onoma {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--ink);
-    display: block;
-    line-height: 1.2;
-    margin-bottom: 3px;
-  }
-  .style-desc {
-    font-size: 11px;
-    color: var(--muted);
-    line-height: 1.7;
+  .weakness-label-mark {
+    color: #c49a00;
+    margin-right: 4px;
   }
 
   /* お茶セクション */
@@ -649,69 +771,334 @@
     letter-spacing: 0.05em;
     line-height: 1.7;
   }
-  .style-item-new {
+
+
+
+
+
+
+
+
+  /* 体質カード：3BOX構造 */
+  .taisitsu-box {
+    background: var(--white);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0,168,157,0.12);
+    margin-bottom: 14px;
+  }
+  .taisitsu-box-section {
     padding: 18px 20px;
     border-bottom: 1px solid var(--teal-pale);
   }
-  .style-item-new:last-child { border-bottom: none; }
-  .style-item-top {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  .taisitsu-box-section:last-child { border-bottom: none; }
+  .taisitsu-box-label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--teal);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  /* BOX①：この体質について */
+  .image-text-block {
+    margin-bottom: 14px;
+  }
+  .image-text {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    line-height: 2.1;
+    color: var(--muted);
+    letter-spacing: 0.03em;
+    font-style: italic;
+  }
+  .body-text-block {
+    padding: 14px 0 0;
+    border-top: 1px solid var(--teal-pale);
+  }
+  .body-text {
+    font-size: 13px;
+    line-height: 2.1;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+  }
+  .strength-block {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--teal-pale);
+  }
+  .strength-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--teal-dark);
+    font-weight: 700;
+    display: block;
     margin-bottom: 8px;
   }
-  .style-role-badge {
-    font-size: 9px;
+  .strength-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .strength-list li {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--ink);
+    padding-left: 14px;
+    position: relative;
+    letter-spacing: 0.02em;
+  }
+  .strength-list li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 8px;
+    top: 4px;
+  }
+
+  /* BOX②：心と体の不調＋季節 */
+  .sign-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 8px;
+  }
+  .sign-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .sign-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--teal);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+  .season-inner {
+    margin-top: 4px;
+  }
+  .season-inner-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .season-inner-icon { font-size: 13px; }
+  .season-inner-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--teal-dark);
+    letter-spacing: 0.08em;
+  }
+  .season-inner-desc {
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+  }
+
+  /* BOX③：整え方 */
+  .yojo-wrap {
+    overflow: hidden;
+  }
+  .yojo-wrap-header {
+    background: linear-gradient(135deg, #004d47 0%, #00a89d 100%);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .yojo-wrap-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.1em;
+  }
+  .yojo-panel {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--teal-pale);
+    background: var(--white);
+  }
+  .yojo-panel:last-child { border-bottom: none; }
+  .yojo-section {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .yojo-icon { font-size: 15px; line-height: 1; }
+  .yojo-title {
+    font-size: 11px;
     letter-spacing: 0.2em;
     color: var(--teal-dark);
     font-weight: 700;
-    background: var(--teal-pale);
-    border-radius: 20px;
-    padding: 3px 10px;
-    flex-shrink: 0;
   }
-  .style-pillar-note {
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-  }
-  .style-onoma-row {
+  .yojo-list {
+    list-style: none;
     display: flex;
-    align-items: baseline;
-    gap: 8px;
-    margin-bottom: 6px;
+    flex-direction: column;
+    gap: 7px;
   }
-  .style-onoma-big {
-    font-family: 'Shippori Mincho', serif;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--ink);
-    line-height: 1;
+  .yojo-list li {
+    font-size: 12px;
+    line-height: 1.8;
+    color: var(--muted);
+    padding-left: 14px;
+    position: relative;
+    letter-spacing: 0.02em;
   }
-  .style-shi-label {
+  .yojo-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--teal-dark);
+    font-size: 10px;
+    top: 3px;
+  }
+  .food-text {
     font-size: 12px;
     color: var(--muted);
-    letter-spacing: 0.05em;
+    line-height: 1.9;
+    margin-bottom: 10px;
   }
-  .style-keys-row {
+  .food-items {
     display: flex;
-    gap: 4px;
     flex-wrap: wrap;
-    margin-bottom: 8px;
+    gap: 6px;
   }
-  .style-key-tag {
-    font-size: 10px;
+  .food-tag {
+    background: var(--white);
+    border: 1px solid var(--teal-mid);
     color: var(--teal-dark);
-    background: var(--teal-pale);
-    border-radius: 10px;
-    padding: 2px 8px;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11px;
     font-weight: 500;
   }
-  .style-desc-new {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.8;
+
+  /* 体質カードヘッダー */
+  .taisitsu-header {
+    padding: 28px 24px 22px;
+    text-align: center;
+    position: relative;
+  }
+  .taisitsu-header-label {
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.65);
     display: block;
+    margin-bottom: 10px;
+  }
+  .taisitsu-header-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 32px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.15em;
+    display: block;
+    line-height: 1.3;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.15);
+    margin-bottom: 4px;
+  }
+  .taisitsu-header-sub {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.2em;
+    display: block;
+    margin-bottom: 14px;
+  }
+  .taisitsu-header .onoma-badge {
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.5);
+    color: #fff;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    padding: 5px 18px;
+  }
+
+  /* 体質タイプ名（旧・非表示） */
+  .taisitsu-type-block { display: none; }
+
+  /* 季節×十干の体質ブロック（旧・削除） */
+  .season-taisitsu-block { display: none; }
+
+  /* 橋渡しセクション */
+  .bridge-section {
+    background: linear-gradient(160deg, #004d47 0%, #00a89d 100%);
+    border-radius: 20px;
+    padding: 28px 24px;
+    margin-bottom: 20px;
+  }
+  .bridge-lead {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    display: block;
+    margin-bottom: 16px;
+  }
+  .bridge-body {
+    font-size: 13px;
+    line-height: 2.1;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+    letter-spacing: 0.03em;
+    margin-bottom: 14px;
+  }
+  .bridge-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  .bridge-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .bridge-step-num {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    flex-shrink: 0;
+    line-height: 1;
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+  .bridge-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .bridge-step-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+    letter-spacing: 0.05em;
+  }
+  .bridge-step-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.8;
+    letter-spacing: 0.03em;
   }
 
   /* CTAエリア */
@@ -752,6 +1139,113 @@
   }
   .btn-share:hover { background: var(--teal-pale); }
 
+  .bridge-qa {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.2);
+  }
+  .bridge-qa-lead {
+    font-size: 13px;
+    color: rgba(255,255,255,0.9);
+    text-align: center;
+    line-height: 1.8;
+    margin-bottom: 14px;
+    letter-spacing: 0.03em;
+  }
+
+  /* 質問枠（独立カード） */
+  .qa-section {
+    background: var(--white);
+    border-radius: 20px;
+    padding: 22px 20px;
+    box-shadow: 0 4px 24px rgba(0,168,157,0.1);
+    margin-bottom: 14px;
+  }
+  .qa-lead {
+    font-size: 13px;
+    color: var(--ink);
+    text-align: center;
+    line-height: 1.9;
+    margin-bottom: 16px;
+    letter-spacing: 0.03em;
+  }
+  .bridge-qa-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .bridge-qa-list li {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--teal-pale);
+    border-radius: 8px;
+    padding: 9px 14px 9px 30px;
+    position: relative;
+    line-height: 1.6;
+    letter-spacing: 0.02em;
+  }
+  .bridge-qa-list li::before {
+    content: 'Q';
+    position: absolute;
+    left: 10px;
+    color: var(--teal);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0;
+    top: 10px;
+  }
+
+  /* リンク枠（独立カード） */
+  .bridge-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .bridge-link-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: var(--white);
+    border: 1px solid var(--teal-mid);
+    border-radius: 14px;
+    padding: 16px 18px;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(0,168,157,0.08);
+    transition: background 0.2s;
+  }
+  .bridge-link-item:hover { background: var(--teal-pale); }
+  .bridge-link-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+  .bridge-link-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--teal-dark);
+    letter-spacing: 0.05em;
+  }
+
+  .qa-line-btn {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  /* シェアエリア */
+  .share-area {
+    margin-bottom: 20px;
+  }
+  .share-area-lead {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: center;
+    letter-spacing: 0.15em;
+    margin-bottom: 10px;
+  }
+
   .footer {
     text-align: center;
     font-size: 11px;
@@ -769,14 +1263,14 @@
   <span class="header-kanji">漢方占い</span>
   <span class="header-title-sub">生まれの体質鑑定</span>
   <div class="header-divider"></div>
-  <p class="header-desc">干支から読み解く、あなた本来の体質。<br>自分らしさを引き出す漢方茶を見つけます。</p>
+  <p class="header-desc">中医学×算命学で、<br>あなたの体質を読み解きます。</p>
 </div>
 
 <div class="container">
   <div class="form-card">
     <span class="form-eyebrow">DIAGNOSIS</span>
     <h2>生年月日を入力する</h2>
-    <p class="form-card-desc">生まれた日の干支から、<br>あなたの本来のフィジカルを読み解きます。</p>
+    <p class="form-card-desc">生年月日から、あなたの体質タイプを鑑定します。</p>
     <div class="date-row">
       <div class="field">
         <label>年（西暦）</label>
@@ -799,22 +1293,54 @@
     <!-- 命式バッジ -->
     <div class="meishiki-badge" id="meishiki-badge"></div>
 
-    <!-- メインタイプカード -->
+    <!-- 本質カード -->
     <div class="type-card-intro">あなたの生まれのフィジカルは…</div>
     <div class="type-card" id="type-card"></div>
 
-    <!-- 行動スタイル -->
-    <div id="section-style"></div>
+    <!-- 体質カード -->
+    <div id="section-taisitsu"></div>
 
     <!-- お茶セクション -->
     <div id="section-tea"></div>
 
-    <!-- CTAエリア -->
-    <div class="cta-area">
-      <button class="btn-line" id="btn-line" onclick="sendToLine()">
+    <!-- 橋渡しセクション -->
+    <div class="bridge-section">
+      <p class="bridge-lead">私だけの整え方がわかる漢方占い</p>
+      <p class="bridge-body">今日分かったのは、<br>日干と生まれの季節から読み解く<br>あなたの体質の入口です。</p>
+      <p class="bridge-body">漢方占いでは、これに加えて<br>年・月・日の五行バランス、<br>今の運気の流れ、今の体の状態を重ねることで<br>より深く、あなただけの整え方が見えてきます。</p>
+    </div>
+
+    <!-- 質問枠（LINEボタン込み） -->
+    <div class="qa-section">
+      <p class="qa-lead">鑑定結果についてのご質問は<br>LINEでお気軽にどうぞ🐼</p>
+      <ul class="bridge-qa-list">
+        <li>いつ、どのくらい飲めばいいですか？</li>
+        <li>温かいのと冷たいので違いはありますか？</li>
+        <li>不調が複数ある場合、このお茶で合っていますか？</li>
+        <li>季節によって変えた方がいいですか？</li>
+        <li>他に自分に合うお茶はありますか？</li>
+      </ul>
+      <button class="btn-line qa-line-btn" id="btn-line" onclick="sendToLine()">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2C6.48 2 2 6.02 2 11c0 2.84 1.36 5.37 3.5 7.06L4.5 22l4.25-1.42C9.96 20.84 10.97 21 12 21c5.52 0 10-4.02 10-9S17.52 2 12 2z"/></svg>
         鑑定結果をLINEで受け取る
       </button>
+    </div>
+
+    <!-- リンク枠 -->
+    <div class="bridge-links">
+      <a class="bridge-link-item" href="https://kampotakeru.stores.jp/items/68cf08e88119e53503c061f8" target="_blank" rel="noopener">
+        <span class="bridge-link-label">さらに詳しい鑑定をご希望の方</span>
+        <span class="bridge-link-title">漢方占いカウンセリング →</span>
+      </a>
+      <a class="bridge-link-item" href="https://note.com/ochapansan/n/n480487e8df3e" target="_blank" rel="noopener">
+        <span class="bridge-link-label">漢方占いを学びたい方</span>
+        <span class="bridge-link-title">漢方占い講座 →</span>
+      </a>
+    </div>
+
+    <!-- シェアエリア -->
+    <div class="share-area">
+      <p class="share-area-lead">この鑑定をシェアする</p>
       <div class="share-row">
         <a id="btn-x" class="btn-share" href="#" target="_blank" rel="noopener">𝕏 でシェア</a>
         <a id="btn-threads" class="btn-share" href="#" target="_blank" rel="noopener">Threads</a>
@@ -823,7 +1349,7 @@
 
     <p class="footer">
       KAMPO STAND ／ 漢方占い<br>
-      詳しい鑑定は公式LINEからどうぞ
+      @ochapansan
     </p>
   </div>
 </div>
@@ -900,6 +1426,15 @@ const SEASON_MAP = {
   '亥':'冬','子':'冬','丑':'冬'
 };
 
+// 季節カラー
+const SEASON_COLOR = {
+  '春': '#7bc832',
+  '夏': '#e05070',
+  '秋': '#d4820a',
+  '冬': '#1a5080'
+};
+
+
 // ============================================================
 // 十二支データ（行動スタイル）
 // ============================================================
@@ -939,84 +1474,385 @@ const SCENE_DATA = {
 // ============================================================
 const KAN_TAISITSU = {
   '甲': {
+    onoma: 'イライラ',
     shortText: '気が上にのぼって熱がこもりやすく、イライラしやすい体質',
-    baseText: '甲（木）は中医学で「肝」の機能に関わり、自律神経系や気の巡りを担当します。あなたが生まれたのは［季節］。［情景フレーズ］大木のイメージです。肝の機能が強まって気が上にのぼって熱が起こりやすく、ソワソワ落ち着かない、目の充血や頭痛、肩こりなどが起きやすい体質です。',
-    signs: ['イライラしてカッとなりやすい、またはソワソワして落ち着かない。','目の充血や疲れ、痛みを感じやすい。','頭痛や肩こりなど、上半身が張って動くと痛む。','ストレスを感じると、食欲が激しく上下する。','気が昂って、気になって夜なかなか寝付けない。'],
+    baseText: '甲は中医学では「胆」に関わります。肝と連携して気の流れを調整し、判断・決断の力を担う臓腑です。肝の機能が強まりすぎると気が頭に上って熱となり、イライラしやすい体質です。',
+    signs: ["頭に血が上ってイライラしやすい", "目の充血や頭痛が出やすい", "肩こりや上半身の張りを感じやすい", "ストレスで食欲が激しく乱れる", "気が昂って夜に眠れない"],
     foodText: '甲の気が暴走して「イライラ」してきたら、酸味のある食材の出番です。酸味や香りのよいものが、上にのぼって滞った気の流れをスムーズにし、気持ちをすっきりとリフレッシュさせてくれます。',
     foods: ['レモン','みかん','トマト','梅干し','お酢','ベリー類'],
     teaKey: '甲'
   },
   '乙': {
+    onoma: 'うつうつ',
     shortText: '気がうまく巡らず、ストレスやうつうつをためやすい体質',
-    baseText: '乙（木）は中医学で「肝」の機能に関わり、自律神経系や気の巡りを担当します。あなたが生まれたのは［季節］。［情景フレーズ］草花のイメージです。肝の機能が弱まって気がうまく巡らず、やる気が出ない、ストレスを感じやすい、お腹が張るなどの症状が出やすい体質です。',
-    signs: ['なんとなく気分が塞いでうつうつとし、やる気が起きない。','朝すっきりと起きられない、または気疲れしやすい。','お腹が張ってガスが溜まったり、下痢と便秘を繰り返す。','目の疲れやかすみ、筋肉や筋のしびれ・つりを感じる。','気持ちの浮き沈みが激しく、生理不順やPMSが出やすい。'],
+    baseText: '乙は中医学では「肝」に関わります。自律神経を整えて気と血の流れを調節し、感情・目・筋肉の働きを支える臓腑です。肝の機能が弱まると気がうまく巡らなくなり、うつうつしやすい体質です。',
+    signs: ["気分が塞いでやる気が出ない", "朝すっきり起きられず気疲れしやすい", "お腹が張ってガスが溜まりやすい", "目の疲れや筋肉のしびれ・つりが出やすい", "生理不順やPMSが出やすい"],
     foodText: '気がうまく巡らず「うつうつ」してきたら、緑色や色の濃い食材を摂りましょう。肝の栄養（血）を補うことで、自律神経の働きを助け、落ち込んだやる気を自然にアップさせてくれます。',
     foods: ['ほうれん草','小松菜','ブロッコリー','にんじん','枝豆'],
     teaKey: '乙'
   },
   '丙': {
+    onoma: 'ドキドキ',
     shortText: '血に熱がこもって、オーバーヒートや炎症を起こしやすい体質',
-    baseText: '丙（火）は中医学で「心」の機能に関わり、循環器系や血の巡りを担当します。あなたが生まれたのは［季節］。［情景フレーズ］太陽のイメージです。心の機能が強まって血が上って熱が起こりやすく、暑がりで汗が多い、顔が赤い、高血圧や湿疹といった症状が出やすい体質です。',
-    signs: ['胸がドキドキしたり、脈が速くなりやすい。','暑がりで汗をかきやすく、顔が赤くのぼせやすい。','気持ちが興奮して、疲れているのに眠れない。','赤いニキビや吹き出物、口内炎などの炎症が出やすい。','舌の先が赤くなったり、常に焦燥感がある。'],
+    baseText: '丙は中医学では「小腸」に関わります。心と連携して栄養を吸収し、体に必要なものと不要なものを分ける臓腑です。心の機能が強まりすぎると血に熱がこもり、ドキドキしやすい体質です。',
+    signs: ["胸がドキドキして脈が速くなりやすい", "暑がりで顔が赤くのぼせやすい", "興奮して疲れているのに眠れない", "赤いニキビや口内炎などの炎症が出やすい", "常に焦燥感があり落ち着きにくい"],
     foodText: '血に熱がこもって「ドキドキ」してきたら、苦味のある食材でクールダウンが必要です。苦味のものや夏が旬の水分を多く含む食材が、余分な熱を冷まし、体の内側の炎症や昂りを鎮めてくれます。',
     foods: ['ゴーヤー','セロリ','レタス','緑茶','コーヒー','夏野菜'],
     teaKey: '丙'
   },
   '丁': {
+    onoma: 'はらはら',
     shortText: '血がうまく巡らず、冷えや漠然とした不安を感じやすい体質',
-    baseText: '丁（火）は中医学で「心」の機能に関わり、循環器系や血の巡りを担当します。あなたが生まれたのは［季節］。［情景フレーズ］灯火のイメージです。心の機能が弱まって血がうまく巡らず、手足の冷え、貧血、不安感や不眠、ずっと続く痛みなどの症状が出やすい体質です。',
-    signs: ['手足や指先が冷えやすく、顔色やくすみが気になる。','なんとなく漠然とした不安感（はらはら）があり、眠りが浅い。','息切れしやすかったり、立ちくらみや貧血気味になる。','肩こりや生理痛など、同じ場所にずっと続く痛みがある。','舌の色が白っぽかったり、赤紫色になりやすい。'],
+    baseText: '丁は中医学では「心」に関わります。血の巡りを司り、精神・感情・睡眠の安定を支える臓腑です。心の機能が弱まると血がうまく巡らなくなり、はらはらしやすい体質です。',
+    signs: ["漠然とした不安感があり眠りが浅い", "手足や指先が冷えやすい", "立ちくらみや貧血気味になりやすい", "肩こりや生理痛など同じ場所に続く痛みがある", "顔色のくすみやシミが気になりやすい"],
     foodText: '血の巡りが滞って「はらはら」不安になったら、赤色の食材や良質なたんぱく質を。体の栄養である血をたっぷりと補うことで、血流を改善し、精神的な落ち着きを取り戻してくれます。',
     foods: ['牛肉','レバー','まぐろ','かつお','にんじん','黒酢'],
     teaKey: '丁'
   },
   '戊': {
+    onoma: 'ガツガツ',
     shortText: '胃腸が働きすぎて熱を持ち、溜め込みやすい体質',
-    baseText: '戊（土）は中医学で「脾」の機能に関わり、消化器系や胃腸の働きを担当します。あなたが生まれたのは［季節］。［情景フレーズ］山岳のイメージです。脾の機能が強まって胃腸に熱が起こりやすく、食欲過多になったり、ムカムカや胃痛、便秘、口内炎などの症状が出やすい体質です。',
-    signs: ['すぐにお腹が空いたり、食欲が止まらずつい食べ過ぎてしまう。','胸やけや胃痛、胃のムカムカを感じやすい。','吹き出物や口角炎ができやすく、口がネバつく・苦い。','お腹周りや上半身にお肉がつきやすい。','汗がベタベタしたり、二日酔いになりやすい。'],
+    baseText: '戊は中医学では「胃」に関わります。脾と連携して食べ物を受け取り消化し、体のエネルギーを作り出す入口となる臓腑です。脾の機能が強まりすぎると胃腸に熱がこもり、ガツガツしやすい体質です。',
+    signs: ["食欲が止まらずつい食べすぎてしまう", "胸やけや胃のムカムカを感じやすい", "口内炎や口角炎ができやすい", "お腹周りに肉がつきやすい", "汗がベタベタして二日酔いになりやすい"],
     foodText: '胃腸が働きすぎて「ガツガツ」してしまう時は、自然の甘みを持つ炭水化物や食物繊維を。消化器系（脾）の機能を正常に整え、余分な糖分や水分の排出を助けてくれます。',
     foods: ['白米','さつまいも','かぼちゃ','キャベツ','とうもろこし'],
     teaKey: '戊'
   },
   '己': {
+    onoma: 'くよくよ',
     shortText: '胃腸のエネルギーが不足して、疲れや重だるさが出やすい体質',
-    baseText: '己（土）は中医学で「脾」の機能に関わり、消化器系や胃腸の働きを担当します。あなたが生まれたのは［季節］。［情景フレーズ］大地のイメージです。脾の機能が弱まって胃腸がうまく動かず、疲れやすい、胃もたれや消化不良、軟便気味になるといった症状が出やすい体質です。',
-    signs: ['疲れやすく、食後に強い眠気に襲われたり横になりたくなる。','胃もたれや消化不良を起こしやすく、便がゆるめ（軟便）。','一つのことをため込んで、くよくよと思い悩みやすい。','太れない、またはお腹にだけぽっこり脂肪がつきやすい。','体が冷えやすく、肌のたるみや内臓下垂が気になってくる。'],
+    baseText: '己は中医学では「脾」に関わります。消化吸収によって気・血・水を作り出し、全身にエネルギーを送り届ける臓腑です。脾の機能が弱まるとエネルギーが不足し、くよくよしやすい体質です。',
+    signs: ["疲れやすく食後に強い眠気が来る", "胃もたれや消化不良を起こしやすい", "くよくよと思い悩みため込みやすい", "体が冷えやすく便がゆるくなりやすい", "肌のたるみや体のだるさが気になりやすい"],
     foodText: '胃腸のエネルギーが不足して「くよくよ」思い悩む時は、黄色の食材でお腹から元気に。消化力を助けてエネルギー（気）を作り出す力を高め、気血水の巡りの土台を立て直してくれます。',
     foods: ['山芋','じゃがいも','玉ねぎ','きのこ類','卵','大豆'],
     teaKey: '己'
   },
   '庚': {
+    onoma: 'ムズムズ',
     shortText: 'バリア機能が過剰に反応し、乾燥や緊張が出やすい体質',
-    baseText: '庚（金）は中医学で「肺」の機能に関わり、呼吸器系やバリア機能を担当します。あなたが生まれたのは［季節］。［情景フレーズ］岩石のイメージです。肺の機能が強まってバリアが過剰になりやすく、乾燥肌やアレルギー、くしゃみ、せき、さむけなどの症状が出やすい体質です。',
-    signs: ['気温や気圧の変化に敏感で、肌のかゆみや乾燥（ムズムズ）が出やすい。','鼻づまりや黄色い鼻水、のどの痛みやせき・たんが出やすい。','食物アレルギーが出たり、便秘になりやすい。','さむけを感じたり、節々が痛むことがある。','体や筋肉がガチガチに硬く緊張しやすい。'],
+    baseText: '庚は中医学では「大腸」に関わります。肺と連携して体の不要なものを排出し、免疫機能を支える働きを担う臓腑です。肺の機能が強まりすぎるとバリアが過剰に反応し、ムズムズしやすい体質です。',
+    signs: ["気温や気圧の変化で肌がかゆくなりやすい", "鼻づまりや黄色い鼻水・のどの痛みが出やすい", "便秘や食物アレルギーが出やすい", "さむけや節々の痛みを感じやすい", "体や筋肉がガチガチに硬くなりやすい"],
     foodText: 'バリア機能が過剰に反応して「ムズムズ」する時は、辛味のある食材で発散を。血行を良くして滞った気血を巡らせることで、体温調節や呼吸器系（肺）の機能を正常な状態に導きます。',
     foods: ['ねぎ','しょうが','しそ','大根','スパイス類'],
     teaKey: '庚'
   },
   '辛': {
+    onoma: 'ひりひり',
     shortText: 'バリア機能が敏感になりやすく、外からの刺激を受けやすい体質',
-    baseText: '辛（金）は中医学で「肺」の機能に関わり、呼吸器系やバリア機能を担当します。あなたが生まれたのは［季節］。［情景フレーズ］宝石のイメージです。肺の機能が弱まってバリアが敏感になりやすく、敏感肌になったり、鼻やのどが弱い、風邪をひきやすいといった症状が出やすい体質です。',
-    signs: ['肌が敏感で弱く、かぶれや乾燥（ひりひり）が気になる。','空気の流れや汚れに敏感で、鼻水やくしゃみ、風邪をひきやすい。','呼吸が浅くなりやすく、声が小さかったりかすれたりする。','環境や食べ物の変化で、お腹の調子（便通）が変わりやすい。','気を使いすぎて、急に免疫力が落ちたように感じる。'],
+    baseText: '辛は中医学では「肺」に関わります。呼吸を通じて外からの刺激を防ぎ、体をきれいに保つバリア機能を担う臓腑です。肺の機能が弱まるとバリアが薄くなり、ひりひりしやすい体質です。',
+    signs: ["肌が敏感でかぶれや乾燥が出やすい", "鼻水・くしゃみ・風邪をひきやすい", "呼吸が浅く声がかすれやすい", "食べ物や環境の変化でお腹が乱れやすい", "気を使いすぎると急に体がダウンする"],
     foodText: 'バリア機能が弱まって「ひりひり」乾燥や敏感さを感じる時は、白色の食材で潤いを。肺や呼吸器系に潤いを与え、免疫力を高めることで、外の刺激から体を優しく守ってくれます。',
     foods: ['白菜','れんこん','白ごま','豆腐','豆乳','白きくらげ'],
     teaKey: '辛'
   },
   '壬': {
+    onoma: 'ポヨポヨ',
     shortText: '余分な水がたまって冷えやすく、ポヨポヨとむくみやすい体質',
-    baseText: '壬（水）は中医学で「腎」の機能に関わり、泌尿器系や水の巡りを担当します。あなたが生まれたのは［季節］。［情景フレーズ］海洋のイメージです。腎の機能が強まって水があふれて冷えやすく、むくみや、胃がポチャポチャする、関節痛、神経痛などの症状が出やすい体質です。',
-    signs: ['体がむくみやすく、全体的にポヨポヨとだるくて重い。','胃の中でポチャポチャと水の音がすることがある。','下半身が冷えやすく、尿の量が多い。','冷えによって、関節痛や神経痛が出やすい。','ふわふわ、またはグルグルするめまいを感じることがある。'],
+    baseText: '壬は中医学では「膀胱」に関わります。腎と連携して体の余分な水分を排出し、水分代謝を整える働きを担う臓腑です。腎の機能が強まりすぎると水が滞って冷えやすくなり、ポヨポヨしやすい体質です。',
+    signs: ["体がむくみやすく全体的に重だるい", "胃がポチャポチャして下半身が冷えやすい", "冷えによる関節痛や神経痛が出やすい", "ふわふわ・グルグルするめまいを感じやすい", "尿の量が多く水分代謝が乱れやすい"],
     foodText: '水が溜まって冷え「ポヨポヨ」むくむ時は、適度な塩辛さ（鹹味）を持つ海産物などを。泌尿器系（腎）の機能を高め、水分代謝をスムーズにして、重だるさや冷えによる痛みを取り除いてくれます。',
     foods: ['昆布','わかめ','あさり','イカ','タコ','味噌'],
     teaKey: '壬'
   },
   '癸': {
+    onoma: 'からから',
     shortText: '水の巡りや潤いが不足して、根本的な疲れを感じやすい体質',
-    baseText: '癸（水）は中医学で「腎」の機能に関わり、泌尿器系や水の巡りを担当します。あなたが生まれたのは［季節］。［情景フレーズ］雨水のイメージです。腎の機能が弱まって水がうまく巡らず、のぼせやほてり、口の渇き、足腰の疲れといった症状が出やすい体質です。',
-    signs: ['顔や手足がほてりやすく、寝汗をかいたり口がからからに渇く。','足腰が疲れやすく、だるさや骨の弱さを感じる。','白髪や抜け毛、髪のパサつきが急に気になり始めた。','耳鳴りがしたり、音が聞こえづらくなることがある。','夜中にトイレで起きるなど、根源的なエネルギー不足を感じる。'],
+    baseText: '癸は中医学では「腎」に関わります。生命エネルギーの源を蓄え、水分代謝・骨・脳など体の根本を支える臓腑です。腎の機能が弱まると潤いと生命力が不足し、からからしやすい体質です。',
+    signs: ["顔や手足がほてりやすく寝汗をかきやすい", "足腰が疲れやすくだるさが抜けない", "白髪や抜け毛・髪のパサつきが気になりやすい", "耳鳴りや音の聞こえづらさを感じやすい", "夜中にトイレで起きるなど根本的な疲れがある"],
     foodText: '水の巡りが不足して「からから」に渇き、根本的な疲れを感じる時は、黒色の食材を。生命力の源である腎の栄養（精）を深く補い、いつまでも若々しく元気な体を作ってくれます。',
     foods: ['黒豆','黒ごま','黒きくらげ','牡蠣','しじみ','くるみ'],
     teaKey: '癸'
+  }
+};
+
+
+// ============================================================
+// 十干養生データ（強み・生活のヒント・感情の整え方）
+// ============================================================
+const KAN_YOJO = {
+  '甲': {
+    imageText: '木の中でも陽の力を持つ大木。春に芽吹き、まっすぐ上へ伸びるように、自らの力で道を切り拓いていく強い生命力と自立の意志を持っています。',
+    strength: ["決断が早く、迷わず行動に移せる", "目標に向かって折れずに進み続けられる", "困難な場面で自然とリーダーシップを発揮できる"],
+    life: ['目を酷使しすぎず、遠くを見る時間を意識的に作りましょう。', '気が上がりやすい日は、早めに休息を取ることが大切です。', '深呼吸やゆっくりしたため息で、上がった気を下ろす習慣を。'],
+    emotion: ['イライラを感じたら、気が頭に上がっているサインです。', '無理に抑えるより、外の空気を吸って気を散らすと楽になります。', '柑橘系の香りを嗅ぐだけで、気の流れが変わることがあります。']
+  },
+  '乙': {
+    imageText: '木の中でも陰の力を持つ草花。風に揺れながらも根を張り、周囲に柔軟に寄り添いながらしなやかに広がっていく力を持っています。',
+    strength: ["相手の気持ちを自然に察して寄り添える", "どんな環境でも柔軟に対応できる", "人間関係をじっくり丁寧に育てられる"],
+    life: ['朝は温かい飲み物でゆっくり体を起こしましょう。', '肝の血が不足しやすいため、朝の体の回復に時間がかかることがあります。', '夕方のだるさが強い時は、お腹を軽く温めると効果的です。'],
+    emotion: ['気持ちが沈む日は、短時間でも外の空気に触れてみてください。', '緑の多い場所に出るだけで、滞った気がほぐれやすくなります。', 'ため込まず、信頼できる人に話すことが気の巡りを助けます。']
+  },
+  '丙': {
+    imageText: '火の中でも陽の力を持つ太陽。すべてを明るく照らすように、外へ向かって燃え上がる表現力と人を温める大きなエネルギーを持っています。',
+    strength: ["場の空気を明るく温めて人を引きつけられる", "感情を豊かに表現して周囲を動かせる", "熱量と行動力で物事を一気に動かせる"],
+    life: ['のぼせた日は首筋を軽く冷やし、辛いものや揚げ物を控えましょう。', '激しい運動やサウナでの多汗は避け、体の熱を穏やかに保ちます。', '興奮した後は、静かな場所で心拍をゆっくり落ち着かせる時間を。'],
+    emotion: ['興奮が続くと心が前に走りすぎて消耗します。', '刺激を受けた後は意識的にペースを落とし、心を静める時間を作りましょう。', '苦味のあるお茶を一杯飲むだけで、気持ちが落ち着きやすくなります。']
+  },
+  '丁': {
+    imageText: '火の中でも陰の力を持つ灯火。派手に燃えるのではなく、内側をじっくり静かに照らすような繊細な感性と深い思いやりを持っています。',
+    strength: ["相手の痛みや感情を深く感じ取れる", "静かに信頼関係をじっくり育てられる", "献身的に人を支え続けられる"],
+    life: ['腰回りと足元を常に温め、冷やさないことが最優先です。', '夜は足を温めてから眠ると、眠りの質が上がりやすくなります。', '長時間同じ姿勢を避け、肩や腕を軽く動かして血流を促しましょう。'],
+    emotion: ['漠然とした不安を感じたら、体が冷えているサインかもしれません。', 'まず温かいものを飲んで体を温めると、気持ちも落ち着いてきます。', '安心できる環境と人のそばにいることが、この体質の力を引き出します。']
+  },
+  '戊': {
+    imageText: '土の中でも陽の力を持つ山岳。どんな嵐にも揺るがないように、どっしりと構えながら大きなエネルギーを蓄え続ける安定感と獲得の力を持っています。',
+    strength: ["どんな状況でもどっしり構えて動じない", "大きな目標に向かって粘り強く積み上げられる", "人や物事をスケール大きくまとめられる"],
+    life: ['一度に食べすぎず、量を区切って胃腸を休ませましょう。', '食後は少し歩くと、胃の熱と停滞が散りやすくなります。', '考えが堂々巡りするときは、温かいお茶で一度リセットを。'],
+    emotion: ['欲求が暴走したときは、胃腸に熱がこもっているサインです。', '甘い飲料を控えて温かいお茶に替えると、気持ちが落ち着きます。', '考えが固まってきたと感じたら、信頼できる人の話を聞くと視界が開けます。']
+  },
+  '己': {
+    strength: ["コツコツと積み上げて着実に結果を出せる", "縁の下で人や物事を支え続けられる", "深く考え抜いてから動く思慮深さがある"],
+    life: ['冷たい飲食を避け、温かい食事でお腹を守りましょう。', '湿気の強い日は特に胃腸が疲れやすいので、消化のよいものを。', '食後はきちんと胃を休ませることが、エネルギー回復の近道です。'],
+    emotion: ['思い悩みすぎると脾を傷つけ、さらに気力が落ちていきます。', '悩んでいると感じたら、まず体を動かして気の流れを変えましょう。', '自分のペースを守ることが、この体質の安心感と強さを育てます。']
+  },
+  '庚': {
+    strength: ["危険や変化をいち早く察知できる", "既存のやり方を壊して新しいものを切り拓ける", "一度決めたことを強い意志で貫き通せる"],
+    life: ['乾燥の強い日はしっかり加湿して、皮膚と粘膜を守りましょう。', '体が固まってきたら、軽いストレッチでこまめにほぐします。', '一定のリズムある生活が、この体質を最も安定させます。'],
+    emotion: ['刺激が多すぎると感じたら、情報や人との接触を一時的に減らしてみましょう。', '静かな時間を意識的に作ることで、判断力がクリアに戻っていきます。', '深呼吸と発散の時間を持つことが、緊張をほぐす一番の近道です。']
+  },
+  '辛': {
+    imageText: '金の中でも陰の力を持つ宝石。岩の中から磨き出された宝石のように、繊細で洗練された感受性と自分を守りながら輝く防衛の力を持っています。',
+    strength: ["人が気づかない細部まで感じ取れる", "独自の美意識と洗練されたセンスがある", "デリケートな場面で相手の気持ちを察せる"],
+    life: ['マスクや加湿器を活用して湿度を保ち、バリア機能を守りましょう。', '冷たい飲み物や刺激の強いものは控えめにします。', '自分が心地よいと感じる空間を整えることが、この体質の養生になります。'],
+    emotion: ['悲しみや憂いを感じやすい日は、肺が疲れているサインです。', '好きなものや美しいと感じるものに触れる時間が、心の潤いを補ってくれます。', '外からの刺激を受けすぎたと感じたら、一人の時間を作って静かに回復を。']
+  },
+  '壬': {
+    imageText: '水の中でも陽の力を持つ大海。どこまでも広がる海のように、自由な発想と柔軟な適応力で周囲を巻き込んでいく影響力を持っています。',
+    strength: ["自由な発想で誰も思いつかないアイデアが出せる", "どんな環境でも柔軟に適応して動ける", "人を自然に巻き込んで大きな流れを作れる"],
+    life: ['温かい飲み物でお腹と腰回りの冷えを抑えましょう。', '汗をかきすぎない程度の有酸素運動で、水分代謝を高めます。', '束縛を感じる環境はストレスになりやすいので、自分のペースで動ける時間を意識して作りましょう。'],
+    emotion: ['焦りを感じたら、流れに逆らわず今いる場所を確かめてみましょう。', '自分の直感を信じて動くことが、この体質の発想力を最大限に引き出します。', '水が自然に流れるように、無理な力を手放すと本来の力が戻ってきます。']
+  },
+  '癸': {
+    imageText: '水の中でも陰の力を持つ雨水。大地にしずかに染み込む雨のように、時間をかけて深く浸透していく忍耐力と物事の本質を感じ取る直感力を持っています。',
+    strength: ["物事の本質を静かに深く感じ取れる", "時間をかけてじっくり根を張り大きな力を発揮できる", "逆境の中でも静かに浸透するように前進できる"],
+    life: ['夜ふかしや過労を避け、早めに就寝して腎の消耗を防ぎましょう。', '腰と足元を冷やさない服装を意識し、湯船で深部を温めます。', '睡眠の質を整えることが、この体質のすべてのベースになります。'],
+    emotion: ['恐れや不安が強い時は、腎のエネルギーが落ちているサインです。', '頑張ろうとする前に、まず体を温めて休息を取ることが先決です。', 'エネルギーが満ちてくると、自然と次の一歩が踏み出せるようになります。']
+  }
+};
+
+// ============================================================
+// 季節×十干の体質データ
+// ============================================================
+const SEASON_TAISITSU = {
+  '甲': {
+    '春': {
+      desc: '春に生まれた大木は、気がのぼりやすい季節の中で育ちます。春は気が一斉に上へ動く季節のため、上昇しやすい体質の勢いがさらに強まります。イライラ・頭痛・目の充血が通常より強く出やすくなります。',
+      foodText: '酸味や香りのよいものが、上にのぼって滞った気の流れをスムーズにし、気持ちをすっきりさせてくれます。',
+      foods: ['レモン','梅干し','トマト','酢のもの','セロリ','しそ','みかん','みょうが']
+    },
+    '夏': {
+      desc: '夏に生まれた大木は、強い熱の中で上へ伸びようとします。夏の熱が木の気をさらに燃やすため、気が消耗しながら上昇し続けます。目の充血・肩こり・眠れない夜が出やすい体質です。',
+      foodText: '酸味や苦味のものが、上がった熱を冷ましながら気を下ろし、気持ちをすっきりさせてくれます。',
+      foods: ['ゴーヤー','セロリ','トマト','レモン','きゅうり','緑茶','梅干し','しそ']
+    },
+    '秋': {
+      desc: '秋に生まれた大木は、乾燥の中で気の流れが滞りやすい季節に育ちます。秋の金気が木の動きを抑えるため、上昇しようとする力が行き場を失いやすくなります。気分の浮き沈み・喉の乾き・肌のかさつきが出やすい体質です。',
+      foodText: '酸味や色の濃いものが、肝の血を補いながら気の流れを整え、自律神経の働きを助けてくれます。',
+      foods: ['トマト','ほうれん草','にんじん','梅干し','ぶどう','ブロッコリー','酢のもの','しそ']
+    },
+    '冬': {
+      desc: '冬に生まれた大木は、気が内側に籠もりやすい季節の中で育ちます。冬の水気が木を静かに育てるため、力は蓄えられますが気が滞りがちです。ストレスが頭痛・肩こり・食欲の乱れとして出やすい体質です。',
+      foodText: '辛味や香りのよいものが、こもった気を発散させて流れをスムーズにし、気持ちをすっきりさせてくれます。',
+      foods: ['ねぎ','しょうが','しそ','セロリ','レモン','酢のもの','三つ葉','みょうが']
+    }
+  },
+  '乙': {
+    '春': {
+      desc: '春に生まれた草花は、本来の季節の中で育ちます。春は気が一斉に動きすぎる季節のため、繊細な体質には過剰な刺激となって消耗しやすくなります。気疲れ・ため息・気分の波が通常より出やすくなります。',
+      foodText: '緑の野菜や色の濃いものが、肝の血を補って自律神経の働きを助け、滞った気の流れを整えてくれます。',
+      foods: ['ほうれん草','小松菜','ブロッコリー','にんじん','枝豆','アスパラガス','三つ葉','セロリ']
+    },
+    '夏': {
+      desc: '夏に生まれた草花は、強い熱の中で横へ広がろうとします。夏の熱が体の潤いと気を同時に消耗させるため、気が滞りやすい体質にさらに負担がかかります。だるさ・食欲の低下・気力の落ち込みが出やすい体質です。',
+      foodText: '緑の野菜や色の濃いものが、肝の血を補いながら気を動かし、自律神経の働きを助けてくれます。',
+      foods: ['ほうれん草','にんじん','枝豆','トマト','小松菜','ピーマン','アスパラガス','しそ']
+    },
+    '秋': {
+      desc: '秋に生まれた草花は、乾燥の中でしなやかさを保ちながら育ちます。秋の乾燥が肝の血をさらに不足させるため、気の流れが滞りやすくなります。血の不足・肌のかさつき・気分の落ち込みが出やすい体質です。',
+      foodText: '赤い食材や木の実が、肝の血をたっぷり補って、自律神経の働きを助けてくれます。',
+      foods: ['にんじん','クコの実','ぶどう','ほうれん草','レバー','黒豆','黒ごま','アーモンド']
+    },
+    '冬': {
+      desc: '冬に生まれた草花は、冷えの中で静かに根を張りながら育ちます。冬の水気が肝をゆっくり育てるため、力は蓄えられますが気の流れが滞りがちです。やる気の低下・お腹の張り・体の重だるさが出やすい体質です。',
+      foodText: '体を温めながら気を動かすものが、肝の血を補い自律神経の働きを助け、滞りをほぐしてくれます。',
+      foods: ['にんじん','ねぎ','しょうが','かぼちゃ','黒豆','なつめ','ほうれん草','酢のもの']
+    }
+  },
+  '丙': {
+    '春': {
+      desc: '春に生まれた太陽は、気が上昇する季節の中で育ちます。春の木気が火をさらに燃やすため、熱がみなぎりやすい体質の勢いが高まります。興奮しやすい・眠りが浅い・落ち着かない状態が通常より出やすくなります。',
+      foodText: '苦味のものや夏が旬のものが、余分な熱を冷まして炎症をしずめ、心を落ち着かせてくれます。',
+      foods: ['セロリ','レタス','緑茶','きゅうり','ゴーヤー','アスパラガス','トマト','ごぼう']
+    },
+    '夏': {
+      desc: '夏に生まれた太陽は、最も熱が強い季節の中で育ちます。夏は心の働きが活発になる季節のため、熱がみなぎりやすい体質の勢いがさらに強まります。ほてり・多汗・口内炎・ニキビが特に出やすい体質です。',
+      foodText: '苦味のものや夏が旬のものが、血の熱を冷まして炎症をしずめ、体に必要な水分を補ってくれます。',
+      foods: ['ゴーヤー','きゅうり','トマト','緑茶','レタス','なす','冬瓜','スイカ']
+    },
+    '秋': {
+      desc: '秋に生まれた太陽は、熱が落ち着きにくいまま乾燥の季節に育ちます。秋の乾燥が体の潤いを奪うため、熱と乾燥が重なって炎症が長引きやすくなります。肌荒れ・喉の渇き・便秘が出やすい体質です。',
+      foodText: '苦味と潤いを補うものを合わせることで、余分な熱を冷ましながら、体の潤いを守ってくれます。',
+      foods: ['豆腐','梨','きゅうり','緑茶','ゴーヤー','れんこん','白菜','トマト']
+    },
+    '冬': {
+      desc: '冬に生まれた太陽は、熱が内側にこもりやすい季節の中で育ちます。冬の寒さが外から熱を閉じ込めるため、心の火が出口を失って内側で燃え続けます。不眠・動悸・顔のほてりが出やすい体質です。',
+      foodText: '心を落ち着けるものや血流を整えるものが、内側にこもった熱をしずめ、精神を安定させてくれます。',
+      foods: ['黒豆','牡蠣','れんこん','豆腐','しじみ','小豆','白菜','なつめ']
+    }
+  },
+  '丁': {
+    '春': {
+      desc: '春に生まれた灯火は、気が動き出す季節の中で育ちます。春の気の動きが血を引っ張るため、血が滞りやすい体質には変化についていきにくくなります。立ちくらみ・気分の不安定・疲れやすさが通常より出やすくなります。',
+      foodText: '赤いものやたんぱく質が、体の栄養である血をたっぷり補って、血流を改善し気持ちを落ち着かせてくれます。',
+      foods: ['にんじん','レバー','まぐろ','ほうれん草','なつめ','黒酢','卵','クコの実']
+    },
+    '夏': {
+      desc: '夏に生まれた灯火は、熱の中で血が消耗しやすい季節に育ちます。夏は心の働きが活発になる季節のため、もともと弱い血がさらに消耗しやすくなります。手足の冷えと顔のほてりが同時に出やすい体質です。',
+      foodText: '赤いものや黒いものが、血を補いながら熱も落ち着かせ、血流を整えてくれます。',
+      foods: ['まぐろ','かつお','黒豆','にんじん','黒酢','レバー','なつめ','黒ごま']
+    },
+    '秋': {
+      desc: '秋に生まれた灯火は、乾燥の中で血がさらに不足しやすい季節に育ちます。秋の乾燥が血と潤いを同時に奪うため、体の内側が乾きやすくなります。肌のかさつき・不安感・眠りの浅さが出やすい体質です。',
+      foodText: '赤いものや心を落ち着けるものが、血と潤いを同時に補って、精神を安定させてくれます。',
+      foods: ['まぐろ','かつお','黒ごま','レバー','クコの実','なつめ','豆腐','牡蠣']
+    },
+    '冬': {
+      desc: '冬に生まれた灯火は、血の巡りが最も滞りやすい季節の中で育ちます。冬の寒さが血の流れを直接止めるため、血が滞りやすい体質に冷えが追い打ちをかけます。冷え・生理痛・同じ場所の痛みが強く出やすい体質です。',
+      foodText: '体を温めながら血を補うものが、血流を改善して気持ちを落ち着かせ、痛みをやわらげてくれます。',
+      foods: ['牛肉','レバー','黒酢','しょうが','なつめ','にんじん','黒豆','ねぎ']
+    }
+  },
+  '戊': {
+    '春': {
+      desc: '春に生まれた山岳は、気が活発になる季節の中で育ちます。春の気の高まりが胃腸を刺激するため、熱がこもりやすい体質の消化器がさらに過剰に動きます。食欲の過剰・胃のムカムカ・口内炎が通常より出やすくなります。',
+      foodText: '自然の甘味や食物繊維のものが、胃腸の機能を整えて消化を助け、余分な熱をやさしく冷ましてくれます。',
+      foods: ['キャベツ','大根','セロリ','きゅうり','レタス','白菜','ごぼう','りんご']
+    },
+    '夏': {
+      desc: '夏に生まれた山岳は、最も熱が強い季節の中で育ちます。夏の熱が胃腸をさらに燃やすため、熱がこもりやすい体質の勢いが極まります。胃の不快感・便秘・口の苦みが特に強く出やすい体質です。',
+      foodText: '苦味や食物繊維のものが、胃腸の熱と詰まりを同時に解消し、消化機能を正常に整えてくれます。',
+      foods: ['ゴーヤー','とうもろこし','キャベツ','大根','緑茶','きゅうり','冬瓜','ごぼう']
+    },
+    '秋': {
+      desc: '秋に生まれた山岳は、胃腸の熱が落ち着きにくいまま乾燥の季節に育ちます。秋の乾燥が胃腸の熱と重なるため、体の内側の潤いが奪われやすくなります。口の渇き・便秘・肌の乾燥が続きやすい体質です。',
+      foodText: '消化を助けながら潤いも補うものが、胃腸の機能を整えながら、乾燥から体を守ってくれます。',
+      foods: ['山芋','大根','豆腐','白菜','れんこん','りんご','キャベツ','白ごま']
+    },
+    '冬': {
+      desc: '冬に生まれた山岳は、食欲が高まりやすい季節の中で育ちます。冬の寒さが胃腸の熱を外へ発散させにくくするため、食べすぎた熱が内側にこもりやすくなります。胃もたれ・体重増加・口内炎が出やすい体質です。',
+      foodText: '消化のよい自然の甘みのものが、胃腸の機能を整えて消化を助け、胃腸をゆっくり休ませてくれます。',
+      foods: ['白米','かぼちゃ','さつまいも','キャベツ','大根','山芋','豆腐','りんご']
+    }
+  },
+  '己': {
+    '春': {
+      desc: '春に生まれた大地は、気が変化しやすい季節の中で育ちます。春の気の動きが胃腸に負担をかけるため、エネルギーが不足しやすい体質にはついていきにくくなります。食欲不振・だるさ・気分の乗らなさが通常より出やすくなります。',
+      foodText: '黄色いものやお腹に気を補うものが、胃腸を元気にしてエネルギーを作り出し、気血水の巡りの土台を整えてくれます。',
+      foods: ['山芋','かぼちゃ','じゃがいも','なつめ','卵','玉ねぎ','さつまいも','しいたけ']
+    },
+    '夏': {
+      desc: '夏に生まれた大地は、暑さで胃腸が疲れやすい季節の中で育ちます。夏の熱が胃腸を温めすぎるため、エネルギーが不足しやすい体質には消耗が重なります。食後の眠気・軟便・体の重だるさが特に出やすい体質です。',
+      foodText: '冷たいものを避けて黄色いものが、胃腸を温めながらエネルギーを補い、消化力を高めてくれます。',
+      foods: ['しょうが','なつめ','山芋','かぼちゃ','とうもろこし','卵','みそ','玉ねぎ']
+    },
+    '秋': {
+      desc: '秋に生まれた大地は、実りの季節の中でゆっくり育ちます。秋に胃腸がエネルギーを外へ送り出そうとするため、もともと不足しやすい体質にはさらに負担がかかります。疲れが溜まりやすく回復が遅くなりやすい体質です。',
+      foodText: '黄色いものや秋の食材が、胃腸を温めながらエネルギーを補い、体に必要な栄養を作り出してくれます。',
+      foods: ['さつまいも','かぼちゃ','しいたけ','山芋','じゃがいも','栗','なつめ','玉ねぎ']
+    },
+    '冬': {
+      desc: '冬に生まれた大地は、胃腸が最も冷えやすい季節の中で育ちます。冬の寒さが胃腸を直接冷やすため、エネルギー不足の体質に冷えが追い打ちをかけます。体の重だるさ・気力の低下・手足の冷えが強く出やすい体質です。',
+      foodText: '黄色いものや体を温めるものが、胃腸を芯から温めてエネルギーを補い、気血水の巡りを立て直してくれます。',
+      foods: ['玉ねぎ','じゃがいも','しょうが','かぼちゃ','山芋','なつめ','みそ','鶏肉']
+    }
+  },
+  '庚': {
+    '春': {
+      desc: '春に生まれた岩石は、気温変化が激しい季節の中で育ちます。春の気の乱れがバリアを刺激するため、過剰反応しやすい体質にさらに負担がかかります。花粉・鼻水・くしゃみ・肌のかゆみが通常より出やすくなります。',
+      foodText: '辛味のものが、血行を良くして滞った気血を巡らせ、体温調節やバリア機能を正常に整えてくれます。',
+      foods: ['ねぎ','しょうが','しそ','大根','ミント','にんにく','かぶ','玉ねぎ']
+    },
+    '夏': {
+      desc: '夏に生まれた岩石は、湿気と熱が強い季節の中で育ちます。夏の熱がバリアを溶かすように消耗させるため、過剰反応しやすい体質が乱れやすくなります。あせも・湿疹・鼻づまり・体の重さが出やすい体質です。',
+      foodText: '辛味と苦味を組み合わせたものが、熱と湿気を同時に発散させ、バリア機能を正常に整えてくれます。',
+      foods: ['大根','ゴーヤー','しそ','緑茶','冬瓜','とうもろこし','ねぎ','しょうが']
+    },
+    '秋': {
+      desc: '秋に生まれた岩石は、本来の季節の中で育ちます。秋はバリア機能が最も活発になる季節のため、過剰反応しやすい体質の勢いがさらに強まります。空咳・肌荒れ・鼻の乾燥が出やすい体質です。',
+      foodText: '辛味で発散させながら秋が旬のものが、体の潤いを補って呼吸器系やお肌を潤し、バリア機能を整えてくれます。',
+      foods: ['れんこん','大根','白ごま','梨','ねぎ','しそ','白菜','しょうが']
+    },
+    '冬': {
+      desc: '冬に生まれた岩石は、冷たい空気の中で育ちます。冬の寒さがバリアを緊張させ収縮させるため、過剰反応しやすい体質がさらに硬直しやすくなります。体のこわばり・節々の痛み・寒けが出やすい体質です。',
+      foodText: '辛味のものが、体を温めながら滞った気血を巡らせ、バリア機能をほぐして整えてくれます。',
+      foods: ['しょうが','ねぎ','にんにく','シナモン','大根','山椒','玉ねぎ','しそ']
+    }
+  },
+  '辛': {
+    '春': {
+      desc: '春に生まれた宝石は、気が揺れやすい季節の中で育ちます。春の気の変化がバリアの薄い体質に直接影響するため、外からの刺激を防ぎにくくなります。花粉・気圧の変化・気分の揺れへの敏感さが通常より強くなります。',
+      foodText: '白いものが、肺の気や潤いを補ってバリア機能を高め、外からの刺激に備えてくれます。',
+      foods: ['豆腐','れんこん','白ごま','梨','豆乳','白菜','山芋','大根']
+    },
+    '夏': {
+      desc: '夏に生まれた宝石は、強い日差しの中で潤いを消耗しながら育ちます。夏の熱がバリアをさらに薄くするため、潤いが飛びやすい体質に熱の消耗が重なります。ほてり・乾燥・過敏さが特に強く出やすい体質です。',
+      foodText: '白いものや水分の多いものが、肺の潤いを内側から補いながら、外の刺激から体をやさしく守ってくれます。',
+      foods: ['豆腐','れんこん','きゅうり','豆乳','梨','白菜','白ごま','山芋']
+    },
+    '秋': {
+      desc: '秋に生まれた宝石は、本来の季節の中で育ちます。秋はバリア機能が最も働く季節ですが、乾燥が重なることで潤いが奪われやすくなります。肌や喉のひりひり・空咳・声のかすれが出やすい体質です。',
+      foodText: '白いものをたっぷり取り入れることで、肺と肌の潤いを補い、免疫力を高めてくれます。',
+      foods: ['梨','白菜','れんこん','豆腐','白ごま','山芋','豆乳','大根']
+    },
+    '冬': {
+      desc: '冬に生まれた宝石は、冷えの中で潤いが固まりやすい季節に育ちます。冬の寒さがバリアをさらに薄くするため、外からの刺激を防げなくなりやすくなります。風邪をひきやすく回復に時間がかかりやすい体質です。',
+      foodText: '白いものと体を温めるものを合わせることで、肺の潤いを補いながらバリアを温め、免疫力を高めてくれます。',
+      foods: ['豆乳','山芋','れんこん','なつめ','はちみつ','ゆず','白菜','しょうが']
+    }
+  },
+  '壬': {
+    '春': {
+      desc: '春に生まれた海洋は、気が動き出す季節の中で育ちます。春の気の動きが水を引っ張るため、滞りやすい体質に揺れが加わります。頭のぼんやり・めまい・体の重さが通常より出やすくなります。',
+      foodText: '塩辛い味のものや水分代謝をよくするものが、腎の機能を高めて水の巡りを整え、重だるさをとりのぞいてくれます。',
+      foods: ['昆布','わかめ','あさり','しょうが','とうもろこし','みそ','大根','ねぎ']
+    },
+    '夏': {
+      desc: '夏に生まれた海洋は、湿気と熱が強い季節の中で育ちます。夏の湿気が体の水に混ざり込むため、水が重くてねばついた状態で滞りやすくなります。むくみ・胃のポチャポチャ・体の重だるさが特に出やすい体質です。',
+      foodText: '塩辛い味のものや水分代謝をよくするものが、腎の機能を高めて重くなった水の巡りを整え、むくみや重だるさをとりのぞいてくれます。',
+      foods: ['あさり','しじみ','イカ','とうもろこし','冬瓜','みそ','きゅうり','わかめ']
+    },
+    '秋': {
+      desc: '秋に生まれた海洋は、水が滞りやすい体質に秋の乾燥が加わります。秋の乾燥が体の水分をさらに奪うため、水の巡りが乱れやすくなります。むくみ・関節のだるさ・体の重さが出やすい体質です。',
+      foodText: '塩辛い味のものや水分代謝をよくするものが、余分な水を動かしながら、腎の機能を整えてくれます。',
+      foods: ['昆布','あさり','わかめ','とうもろこし','山芋','みそ','大根','しょうが']
+    },
+    '冬': {
+      desc: '冬に生まれた海洋は、水が最も冷えて固まりやすい季節の中で育ちます。冬は腎の働きが活発になる季節ですが、水が滞りやすい体質には冷えで水が固まりやすくなります。むくみ・冷え・関節痛が特に強く出やすい体質です。',
+      foodText: '体を温めるものと塩辛い味のものを合わせることで、冷えた水を温めながら動かし、腎の機能を高めてくれます。',
+      foods: ['シナモン','しょうが','昆布','あさり','みそ','山椒','ねぎ','わかめ']
+    }
+  },
+  '癸': {
+    '春': {
+      desc: '春に生まれた雨水は、気が動き出す季節の中で育ちます。春の気の動きが腎の潤いを引き出すため、もともと不足しやすい体質にはさらに消耗が重なります。のぼせ・口の渇き・気分の浮き沈みが通常より出やすくなります。',
+      foodText: '黒いものが、腎の栄養をじっくり補って精や潤いを満たし、いつまでも若々しく元気な体を作ってくれます。',
+      foods: ['黒豆','黒ごま','クコの実','山芋','なつめ','ぶどう','牡蠣','しじみ']
+    },
+    '夏': {
+      desc: '夏に生まれた雨水は、熱で潤いが飛びやすい季節の中で育ちます。夏の熱が腎の水を蒸発させるため、潤いが不足しやすい体質に熱の消耗が追い打ちをかけます。ほてり・寝汗・足腰のだるさが特に強く出やすい体質です。',
+      foodText: '黒いものと体を冷ますものを合わせることで、腎の栄養を補いながら熱を落ち着かせ、潤いを守ってくれます。',
+      foods: ['黒豆','しじみ','黒ごま','梨','黒きくらげ','牡蠣','山芋','豆腐']
+    },
+    '秋': {
+      desc: '秋に生まれた雨水は、乾燥と潤い不足が重なる季節の中で育ちます。秋の乾燥が肺から腎へと潤いを奪うため、もともと乾きやすい体質にさらに拍車がかかります。肌のパサつき・喉の渇き・疲れやすさが出やすい体質です。',
+      foodText: '黒いものと白いものを合わせることで、肺と腎を同時に潤し、精や潤いを補ってくれます。',
+      foods: ['黒きくらげ','牡蠣','白菜','黒ごま','梨','山芋','豆腐','しじみ']
+    },
+    '冬': {
+      desc: '冬に生まれた雨水は、腎が最も酷使される季節の中で育ちます。冬は腎に負担がかかり続ける季節のため、もともと潤いが不足しやすい体質には蓄えが底をつきやすくなります。疲れが抜けない・冷える・気力が湧かないが出やすい体質です。',
+      foodText: '黒いものや体を温めるものが、腎の栄養をしっかり補って陽気を助け、体の芯から若々しい力を取り戻してくれます。',
+      foods: ['黒豆','くるみ','しじみ','黒ごま','牡蠣','山芋','なつめ','しょうが']
+    }
   }
 };
 
@@ -1060,30 +1896,30 @@ const KANSHI_DATA = {
   '34': { kanshi:'丁酉', catchphrase:'闘志を秘めつつ自分の思いをぶつけてくる、義理と人情の人。', group:'湿 HUMID ／ 実業家', bullets:['怖いもの知らずで思い切りがいい反面、意外と慎重でびびりな一面もあります。','ほのぼのとして明るいですが、ビジネスの場では頭がキレる策士になります。','研ぎ澄まされた美意識と感受性で、細部までこだわり抜く才能があります。','敵に回したくないNo.1だけど、味方にしたらこれ以上ないほど頼れる存在です。','気分が乗らない時は、頑張りをちゃんと認めてくれる人のそばにいると復活が早いです。'] },
   '35': { kanshi:'戊戌', catchphrase:'自分の意見は決して曲げない信念と、強情で不器用な人。', group:'湿 HUMID ／ 実業家', badges:['ruler','alien','warrior'], bullets:['好き嫌いが激しく、一度夢中になると自分が納得がいくまで徹底的にやります。','プライドと自尊心は高く、常に自分をより良く見せようと努力する人です。','一度決めたことは揺るがず、強い持久力で安定して走り続ける力があります。','高い山の上や、タワマンの上層階のような見晴らしの良い場所に住みたいと願っています。','みんなを集めてワイワイと楽しく、お山の大将のような立場でいるのが大好きです。'] },
   '36': { kanshi:'己亥', catchphrase:'安定をなぜか覆したくなっちゃう、あまのじゃくなカメレオン。', group:'湿 HUMID ／ 実業家', badges:['fairy','alien'], bullets:['誠実で素直な人ですが、周りの変化を敏感に察知して即座にキャラを変えられます。','考えをすぐ態度に出さないまま、実は水面下で着々と物事を進めています。','自分が信じた道を、純粋な探求心でどこまでも深く掘り下げていきます。','自分の本当の居場所を求めてさまよいながら、基本的には一人で行動します。','波乱の道をめげずに進み続ければ、やがてとても大きなものが実を結びます。'] },
-  '37': { kanshi:'庚子', catchphrase:'かなり心配性だけど、ずば抜けた直感力と空想力のある人。', group:'風 WIND ／ 会社員', badges:['ruler','alien'], bullets:['自分を客観視しながら、常に一歩先を見据えて慎重に行動する頭脳派です。','シャープでキレすぎる頭脳と、とても繊細でデリケートな精神を併せ持っています。','状況を静かに観察し、水面下で柔軟に順応していく賢さを持っています。','繊細なため無意識にストレスを溜め込みやすいので、心身のバランス管理が大事です。','精神的なつながりを、言葉や形など目に見える形で表してもらえると安心できます。'] },
-  '38': { kanshi:'辛丑', catchphrase:'能ある鷹は爪を隠して、いつも無邪気にふるまう癒しの人。', group:'風 WIND ／ 会社員', badges:['alien'], bullets:['聡明で論理的な思考と、絶妙なユーモアセンスを併せ持つタレント性があります。','裏ではコツコツと自分を律しながら、地道な努力を続けられる頑張り屋さんです。','焦らずどっしりと構え、時間をかけて着実に結果を出す底力があります。','ボーッとしているように見えて、実は頭の中でいろいろと考えて結構頑張っています。','特有ののんびりとした雰囲気が、自然と周りの空気をなごませてくれます。'] },
-  '39': { kanshi:'壬寅', catchphrase:'のんびり見えるけど、アクティブな目立ちたがり屋さん。', group:'風 WIND ／ 会社員', bullets:['すぐれた直感力とパワーで、いろんな人から頼りにされやすい兄貴・姉御肌です。','自意識とおしゃれ度が高く、集団よりも単独で自由に行動する方が好きです。','迷わず決断し、前例のないことでも力強く切り拓いていく強さがあります。','苦境に立たされても決して逃げず、果敢に立ち向かい解決しようとします。','見た目は大人しそうなのに、秘めたるパワーやエネルギーは最強クラスです。'] },
-  '40': { kanshi:'癸卯', catchphrase:'陰で責任感が強く、縁の下を支えるしっかり者の実力者。', group:'風 WIND ／ 会社員', bullets:['自分から前へは出ませんが、そのマジメさで周りから高く評価され引き立てられます。','聡明で気品のある人柄ですが、中身はかなりのこだわりを持った完全主義者です。','持ち前の愛嬌と計画性で、人と人を軽やかにつないでいく才能があります。','人に気を遣いすぎてしまうため、それが少しストレスになりやすいところがあります。','現実と守りをしっかり意識して生活すると、平穏で安心な暮らしができます。'] },
+  '37': { kanshi:'庚子', catchphrase:'かなり心配性だけど、ずば抜けた直感力と空想力のある人。', group:'湿 HUMID ／ 実業家', badges:['ruler','alien'], bullets:['自分を客観視しながら、常に一歩先を見据えて慎重に行動する頭脳派です。','シャープでキレすぎる頭脳と、とても繊細でデリケートな精神を併せ持っています。','状況を静かに観察し、水面下で柔軟に順応していく賢さを持っています。','繊細なため無意識にストレスを溜め込みやすいので、心身のバランス管理が大事です。','精神的なつながりを、言葉や形など目に見える形で表してもらえると安心できます。'] },
+  '38': { kanshi:'辛丑', catchphrase:'能ある鷹は爪を隠して、いつも無邪気にふるまう癒しの人。', group:'湿 HUMID ／ 実業家', badges:['alien'], bullets:['聡明で論理的な思考と、絶妙なユーモアセンスを併せ持つタレント性があります。','裏ではコツコツと自分を律しながら、地道な努力を続けられる頑張り屋さんです。','焦らずどっしりと構え、時間をかけて着実に結果を出す底力があります。','ボーッとしているように見えて、実は頭の中でいろいろと考えて結構頑張っています。','特有ののんびりとした雰囲気が、自然と周りの空気をなごませてくれます。'] },
+  '39': { kanshi:'壬寅', catchphrase:'のんびり見えるけど、アクティブな目立ちたがり屋さん。', group:'湿 HUMID ／ 実業家', bullets:['すぐれた直感力とパワーで、いろんな人から頼りにされやすい兄貴・姉御肌です。','自意識とおしゃれ度が高く、集団よりも単独で自由に行動する方が好きです。','迷わず決断し、前例のないことでも力強く切り拓いていく強さがあります。','苦境に立たされても決して逃げず、果敢に立ち向かい解決しようとします。','見た目は大人しそうなのに、秘めたるパワーやエネルギーは最強クラスです。'] },
+  '40': { kanshi:'癸卯', catchphrase:'陰で責任感が強く、縁の下を支えるしっかり者の実力者。', group:'湿 HUMID ／ 実業家', bullets:['自分から前へは出ませんが、そのマジメさで周りから高く評価され引き立てられます。','聡明で気品のある人柄ですが、中身はかなりのこだわりを持った完全主義者です。','持ち前の愛嬌と計画性で、人と人を軽やかにつないでいく才能があります。','人に気を遣いすぎてしまうため、それが少しストレスになりやすいところがあります。','現実と守りをしっかり意識して生活すると、平穏で安心な暮らしができます。'] },
   '41': { kanshi:'甲辰', catchphrase:'好きなことにひたすらまっしぐらにのめり込んで追求する人。', group:'風 WIND ／ 会社員', bullets:['あまり器用ではないので、同時にいろんなことに手を出さず一つに集中します。','気持ちはのびのびしていますが、実際の行動はかなり慎重で着実です。','自分への甘えは許さず、地道にコツコツと努力を重ねることができます。','全体を大きく俯瞰し、周囲を巻き込んでスケール大きくまとめる力があります。','人を信じやすい純粋なところがありますが、それが前に進む大きな原動力になっています。'] },
   '42': { kanshi:'乙巳', catchphrase:'穏やかで明るさがあり、人からの注目を浴びる人。', group:'風 WIND ／ 会社員', bullets:['内面は感受性が強く、表の明るさとは裏腹に警戒心が強い一面を持っています。','自分が決めた一つのテーマに熱を注ぎ、妥協せず深く集中して追求します。','人情が深く相手に気を遣いすぎるところがありますが、持ち前の行動力でカバーします。','裏でうまく手を回して、人と人をつないでまとめる調整役が得意です。','少しさみしがり屋な性格が、周りに人が集まってくる理由の一つになっています。'] },
   '43': { kanshi:'丙午', catchphrase:'周りをぐいぐい巻き込んで引っ張っていく、圧倒的リーダー気質の人。', group:'風 WIND ／ 会社員', badges:['hero'], bullets:['どんな時でも、オンとオフをきっちり切り替えてメリハリをつけて働きます。','大人しそうに見えて、実は周りの人のことをとてもよく観察しています。','鋭い直感と瞬発力で、チャンスを逃さず一気に燃え上がる力があります。','若い頃にたくさん苦労や経験を積むほど、後になって大きな成功を収めます。','自分の仕事や行動で世の中に貢献することに、強い生きがいを感じるタイプです。'] },
   '44': { kanshi:'丁未', catchphrase:'気さくで愛嬌があり、その場の雰囲気に合わせられる人。', group:'風 WIND ／ 会社員', bullets:['本心は謎めいていて、何を考えているか周りから少し伝わりづらいところがあります。','普段は穏やかですが、たまに核心を突いた鋭い毒舌が急に飛び出すことがあります。','全体のバランスを見ながら、こまやかに調整しサポートするのが得意です。','軽やかな雰囲気を持っていますが、一度決めたことは最後までやり抜く芯の強さがあります。','スタートダッシュは遅めでも、じわじわと追い上げていく強い持久力を持っています。'] },
-  '45': { kanshi:'戊申', catchphrase:'決着がつくまで見守ってから出てくるラスボス的な人。', group:'寒 COLD ／ 表現者', bullets:['冷静に全体の状況を把握して、自分の最適な出方を考えてから行動します。','そんなつもりはないのに、周りからは少し計算高いと思われることがあります。','無駄を省き、合理的な判断ですばやく頭を切り替えるスマートさを持っています。','口がうまく交渉上手ですが、たまにちょっと強引に物事を進めることがあります。','その日その日の状況に合わせて、どんな時でも臨機応変に柔軟な対応ができます。'] },
-  '46': { kanshi:'己酉', catchphrase:'自分の努力や経験をすべて土台にして切り開いていく人。', group:'寒 COLD ／ 表現者', bullets:['新しくてワクワクするような事を見つけると、大きなやりがいを感じて没頭します。','地道にコツコツと進めるのは好きですが、無駄なことや面倒な作業は嫌いです。','研ぎ澄まされた美意識と感受性で、細部までこだわり抜く才能があります。','人に何と言われようと、自分が「できる」と思ったことは必ずやり遂げます。','スピードは決して早くありませんが、一歩一歩着実に足場を固めて進んでいきます。'] },
-  '47': { kanshi:'庚戌', catchphrase:'いざという時にキャラ変して、本心がお目見えする頭脳派。', group:'寒 COLD ／ 表現者', badges:['warrior'], bullets:['物静かで落ち着いて見えますが、内面には誰にも譲れない強い信念を隠し持っています。','基本的にまじめで、いつも周りの空気や反応を気にしながら慎重に行動します。','頭脳を武器にして静かに自己主張をしながら、自分だけの世界を確立していきます。','一度決めたことは揺るがず、強い持久力で安定して走り続ける力があります。','小さな枠に収まるよりも、スケールの大きな目標に向かうほど本領を発揮します。'] },
-  '48': { kanshi:'辛亥', catchphrase:'ゆるく見えて、人の本質を見抜く不思議な力を持ってる人。', group:'寒 COLD ／ 表現者', badges:['alien'], bullets:['繊細でデリケートな感性の中から、物事の本質を見抜く第六感が磨かれています。','性格は明るく気さくで、いい感じに肩の力を抜いて生きられる大人な人です。','自分が信じた道を、純粋な探求心でどこまでも深く掘り下げていきます。','本人はリラックスして目立とうとしていなくても、なぜか惹きつけられる存在感があります。','賢そうに見えてどこか少し抜けているところが、周りから愛される最大のポイントです。'] },
-  '49': { kanshi:'壬子', catchphrase:'みんなに愛されながら、豪快に引っ張っていく親分肌な人。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['考えているスケールがデカすぎて、たまに周りの人がついていけないことがあります。','状況を静かに観察し、水面下で柔軟に順応していく賢さを持っています。','勉強だけでなく、世間の荒波の中で身につけた独自の強さや魅力を持っています。','頼まれるとイヤと言えない、全方位的にみんなに優しい面倒見の良い性格です。','既成概念にとらわれず、スケールの大きな自由な生き方をするのが合っています。'] },
-  '50': { kanshi:'癸丑', catchphrase:'若いのになぜか落ち着いてるギャップがかわいらしい人。', group:'寒 COLD ／ 表現者', bullets:['人情味に溢れていて、心を許した相手とは朝までずっと熱く語り合うことができます。','焦らずどっしりと構え、時間をかけて着実に結果を出す底力があります。','ちょっと気になることがあると、急にムキになったり意地を張ったりする面があります。','悪気はないので、ムキになった時は一度深呼吸して落ち着くクセをつけると吉です。','へこむたびにメンタルが鍛えられ、どんどん堂々とした揺るぎない人になっていきます。'] },
+  '45': { kanshi:'戊申', catchphrase:'決着がつくまで見守ってから出てくるラスボス的な人。', group:'風 WIND ／ 会社員', bullets:['冷静に全体の状況を把握して、自分の最適な出方を考えてから行動します。','そんなつもりはないのに、周りからは少し計算高いと思われることがあります。','無駄を省き、合理的な判断ですばやく頭を切り替えるスマートさを持っています。','口がうまく交渉上手ですが、たまにちょっと強引に物事を進めることがあります。','その日その日の状況に合わせて、どんな時でも臨機応変に柔軟な対応ができます。'] },
+  '46': { kanshi:'己酉', catchphrase:'自分の努力や経験をすべて土台にして切り開いていく人。', group:'風 WIND ／ 会社員', bullets:['新しくてワクワクするような事を見つけると、大きなやりがいを感じて没頭します。','地道にコツコツと進めるのは好きですが、無駄なことや面倒な作業は嫌いです。','研ぎ澄まされた美意識と感受性で、細部までこだわり抜く才能があります。','人に何と言われようと、自分が「できる」と思ったことは必ずやり遂げます。','スピードは決して早くありませんが、一歩一歩着実に足場を固めて進んでいきます。'] },
+  '47': { kanshi:'庚戌', catchphrase:'いざという時にキャラ変して、本心がお目見えする頭脳派。', group:'風 WIND ／ 会社員', badges:['warrior'], bullets:['物静かで落ち着いて見えますが、内面には誰にも譲れない強い信念を隠し持っています。','基本的にまじめで、いつも周りの空気や反応を気にしながら慎重に行動します。','頭脳を武器にして静かに自己主張をしながら、自分だけの世界を確立していきます。','一度決めたことは揺るがず、強い持久力で安定して走り続ける力があります。','小さな枠に収まるよりも、スケールの大きな目標に向かうほど本領を発揮します。'] },
+  '48': { kanshi:'辛亥', catchphrase:'ゆるく見えて、人の本質を見抜く不思議な力を持ってる人。', group:'風 WIND ／ 会社員', badges:['alien'], bullets:['繊細でデリケートな感性の中から、物事の本質を見抜く第六感が磨かれています。','性格は明るく気さくで、いい感じに肩の力を抜いて生きられる大人な人です。','自分が信じた道を、純粋な探求心でどこまでも深く掘り下げていきます。','本人はリラックスして目立とうとしていなくても、なぜか惹きつけられる存在感があります。','賢そうに見えてどこか少し抜けているところが、周りから愛される最大のポイントです。'] },
+  '49': { kanshi:'壬子', catchphrase:'みんなに愛されながら、豪快に引っ張っていく親分肌な人。', group:'風 WIND ／ 会社員', badges:['hero'], bullets:['考えているスケールがデカすぎて、たまに周りの人がついていけないことがあります。','状況を静かに観察し、水面下で柔軟に順応していく賢さを持っています。','勉強だけでなく、世間の荒波の中で身につけた独自の強さや魅力を持っています。','頼まれるとイヤと言えない、全方位的にみんなに優しい面倒見の良い性格です。','既成概念にとらわれず、スケールの大きな自由な生き方をするのが合っています。'] },
+  '50': { kanshi:'癸丑', catchphrase:'若いのになぜか落ち着いてるギャップがかわいらしい人。', group:'風 WIND ／ 会社員', bullets:['人情味に溢れていて、心を許した相手とは朝までずっと熱く語り合うことができます。','焦らずどっしりと構え、時間をかけて着実に結果を出す底力があります。','ちょっと気になることがあると、急にムキになったり意地を張ったりする面があります。','悪気はないので、ムキになった時は一度深呼吸して落ち着くクセをつけると吉です。','へこむたびにメンタルが鍛えられ、どんどん堂々とした揺るぎない人になっていきます。'] },
   '51': { kanshi:'甲寅', catchphrase:'前向きでポジティブで明るい、マイペースな愛されキャラタイプ。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['来る者は拒まず、どんな人でも広く受け入れるビッグな器を持った人です。','迷わず決断し、前例のないことでも力強く切り拓いていく強さがあります。','イヤなことがあっても、一晩寝て起きればわりとすぐ忘れてしまうポジティブさがあります。','イケイケどんどんな精神で進むため、たまに人の話を聞いていないことがあります。','いろんな人と出会う中で豊かな人脈を築いていくと、人生がより大きく開けます。'] },
   '52': { kanshi:'乙卯', catchphrase:'気さくでほんわか癒し系の内側に、しぶといパワーを持つ人。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['一つ一つ着実に物事を積み重ねていく、とても堅実で努力家なタイプです。','持ち前の愛嬌と計画性で、人と人を軽やかにつないでいく才能があります。','いつも間にか周りの人を自分のペースに巻き込んでしまう、不思議な魅力の持ち主です。','上下関係や和を大事にするので、組織の中でサポートや調整役に回ると重宝されます。','テキパキとそつなくこなせる能力があるので、心に少し余裕を持つとさらに輝きます。'] },
   '53': { kanshi:'丙辰', catchphrase:'少しお節介だけど、人情味にあふれたパワフルなお助けマン。', group:'寒 COLD ／ 表現者', bullets:['しっかり者で心に迷いが少ないため、自分の意見をはっきりとストレートに言えます。','お世辞や建前は言えませんが、その裏表のない正直さが周りからの共感を呼びます。','全体を大きく俯瞰し、周囲を巻き込んでスケール大きくまとめる力があります。','湧き上がるエネルギーが強く、一度走り出すと自分でも止められない勢いがあります。','自分の直感や独自のスタイルを大事にして突き進むと、自然と結果がついてきます。'] },
   '54': { kanshi:'丁巳', catchphrase:'自尊心が強くプライドの高い、孤高で堂々とした潔癖な人。', group:'寒 COLD ／ 表現者', badges:['hero','alien'], bullets:['堂々としていて開けっぴろげで大胆な振る舞いをするため、わりとモテるタイプです。','自分が求めるレベルが高すぎるため、人に任せず自分で全部やってしまいがちです。','自分が決めた一つのテーマに熱を注ぎ、妥協せず深く集中して追求します。','自分の研ぎ澄まされた感覚やセンスを理解してくれる人と一緒にいたいと願っています。','自分なりの世界観を深く追求し続けていると、いつの間にか周囲から注目を集めます。'] },
   '55': { kanshi:'戊午', catchphrase:'どっしりと落ち着いた雰囲気の中に、強い個性と信念を持つ人。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['冷静にデータや状況を分析して、そのまま確実な実行に移せる行動力があります。','鋭い直感と瞬発力で、チャンスを逃さず一気に燃え上がる力があります。','いざという時には、常識を覆して革命を起こせるくらいのとてつもないパワーを持っています。','様々な分野の知識や教養を身につけることで、人間としてのスケールがさらに広がります。','年齢や経験を重ねるごとに深みが増し、だんだんと強い運を引き寄せるようになります。'] },
   '56': { kanshi:'己未', catchphrase:'素朴な明るさの中にも、強い自信と度胸を持つゆとりの人。', group:'寒 COLD ／ 表現者', bullets:['自分に合うかどうかをじっくりと見極めてから、人と深く付き合う慎重派です。','全体のバランスを見ながら、こまやかに調整しサポートするのが得意です。','不満やストレスがたまってくると、つい感情的になって爆発してしまうことがあります。','大人の階段を上る途中のどこかのタイミングで、突如大きく生まれ変わる転機が訪れます。','人の意見にとらわれず、自分を信じる負けない気持ちを持てるとさらに成長できます。'] },
-  '57': { kanshi:'庚申', catchphrase:'人の言葉の裏を読める、シャープな知性と直感力の勝負師。', group:'戌亥 天中殺', badges:['hero'], bullets:['見よう見まねで人の良いところをサッと盗み、すぐに自分の戦力にできる器用さがあります。','無駄を省き、合理的な判断ですばやく頭を切り替えるスマートさを持っています。','鉄壁の防御本能と危機回避能力を持っているので、ピンチからの逃げ足はとても軽いです。','一本気で負けん気が強いので、みんなの先頭に立って困難に挑むリーダーシップがあります。','持ち前の知性と直感で勝負できる環境にいれば、どこでも負け知らずで過ごせます。'] },
-  '58': { kanshi:'辛酉', catchphrase:'知的なセンスと、どこか洗練された雰囲気を持つ理数系な人。', group:'戌亥 天中殺', badges:['hero'], bullets:['人の気持ちの機微にはやや鈍感なところがあり、お世辞や社交辞令はあまり得意ではありません。','研ぎ澄まされた美意識と感受性で、細部までこだわり抜く才能があります。','真面目な姿勢と、裏付けのある信憑性の高い言動で周りから厚く信頼されます。','一つのことに真摯に向き合って、自分が納得するまでとことん追求することが得意です。','周りのペースに合わせるよりも、自分のスタンスを守って進むと物事がうまくいきます。'] },
-  '59': { kanshi:'壬戌', catchphrase:'五感でなんでも吸収してしまう才能を持った、感覚的な人。', group:'戌亥 天中殺', bullets:['思い立ったら理屈よりも先に行動しますが、なぜかその直感や勘はよく当たります。','一度決めたことは揺るがず、強い持久力で安定して走り続ける力があります。','行動を起こした時に、まわりの人をどんどん巻き込んでいく強い影響力を持っています。','困っている人を見ると放っておけず、なんとしてでも助けたくなる優しさがあります。','時に少し荒々しいところもありますが、根がとても誠実なので多くの人から好かれます。'] },
-  '60': { kanshi:'癸亥', catchphrase:'普通じゃない道を行く、強靭な精神力と忍耐力のある超人。', group:'戌亥 天中殺', badges:['hero'], bullets:['相手の心理を鋭く読み取り、状況や流れを感じ取りながら自分を的確に表現します。','自分が信じた道を、純粋な探求心でどこまでも深く掘り下げていきます。','派手そうに見えることもありますが、実は平和で庶民的な普通の生活を好みます。','どんなにどん底に落ちても何度でも這い上がれるので、恐れず挑戦する気持ちが大事です。','世の中の主流や王道を行くよりも、人生の裏側や独自路線を行く方が大成します。'] }
+  '57': { kanshi:'庚申', catchphrase:'人の言葉の裏を読める、シャープな知性と直感力の勝負師。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['見よう見まねで人の良いところをサッと盗み、すぐに自分の戦力にできる器用さがあります。','無駄を省き、合理的な判断ですばやく頭を切り替えるスマートさを持っています。','鉄壁の防御本能と危機回避能力を持っているので、ピンチからの逃げ足はとても軽いです。','一本気で負けん気が強いので、みんなの先頭に立って困難に挑むリーダーシップがあります。','持ち前の知性と直感で勝負できる環境にいれば、どこでも負け知らずで過ごせます。'] },
+  '58': { kanshi:'辛酉', catchphrase:'知的なセンスと、どこか洗練された雰囲気を持つ理数系な人。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['人の気持ちの機微にはやや鈍感なところがあり、お世辞や社交辞令はあまり得意ではありません。','研ぎ澄まされた美意識と感受性で、細部までこだわり抜く才能があります。','真面目な姿勢と、裏付けのある信憑性の高い言動で周りから厚く信頼されます。','一つのことに真摯に向き合って、自分が納得するまでとことん追求することが得意です。','周りのペースに合わせるよりも、自分のスタンスを守って進むと物事がうまくいきます。'] },
+  '59': { kanshi:'壬戌', catchphrase:'五感でなんでも吸収してしまう才能を持った、感覚的な人。', group:'寒 COLD ／ 表現者', bullets:['思い立ったら理屈よりも先に行動しますが、なぜかその直感や勘はよく当たります。','一度決めたことは揺るがず、強い持久力で安定して走り続ける力があります。','行動を起こした時に、まわりの人をどんどん巻き込んでいく強い影響力を持っています。','困っている人を見ると放っておけず、なんとしてでも助けたくなる優しさがあります。','時に少し荒々しいところもありますが、根がとても誠実なので多くの人から好かれます。'] },
+  '60': { kanshi:'癸亥', catchphrase:'普通じゃない道を行く、強靭な精神力と忍耐力のある超人。', group:'寒 COLD ／ 表現者', badges:['hero'], bullets:['相手の心理を鋭く読み取り、状況や流れを感じ取りながら自分を的確に表現します。','自分が信じた道を、純粋な探求心でどこまでも深く掘り下げていきます。','派手そうに見えることもありますが、実は平和で庶民的な普通の生活を好みます。','どんなにどん底に落ちても何度でも這い上がれるので、恐れず挑戦する気持ちが大事です。','世の中の主流や王道を行くよりも、人生の裏側や独自路線を行く方が大成します。'] }
 };
 
 // ============================================================
@@ -1260,9 +2096,7 @@ function diagnose() {
   const kt = KAN_TAISITSU[d.kan];
   const typeName = `${season}の${KAN_SYMBOL[d.kan]}`;
   const scenePhrase = SCENE_DATA[d.kan][season];
-  const bodyText = kt.baseText
-    .replace('［季節］', season)
-    .replace('［情景フレーズ］', scenePhrase);
+  const bodyText = kt.baseText;
 
   const badges = dataD.badges || [];
   const groupBadgeHtml = dataD.group
@@ -1275,6 +2109,7 @@ function diagnose() {
     `<div class="bullet-item"><div class="bullet-dot"></div><span>${b}</span></div>`
   ).join('');
 
+  // 不調サイン（箇条書き）
   const signsHtml = kt.signs.map(s =>
     `<div class="sign-item"><div class="sign-dot"></div><span>${s}</span></div>`
   ).join('');
@@ -1283,22 +2118,55 @@ function diagnose() {
     `<span class="food-tag">${f}</span>`
   ).join('');
 
-  // 行動スタイル（3柱）
-  const styleHtml = [
-    { label:'本来の自分', shi: d.shi, pillar: '日柱' },
-    { label:'プライベート', shi: mShi, pillar: '月柱' },
-    { label:'ソーシャル', shi: y.shi, pillar: '年柱' },
-  ].map(item => {
+  // 季節×十干データ
+  const st = (SEASON_TAISITSU[d.kan] && SEASON_TAISITSU[d.kan][season]) || null;
+
+  // KAN_YOJOデータ
+  const ky = KAN_YOJO[d.kan] || {};
+
+  // 十干イメージ説明
+  const imageTextHtml = ky.imageText ? `
+    <div class="image-text-block">
+      <p class="image-text">${ky.imageText}</p>
+    </div>` : '';
+
+  // 強み（箇条書き3点）
+  const strengthHtml = (ky.strength && ky.strength.length > 0) ? `
+    <div class="strength-block">
+      <span class="strength-label">✦ この体質の強み</span>
+      <ul class="strength-list">${ky.strength.map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>` : '';
+
+  // きっとこんな人かも（最初の3点のみ）
+  const bulletsShortHtml = (dataD.bullets || []).map(b =>
+    `<div class="bullet-item"><div class="bullet-dot"></div><span>${b}</span></div>`
+  ).join('');
+
+  // 行動スタイル（本来・プライベート・ソーシャル）
+  const styleItems = [
+    { label:'本来の自分', note:'日柱', shi: d.shi, kan: d.kan },
+    { label:'プライベート', note:'月柱', shi: mShi, kan: mKan },
+    { label:'ソーシャル', note:'年柱', shi: y.shi, kan: y.kan },
+  ];
+  const styleCompactHtml = styleItems.map(item => {
     const sd = SHI_DATA[item.shi];
-    return `<div class="style-item">
-      <div class="style-label-box">${item.label}</div>
-      <div>
-        <span class="style-onoma">${sd.onoma}</span>
-        <span class="style-desc">${sd.desc}</span>
+    const keys = SHI_KEYS[item.shi] || [];
+    return `<div class="style-compact-item">
+      <div class="style-compact-left">
+        <span class="style-compact-label">${item.label}</span>
+        <span class="style-compact-onoma">${sd.onoma}</span>
+      </div>
+      <div class="style-compact-right">
+        <span class="style-compact-meta">${item.note} ${item.shi}</span>
+        <div class="style-compact-keys">
+          ${keys.map(k => `<span class="style-key-tag">${k}</span>`).join('')}
+        </div>
+        <span class="style-compact-desc">${sd.desc}</span>
       </div>
     </div>`;
   }).join('');
 
+  // ③ 本質カード
   document.getElementById('type-card').innerHTML = `
     <div class="type-header" style="background: linear-gradient(135deg, ${KAN_COLOR[d.kan]} 0%, ${SHI_COLOR[d.shi]} 100%);">
       <div class="type-group-row">${groupBadgeHtml}</div>
@@ -1317,60 +2185,90 @@ function diagnose() {
       ${personalBadgeHtml}
     </div>
     <div class="card-section">
-      <span class="section-label">きっとこんな人かも</span>
-      <div class="bullets-list">${bulletsHtml}</div>
+      <p class="honshitsu-note">日柱から読む、生まれ持った性質と行動の傾向です。</p>
     </div>
     <div class="card-section">
-      <span class="section-label">あなたのメインの体質</span>
-      <div class="taisitsu-type-block">
-        <span class="taisitsu-type-label">体質タイプ</span>
-        <span class="taisitsu-type-name">${typeName} <span>タイプ</span></span>
+      <span class="section-label">きっとこんな人かも</span>
+      <div class="bullets-list">${bulletsShortHtml}</div>
+    </div>
+    <div class="card-section" style="border-bottom:none;">
+      <span class="section-label">行動スタイル</span>
+      <div class="style-compact-grid">${styleCompactHtml}</div>
+    </div>`;
+
+  // ④ 体質カード（3BOX構造）
+  const onomaBadge = kt.onoma ? `<span class="onoma-badge">${kt.onoma}</span>` : '';
+  const seasonColor = SEASON_COLOR[season] || '#00a89d';
+
+  // 季節ブロック：説明＋食材＋感情をひとまとまりに
+  const seasonWrapHtml = st ? `
+    <div class="taisitsu-box taisitsu-box-yojo">
+      <div class="taisitsu-box-section">
+        <div class="season-inner">
+          <div class="season-inner-header">
+            <span class="season-inner-icon">🌿</span>
+            <span class="season-inner-title">${season}生まれの${KAN_SYMBOL[d.kan]}</span>
+          </div>
+          <p class="season-inner-desc">${st.desc}</p>
+        </div>
       </div>
-      <p class="section-text">${bodyText}</p>
-      <div class="sign-box">
-        <span class="sign-label">整えが必要なサイン</span>
+      <div class="taisitsu-box-section">
+        <span class="taisitsu-box-label">おすすめの食材</span>
+        <p class="food-text">${st.foodText}</p>
+        <div class="food-items">${st.foods.map(f => `<span class="food-tag">${f}</span>`).join('')}</div>
+      </div>
+      ${(ky.emotion && ky.emotion.length > 0) ? `
+      <div class="taisitsu-box-section">
+        <span class="taisitsu-box-label">この体質と感情のつながり</span>
+        <ul class="yojo-list">${ky.emotion.map(t => `<li>${t}</li>`).join('')}</ul>
+      </div>` : ''}
+    </div>` : '';
+
+  document.getElementById('section-taisitsu').innerHTML = `
+
+    <!-- 体質ヘッダー：日干×季節カラー -->
+    <div class="type-card" style="margin-top:0; margin-bottom:14px;">
+      <div class="taisitsu-header" style="background: linear-gradient(135deg, ${KAN_COLOR[d.kan]} 0%, ${seasonColor} 100%);">
+        <span class="taisitsu-header-label">体質タイプ</span>
+        <span class="taisitsu-header-name">${typeName}</span>
+        <span class="taisitsu-header-sub">タイプ</span>
+        ${onomaBadge}
+      </div>
+    </div>
+
+    <!-- 体質カード説明一文 -->
+    <div class="taisitsu-intro-note">日干と季節から読む、あなたの体質の傾向です。</div>
+
+    <!-- BOX①：説明（白） -->
+    <div class="taisitsu-box taisitsu-box-explain">
+      <div class="taisitsu-box-section">
+        <span class="taisitsu-box-label">この体質について</span>
+        ${ky.imageText ? `<div class="image-text-block"><p class="image-text">${ky.imageText}</p></div>` : ''}
+        <div class="body-text-block">
+          <p class="body-text">${bodyText}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOX②：強みと弱み（アイボリー） -->
+    <div class="taisitsu-box taisitsu-box-balance">
+      ${(ky.strength && ky.strength.length > 0) ? `
+      <div class="taisitsu-box-section">
+        <span class="taisitsu-box-label"><span class="strength-label-mark">✦</span>得意なこと・強み</span>
+        <ul class="strength-list">${ky.strength.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>` : ''}
+      <div class="taisitsu-box-section">
+        <span class="taisitsu-box-label"><span class="weakness-label-mark">△</span>出やすい心と体の不調</span>
         <div class="sign-list">${signsHtml}</div>
       </div>
-      <p class="food-text">${kt.foodText}</p>
-      <div class="food-items">${foodTagsHtml}</div>
-    </div>`;
+    </div>
 
-  // 行動スタイル（別カード）
-  document.getElementById('section-style').innerHTML = `
-    <div class="style-card">
-      <div class="style-card-header">
-        <span class="style-card-title">あなたの行動スタイル</span>
-        <span class="style-card-intro">生まれた日・月・年の干支が、<br>あなたの3つの顔を教えてくれます。</span>
-      </div>
-      ${[
-        { label:'本来の自分', note:'日柱 ／ 素のあなた',       shi: d.shi },
-        { label:'プライベート', note:'月柱 ／ 親しい人の前で', shi: mShi },
-        { label:'ソーシャル',   note:'年柱 ／ 社会・仕事での顔', shi: y.shi },
-      ].map(item => {
-        const sd = SHI_DATA[item.shi];
-        const keys = SHI_KEYS[item.shi] || [];
-        return `<div class="style-item-new">
-          <div class="style-item-top">
-            <span class="style-role-badge">${item.label}</span>
-            <span class="style-pillar-note">${item.note}</span>
-          </div>
-          <div class="style-onoma-row">
-            <span class="style-onoma-big">${sd.onoma}</span>
-            <span class="style-shi-label">${item.shi}（${SHI_SYMBOL[item.shi]}）</span>
-          </div>
-          <div class="style-keys-row">
-            ${keys.map(k => `<span class="style-key-tag">${k}</span>`).join('')}
-          </div>
-          <span class="style-desc-new">${sd.desc}</span>
-        </div>`;
-      }).join('')}
-    </div>`;
+    <!-- BOX③：養生（グリーン） -->
+    ${seasonWrapHtml}`;
 
-  // お茶セクション
+  // お茶セクション（日干対応の1本のみ）
   const kan1 = d.kan;
-  const kan2 = getSecondTea(d.kan, mShi, d.shi, y.shi);
   const t1 = TEA_DATA[kan1];
-  const t2 = TEA_DATA[kan2];
   document.getElementById('section-tea').innerHTML = `
     <div class="tea-section">
       <div class="tea-header">
@@ -1380,22 +2278,12 @@ function diagnose() {
       <div class="tea-item">
         <div class="tea-item-header">
           <div class="tea-color-dot" style="background:${KAN_COLOR[kan1]}"></div>
-          <span class="tea-role">1本目 ／ 日干・${kan1}に対応</span>
+          <span class="tea-role">日干・${kan1}に対応</span>
         </div>
         <span class="tea-name">${kan1} ${t1.name}</span>
         <span class="tea-blend">${t1.blend}</span>
         <p class="tea-desc">${t1.desc}</p>
         <a class="tea-link" href="${t1.url}" target="_blank" rel="noopener">ストアで見る →</a>
-      </div>
-      <div class="tea-item">
-        <div class="tea-item-header">
-          <div class="tea-color-dot" style="background:${KAN_COLOR[kan2]}"></div>
-          <span class="tea-role">2本目 ／ 月支・${mShi}の十干に対応</span>
-        </div>
-        <span class="tea-name">${kan2} ${t2.name}</span>
-        <span class="tea-blend">${t2.blend}</span>
-        <p class="tea-desc">${t2.desc}</p>
-        <a class="tea-link" href="${t2.url}" target="_blank" rel="noopener">ストアで見る →</a>
       </div>
     </div>`;
 
@@ -1405,12 +2293,14 @@ function diagnose() {
   // シェア文
   const catchphrase = dataD.catchphrase || '';
   const shortText = kt.shortText || '';
+  const kanSymbol = KAN_SYMBOL[d.kan] || '';
   const shareBase =
-    `【漢方占い】生まれの体質鑑定をやってみた🐼\n\n` +
-    `✦ メインの体質｜${typeName}タイプ\n` +
-    `（${shortText}）\n\n` +
-    `── ${catchphrase}\n\n` +
-    `LINEで生まれの体質をチェックできます🌿️\n`;
+    `漢方占い「生まれの体質鑑定」やってみた🐼\n\n` +
+    `${d.kan}${d.shi}（${kanRead(d.kan)}・${shiRead(d.shi)}）\n` +
+    `「${dataD.catchphrase || ''}」\n\n` +
+    `🌿 ${typeName}タイプ\n` +
+    `「${kt.shortText}」\n\n` +
+    `LINEで私だけの整え方がわかります🌱\n`;
   const shareTextX       = shareBase + `→ @ochapansan`;
   const shareTextThreads = shareBase + `→ @kampostand`;
   document.getElementById('btn-x').href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareTextX)}`;
@@ -1450,30 +2340,22 @@ async function sendToLine() {
   const msg =
     `【生まれの体質鑑定 結果】🐼🌿\n\n` +
     `📅 生年月日：${year}年${month}月${day}日\n\n` +
-    `🌿 メイン体質\n` +
-    `【 ${typeName} タイプ 】\n` +
-    `👉 ${kt.shortText || ''}\n\n` +
-    `🔮 わたしの本質\n` +
-    `${numD} ${d.kan}${d.shi}（${kanRead(d.kan)}・${shiRead(d.shi)}）\n` +
+    `🔮 本質タイプ\n` +
+    `${d.kan}${d.shi}（${kanRead(d.kan)}・${shiRead(d.shi)}）${numD}番\n` +
     `「${dataD.catchphrase || ''}」\n\n` +
-    `🍡 おすすめの食材\n` +
-    `${kt.foodText || ''}\n` +
-    `（${(kt.foods || []).join('・')}）\n\n` +
+    `🌿 体質タイプ\n` +
+    `${typeName}タイプ\n` +
+    `${kt.onoma}｜${kt.shortText || ''}\n\n` +
+    `🥗 おすすめの食材\n` +
+    `${(kt.foods || []).join('・')}\n\n` +
     `🍵 おすすめの十干茶\n` +
-    `🌱${kan1}・${t1.name}\n` +
-    `（${t1.blend}）\n` +
+    `${kan1}・${t1.name}（${t1.blend}）\n` +
     `${t1.url}\n\n` +
-    `🌱${kan2}・${t2.name}\n` +
-    `（${t2.blend}）\n` +
-    `${t2.url}\n\n` +
     `────────────────\n` +
-    `📊 命式データ（確認用）\n` +
-    `日：${d.kan}${d.shi}\n` +
-    `月：${mKan}${mShi}\n` +
-    `年：${y.kan}${y.shi}\n` +
+    `📊 命式データ\n` +
+    `日：${d.kan}${d.shi}　月：${mKan}${mShi}　年：${y.kan}${y.shi}\n` +
     `────────────────\n\n` +
-    `この結果を読んでみて、思い当たる不調や、気になっていることはありませんか？\n\n` +
-    `鑑定結果についてのご質問や、今のあなたにぴったりの養生法など、いつでもお気軽にメッセージでお尋ねくださいね🐼`;
+    `結果を見て気になることや、\nお茶・体質についてのご質問はお気軽に🌿`;
 
   const inClient = liff.isInClient();
   if (!inClient) {

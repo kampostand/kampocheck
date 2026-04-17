@@ -710,11 +710,13 @@
     display: flex;
     flex-direction: column;
     gap: 7px;
+    background: var(--white);
   }
   .taishitsu-detail li:last-child { border-bottom: none; }
-  .taishitsu-detail li:nth-child(even) {
-    background: var(--washi-2);
-  }
+
+  /* 行ごとの背景色：2トーンで交互に */
+  .taishitsu-detail .row-signs { background: var(--washi-2); }
+  .taishitsu-detail .row-tea   { background: var(--washi-2); }
 
   .taishitsu-detail-label {
     font-family: 'Noto Sans JP', sans-serif;
@@ -797,18 +799,18 @@
   }
   .tea-link-btn::before { content: '🍵'; font-size: 11px; }
 
-  /* 解説ブロック */
+  /* 解説ブロック（食材・茶の補足説明）*/
   .taishitsu-detail-note {
     display: block;
-    margin-top: 6px;
-    padding: 9px 13px;
-    background: var(--gold-faint);
-    border-left: 2px solid var(--gold-pale);
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--white);
+    border-left: 3px solid var(--gold-pale);
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 11.5px;
     font-weight: 400;
     line-height: 2.0;
-    color: var(--muted);
+    color: var(--ink-2);
     letter-spacing: 0.02em;
   }
 
@@ -840,7 +842,8 @@
   .isou-item.shigo { border-left-color: var(--water-yo); }
   .isou-item.sangi { border-left-color: var(--wood-yo); }
   .isou-item.hosan { border-left-color: var(--metal-yo); }
-  .isou-item.kei   { border-left-color: var(--earth-yo); }
+  .isou-item.kei    { border-left-color: var(--earth-yo); }
+  .isou-item.sankei { border-left-color: var(--earth-yo); }
   /* 天干条件位相法 */
   .isou-item.kango    { border-left-color: #0a6878; }
   .isou-item.risshin  { border-left-color: #0a6878; }
@@ -871,7 +874,8 @@
   .isou-item.shigo .isou-kind { background: var(--water-yo); }
   .isou-item.sangi .isou-kind { background: var(--wood-yo); }
   .isou-item.hosan .isou-kind { background: var(--metal-yo); }
-  .isou-item.kei   .isou-kind { background: var(--earth-yo); }
+  .isou-item.kei    .isou-kind { background: var(--earth-yo); }
+  .isou-item.sankei .isou-kind { background: var(--earth-yo); }
   /* 天干条件位相法 */
   .isou-item.kango    .isou-kind { background: #0a6878; }
   .isou-item.risshin  .isou-kind { background: #0a6878; }
@@ -1044,7 +1048,7 @@
   }
 
   /* ── 運気とバイオリズム ── */
-  .bio-section { margin-bottom: 36px; }
+  .bio-section { margin-bottom: 52px; }
 
   .bio-section-title {
     font-family: 'Noto Sans JP', sans-serif;
@@ -1137,14 +1141,15 @@
   /* 月別 */
   .bio-month-title {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 8px;
+    font-size: 11px;
     letter-spacing: 0.45em;
-    color: var(--muted);
+    color: var(--gold);
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
+    margin-top: 44px;
     display: block;
   }
-  .bio-month-list { display: flex; flex-direction: column; gap: 5px; }
+  .bio-month-list { display: flex; flex-direction: column; gap: 6px; }
 
   /* 平穏な月 */
   .bio-month-item {
@@ -1191,16 +1196,16 @@
     gap: 0;
   }
 
-  /* 季節カラー：枠線と背景を固定値で統一（平穏月・位相あり月どちらも） */
-  .bio-season-spring { background-color: #f2f9f4 !important; border-color: #8aba9a !important; }
-  .bio-season-summer { background-color: #fdf5f7 !important; border-color: #c88898 !important; }
-  .bio-season-autumn { background-color: #fdf9f2 !important; border-color: #c0a068 !important; }
-  .bio-season-winter { background-color: #f2f6fb !important; border-color: #88a8c4 !important; }
+  /* 季節カラー：すべて統一色（和紙ベース） */
+  .bio-season-spring,
+  .bio-season-summer,
+  .bio-season-autumn,
+  .bio-season-winter { background-color: var(--washi-2) !important; border-color: var(--line-dark) !important; }
 
-  .bio-month-item.has-isou.bio-season-spring { background-color: #f2f9f4 !important; border-color: #8aba9a !important; }
-  .bio-month-item.has-isou.bio-season-summer { background-color: #fdf5f7 !important; border-color: #c88898 !important; }
-  .bio-month-item.has-isou.bio-season-autumn { background-color: #fdf9f2 !important; border-color: #c0a068 !important; }
-  .bio-month-item.has-isou.bio-season-winter { background-color: #f2f6fb !important; border-color: #88a8c4 !important; }
+  .bio-month-item.has-isou.bio-season-spring,
+  .bio-month-item.has-isou.bio-season-summer,
+  .bio-month-item.has-isou.bio-season-autumn,
+  .bio-month-item.has-isou.bio-season-winter { background-color: var(--washi-2) !important; border-color: var(--line-dark) !important; }
 
   .bio-month-header {
     display: flex;
@@ -1210,10 +1215,10 @@
     background: transparent;
     border-bottom: 1px solid rgba(0,0,0,0.1);
   }
-  .bio-month-item.has-isou.bio-season-spring .bio-month-header { border-bottom-color: #8aba9a; }
-  .bio-month-item.has-isou.bio-season-summer .bio-month-header { border-bottom-color: #c88898; }
-  .bio-month-item.has-isou.bio-season-autumn .bio-month-header { border-bottom-color: #c0a068; }
-  .bio-month-item.has-isou.bio-season-winter .bio-month-header { border-bottom-color: #88a8c4; }
+  .bio-month-item.has-isou.bio-season-spring .bio-month-header,
+  .bio-month-item.has-isou.bio-season-summer .bio-month-header,
+  .bio-month-item.has-isou.bio-season-autumn .bio-month-header,
+  .bio-month-item.has-isou.bio-season-winter .bio-month-header { border-bottom-color: var(--line-dark); }
   .bio-month-isou-badge {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 9px;
@@ -1252,15 +1257,17 @@
     font-weight: 700;
     letter-spacing: 0.18em;
   }
-  .bio-direction-badge {
+  /* キーワードバッジ */
+  .bio-isou-keyword {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 8px;
+    font-size: 9px;
     font-weight: 500;
-    letter-spacing: 0.12em;
-    padding: 1px 7px;
+    letter-spacing: 0.08em;
+    padding: 1px 8px;
     border: 1px solid;
     flex-shrink: 0;
   }
+
   .bio-isou-with {
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 9px;
@@ -1298,7 +1305,7 @@
   /* 融合系（墨青） */
   .bio-fusion { border-left-color: #2a5888; }
   .bio-fusion .bio-isou-chip-label  { color: #1a3860; }
-  .bio-fusion .bio-direction-badge  { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
+  .bio-fusion .bio-isou-keyword     { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
   .bio-fusion .bio-isou-with        { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
   .bio-fusion .bio-isou-row         { border-top-color: #d0dff0; }
   .bio-fusion .bio-isou-row-label   { color: #2a5888; }
@@ -1308,7 +1315,7 @@
   /* 融合系ターコイズ */
   .bio-fusion-teal { border-left-color: #0a6878; }
   .bio-fusion-teal .bio-isou-chip-label  { color: #084858; }
-  .bio-fusion-teal .bio-direction-badge  { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
+  .bio-fusion-teal .bio-isou-keyword     { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
   .bio-fusion-teal .bio-isou-with        { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
   .bio-fusion-teal .bio-isou-row         { border-top-color: #c0e0e8; }
   .bio-fusion-teal .bio-isou-row-label   { color: #0a6878; }
@@ -1318,7 +1325,7 @@
   /* 分裂系（朱） */
   .bio-brake { border-left-color: #a01838; }
   .bio-brake .bio-isou-chip-label  { color: #800820; }
-  .bio-brake .bio-direction-badge  { color: #a01838; border-color: #d89090; background: #faf0f2; }
+  .bio-brake .bio-isou-keyword     { color: #a01838; border-color: #d89090; background: #faf0f2; }
   .bio-brake .bio-isou-with        { color: #a01838; border-color: #d89090; background: #faf0f2; }
   .bio-brake .bio-isou-row         { border-top-color: #f0d0d8; }
   .bio-brake .bio-isou-row-label   { color: #a01838; }
@@ -1328,7 +1335,7 @@
   /* 分裂系アンバー */
   .bio-brake-amber { border-left-color: #886000; }
   .bio-brake-amber .bio-isou-chip-label  { color: #604000; }
-  .bio-brake-amber .bio-direction-badge  { color: #886000; border-color: #c8a830; background: #fdf8e8; }
+  .bio-brake-amber .bio-isou-keyword     { color: #886000; border-color: #c8a830; background: #fdf8e8; }
   .bio-brake-amber .bio-isou-with        { color: #886000; border-color: #c8a830; background: #fdf8e8; }
   .bio-brake-amber .bio-isou-row         { border-top-color: #e8d898; }
   .bio-brake-amber .bio-isou-row-label   { color: #886000; }
@@ -1341,7 +1348,7 @@
     border-left-color: rgba(154,122,64,0.6);
   }
   .bio-year-isou .bio-isou-chip-label { color: var(--washi) !important; }
-  .bio-year-isou .bio-direction-badge { color: var(--gold-pale) !important; border-color: rgba(154,122,64,0.4) !important; background: rgba(255,255,255,0.06) !important; }
+  .bio-year-isou .bio-isou-keyword    { color: var(--gold-pale) !important; border-color: rgba(154,122,64,0.4) !important; background: rgba(255,255,255,0.06) !important; }
   .bio-year-isou .bio-isou-with       { color: var(--gold-pale) !important; border-color: rgba(154,122,64,0.4) !important; background: rgba(255,255,255,0.06) !important; }
   .bio-year-isou .bio-isou-row        { border-top-color: rgba(255,255,255,0.1) !important; }
   .bio-year-isou .bio-isou-row-label  { color: var(--gold-pale) !important; }
@@ -1454,7 +1461,8 @@
     .taishitsu-item-body, .essence-body {
       background-color: #fdfcf7 !important; color: #1a1614 !important;
     }
-    .taishitsu-detail li:nth-child(even) {
+    .taishitsu-detail .row-signs,
+    .taishitsu-detail .row-tea {
       background-color: #f0ead8 !important;
     }
     .isou-item { background-color: #f0ead8 !important; }
@@ -1467,10 +1475,10 @@
     /* 月ボックス（季節ごとに固定） */
     .bio-month-item { background-color: #fdfcf7 !important; color: #1a1614 !important; }
     .bio-month-calm-text { color: #7a6a56 !important; }
-    .bio-season-spring { background-color: #f2f9f4 !important; }
-    .bio-season-summer { background-color: #fdf5f7 !important; }
-    .bio-season-autumn { background-color: #fdf9f2 !important; }
-    .bio-season-winter { background-color: #f2f6fb !important; }
+    .bio-season-spring,
+    .bio-season-summer,
+    .bio-season-autumn,
+    .bio-season-winter { background-color: #f0ead8 !important; }
 
     /* 位相チップ（固定値） */
     .bio-isou-chip { background-color: #fdfcf7 !important; }
@@ -1507,7 +1515,7 @@
     <div class="date-inputs">
       <div class="input-wrap">
         <label>年</label>
-        <input type="number" id="year" placeholder="1985" min="1900" max="2100">
+        <input type="number" id="year" placeholder="1985" min="1910" max="2050">
       </div>
       <div class="input-wrap">
         <label>月</label>
@@ -1641,7 +1649,7 @@
     <div class="bio-section" id="bio-section" style="display:none;">
       <div class="bio-section-title">運 気 と バ イ オ リ ズ ム</div>
       <div class="bio-year-card" id="bio-year-card"></div>
-      <div class="bio-month-title">2026 年 月 別 バ イ オ リ ズ ム</div>
+      <div class="bio-month-title">毎 月 の 運 気 バ イ オ リ ズ ム</div>
       <div class="bio-month-list" id="bio-month-list"></div>
     </div>
 
@@ -2108,7 +2116,6 @@ function calculate() {
   if (mainT) {
     // ── 6要素を十干に変換して集計 ──
     // 天干3（日干・月干・年干）＋地支3を蔵干本気で十干変換した3つ＝合計6要素
-    const ELEM_YO_KAN = { '木':'甲','火':'丙','土':'戊','金':'庚','水':'壬' };
     const shiToKan = s => {
       const e = SHI_ELEM[s];
       return e ? (SHI_YO[s] ? ELEM_YO_KAN[e] : ELEM_IN_KAN[e]) : null;
@@ -2144,12 +2151,16 @@ function calculate() {
     const food = (() => {
       const raw = t.food || '';
       const sep = raw.indexOf('【解説】');
-      return sep >= 0 ? { main: raw.slice(0,sep).trim(), note: raw.slice(sep) } : { main: raw, note:'' };
+      return sep >= 0
+        ? { main: raw.slice(0,sep).trim(), note: raw.slice(sep + 4).trim() }
+        : { main: raw, note:'' };
     })();
     const tea = (() => {
       const raw = t.tea || '';
       const sep = raw.indexOf('【解説】');
-      return sep >= 0 ? { main: raw.slice(0,sep).trim(), note: raw.slice(sep) } : { main: raw, note:'' };
+      return sep >= 0
+        ? { main: raw.slice(0,sep).trim(), note: raw.slice(sep + 4).trim() }
+        : { main: raw, note:'' };
     })();
     const foodLabelHtml = (t.foodLabel || []).map(fl =>
       `<span class="food-label-badge ${fl.cls}">${fl.text}</span>`
@@ -2162,10 +2173,10 @@ function calculate() {
       : '';
     return `
       <ul class="taishitsu-detail">
-        <li><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🌿</span>体質の傾向</span><span class="taishitsu-detail-body">${t.tendency || ''}</span></li>
-        <li><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🔔</span>体からのサイン</span><span class="taishitsu-detail-body">${t.signs || ''}</span></li>
-        <li><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🥢</span>整える食材</span><div class="food-label-row">${foodLabelHtml}</div><span class="taishitsu-detail-body">${food.main}</span>${food.note ? `<span class="taishitsu-detail-note">${food.note}</span>` : ''}</li>
-        <li><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🍵</span>おすすめ十干茶</span><span class="taishitsu-detail-body">${tea.main}</span>${tea.note ? `<span class="taishitsu-detail-note">${tea.note}</span>` : ''}${teaLinkHtml}</li>
+        <li class="row-tendency"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🌿</span>体質の傾向</span><span class="taishitsu-detail-body">${t.tendency || ''}</span></li>
+        <li class="row-signs"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🔔</span>体からのサイン</span><span class="taishitsu-detail-body">${t.signs || ''}</span></li>
+        <li class="row-food"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🥢</span>整える食材</span><div class="food-label-row">${foodLabelHtml}</div><span class="taishitsu-detail-body">${food.main}</span>${food.note ? `<span class="taishitsu-detail-note">${food.note}</span>` : ''}</li>
+        <li class="row-tea"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🍵</span>おすすめ十干茶</span><span class="taishitsu-detail-body">${tea.main}</span>${tea.note ? `<span class="taishitsu-detail-note">${tea.note}</span>` : ''}${teaLinkHtml}</li>
       </ul>`;
   }
 
@@ -2236,41 +2247,44 @@ function calculate() {
 // =============================================
 const ISOU_MASTER = {
   // ── 融合系 ──
-  sangi:    { label:'三合',     direction:'融合', dirCls:'bio-fusion',
+  sangi:    { label:'三合',     keyword:'爆発的拡大',   direction:'融合', dirCls:'bio-fusion',
               heart:'爆発的に拡大する時。規格外に世界が広がります。',
               bodyFallback:'エネルギーの過剰消耗に注意。反動で反対側の臓腑が弱りやすくなります。' },
-  hosan:    { label:'方三位',   direction:'融合', dirCls:'bio-fusion',
+  hosan:    { label:'方三位',   keyword:'専門集中',     direction:'融合', dirCls:'bio-fusion',
               heart:'五行の勢いが強まる時。専門的なことへの集中力が高まります。',
               bodyFallback:'季節の気が揃い気が大きく偏るため、自律神経の過緊張に注意。' },
-  daihanka: { label:'大半会',   direction:'融合', dirCls:'bio-fusion',
+  daihanka: { label:'大半会',   keyword:'規格外の展開', direction:'融合', dirCls:'bio-fusion',
               heart:'新しい世界が広がる時。一貫性を持った挑戦が、異次元の広がりを見せます。',
               bodyFallback:'一貫性と挑戦のエネルギーが高まりますが、過剰になると疲弊に注意。' },
-  hanka:    { label:'半会',     direction:'融合', dirCls:'bio-fusion',
+  hanka:    { label:'半会',     keyword:'急な展開',     direction:'融合', dirCls:'bio-fusion',
               heart:'急に世界が広がる時。三合の一歩手前のような、新たな展開が起こります。',
               bodyFallback:'三合に向かうエネルギーが蓄積し、特定の五行の気が高まりはじめます。' },
-  kango:    { label:'干合',     direction:'融合', dirCls:'bio-fusion-teal',
+  kango:    { label:'干合',     keyword:'引き合う',     direction:'融合', dirCls:'bio-fusion-teal',
               heart:'気持ちが変わる、引かれる時。誰かとの強い精神的なつながりを感じやすくなります。',
               bodyFallback:'天干の五行が変化するため、感情の振れ幅が大きくなる場合があります。' },
-  shigo:    { label:'支合',     direction:'融合', dirCls:'bio-fusion-teal',
+  shigo:    { label:'支合',     keyword:'前へ進む',     direction:'融合', dirCls:'bio-fusion-teal',
               heart:'つながる、前に進む時。物事がスムーズにまとまる安定期です。',
               bodyFallback:'肉体的な充実感がある反面、安定しすぎて代謝が滞りやすくなります。' },
-  risshin:  { label:'律音',     direction:'融合', dirCls:'bio-fusion-teal',
+  risshin:  { label:'律音',     keyword:'振り返り',     direction:'融合', dirCls:'bio-fusion-teal',
               heart:'重なる、振り返る時。裏表なく自分を客観視できる再出発のタイミングです。',
               bodyFallback:'客観視の力が高まりますが、停滞感を感じやすい面もあります。' },
   // ── 分裂系 ──
-  chu:      { label:'対冲',     direction:'分裂', dirCls:'bio-brake',
+  chu:      { label:'対冲',     keyword:'ストップ',     direction:'分裂', dirCls:'bio-brake',
               heart:'ぶつかる、不安定な時。物事が一度ストップし、リセットされるタイミング。',
               bodyFallback:'正面衝突のような急な体調変化に注意。用心深く過ごすべき時です。' },
-  gai:      { label:'害',       direction:'分裂', dirCls:'bio-brake-amber',
+  gai:      { label:'害',       keyword:'ストレス',     direction:'分裂', dirCls:'bio-brake-amber',
               heart:'ストレス、すれ違いの時。内側でチグハグな感覚が溜まりやすい時期。',
               bodyFallback:'心身のアンバランスから、なんとなくスッキリしない「未病」のサインに注意。' },
-  kei:      { label:'刑',       direction:'分裂', dirCls:'bio-brake',
+  kei:      { label:'刑',       keyword:'強すぎる',     direction:'分裂', dirCls:'bio-brake',
               heart:'勢いが強すぎるトラブルの時。やる気が空回りし、摩擦が起きやすい時期。',
               bodyFallback:'環境のアンバランスが臓腑に負荷をかけます。計画の見直しが吉。' },
-  nacchin:  { label:'納音',     direction:'分裂', dirCls:'bio-brake',
+  sankei:   { label:'三刑',     keyword:'強すぎる',     direction:'分裂', dirCls:'bio-brake',
+              heart:'勢いが強すぎるトラブルの時。やる気が空回りし、摩擦が起きやすい時期。',
+              bodyFallback:'環境のアンバランスが臓腑に負荷をかけます。計画の見直しが吉。' },
+  nacchin:  { label:'納音',     keyword:'リセット',     direction:'分裂', dirCls:'bio-brake',
               heart:'リセット、やり直しの時。枠内での衝突が起きやすい時期です。無理は禁物。',
               bodyFallback:'無理をせず、今の枠の中でできることを丁寧に積み上げましょう。' },
-  tenkoku:  { label:'天剋地冲', direction:'分裂', dirCls:'bio-brake',
+  tenkoku:  { label:'天剋地冲', keyword:'チャレンジ',   direction:'分裂', dirCls:'bio-brake',
               heart:'チャレンジ、負けて勝つ時。戦いの星——犠牲と勝利が交差する慎重な時期。',
               bodyFallback:'強いエネルギーの消耗を伴います。慎重さと粘りが成果につながります。' },
 };
@@ -2281,33 +2295,33 @@ const ISOU_MASTER = {
 
 // ── 対冲 ──
 const CHU_DATA = [
-  { pair:['亥','巳'], organ:'腎と心',     happen:'水と火が激しく衝突し、熱と水分のバランスが急激に崩れやすくなります。',         symptom:'冷えとほてりの混在、不眠、情緒の不安定' },
-  { pair:['寅','申'], organ:'胆と大腸',   happen:'決断力と排泄機能がぶつかり、腸の働きが過敏になりやすくなります。',             symptom:'ストレスによる自律神経の乱れ、腸の過敏反応' },
-  { pair:['戌','辰'], organ:'三焦と胃',   happen:'水の通り道と胃腸がぶつかり、土と水が乱れて消化が停滞しやすくなります。',       symptom:'胃もたれ、消化不良、胸のつかえ' },
-  { pair:['卯','酉'], organ:'肝と肺',     happen:'血の貯蔵と呼吸がぶつかり、気の巡りが急にストップしやすくなります。',           symptom:'気の停滞による気分の落ち込み、呼吸の浅さ' },
-  { pair:['子','午'], organ:'膀胱と小腸', happen:'下半身の水と上半身の火が衝突し、全身のエネルギーが乱れやすくなります。',       symptom:'血圧の上下、情緒の不安定、のぼせ' },
-  { pair:['丑','未'], organ:'脾と心包',   happen:'消化吸収と自律神経がぶつかり、ストレスが胃腸の重さに繋がります。',             symptom:'胃の重さ、むくみ、強い倦怠感' },
+  { pair:['亥','巳'], organ:'腎と心',     bodyText:'水（腎）と火（心）が激しく衝突し、熱と水分のバランスが急激に崩れやすくなるため、冷えとほてりの混在、不眠、情緒の不安定に注意。' },
+  { pair:['寅','申'], organ:'胆と大腸',   bodyText:'金が木を剋すように決断力（胆）と排泄機能（大腸）がぶつかり、腸の働きが過敏になりやすいため、自律神経の乱れや腸のトラブルに注意。' },
+  { pair:['戌','辰'], organ:'三焦と胃',   bodyText:'同じ土同士がぶつかって水の通り道（三焦）と胃腸が乱れ、消化が停滞しやすくなるため、胃もたれ、消化不良、胸のつかえに注意。' },
+  { pair:['卯','酉'], organ:'肝と肺',     bodyText:'金が木を剋すように血の貯蔵（肝）と呼吸（肺）がぶつかり、気の巡りが急にストップしやすいため、気分の落ち込みや呼吸の浅さに注意。' },
+  { pair:['子','午'], organ:'膀胱と小腸', bodyText:'下半身の水（膀胱）と上半身の火（小腸）が衝突し、全身のエネルギーが乱れやすくなるため、血圧の上下やのぼせに注意。' },
+  { pair:['丑','未'], organ:'脾と心包',   bodyText:'同じ土同士がぶつかり、消化吸収（脾）と精神の安定や循環（心包）が衝突してストレスが胃腸に繋がるため、胃の重さや強い倦怠感に注意。' },
 ];
 
 // ── 害 ──
 const GAI_DATA = [
-  { pair:['亥','申'], organ:'腎と大腸',   happen:'水代謝が乱れ、必要な栄養が全身に巡りにくくなります。',                         symptom:'下痢、むくみ、栄養不足による疲労' },
-  { pair:['寅','巳'], organ:'胆と心',     happen:'木が火を過剰に燃やしてしまい、無意識に上半身に熱がこもります。',               symptom:'熱による頭痛、焦り、多動' },
-  { pair:['戌','酉'], organ:'三焦と肺',   happen:'気と水のバランスが乱れ、呼吸やバリア機能に負担がかかります。',                 symptom:'慢性的な疲労、神経過敏、息苦しさ' },
-  { pair:['卯','辰'], organ:'肝と胃',     happen:'木（ストレス）が土（胃腸）を攻撃し、胃の働きを止めてしまいます。',             symptom:'胃痛、お腹の張り、食欲不振' },
-  { pair:['子','未'], organ:'膀胱と心包', happen:'土が水を極端に抑え込み、下半身のデリケートな部分に負担がかかります。',         symptom:'膀胱炎、結石などのトラブル' },
-  { pair:['丑','午'], organ:'脾と小腸',   happen:'湿気と熱が体内にこもり、食べたものの栄養を吸収できなくなります。',             symptom:'吸収の低下、胃腸炎、軟便' },
+  { pair:['亥','申'], organ:'腎と大腸',   bodyText:'金から水への流れが乱れ、下半身と腸の水分代謝がチグハグになり必要な栄養が巡りにくくなるため、下痢やむくみ、疲労感に注意。' },
+  { pair:['寅','巳'], organ:'胆と心',     bodyText:'木が火を過剰に燃やしてしまい、無意識に上半身に熱がこもるため、熱による頭痛や焦り、多動に注意。' },
+  { pair:['戌','酉'], organ:'三焦と肺',   bodyText:'土から金への補給が滞り、気と水のバランスが乱れバリア機能に負担がかかるため、慢性的な疲労や神経過敏、息苦しさに注意。' },
+  { pair:['卯','辰'], organ:'肝と胃',     bodyText:'木が土を過剰に攻撃し、ストレス（肝）がそのまま胃（土）の働きを止めてしまうため、胃痛やお腹の張り、食欲不振に注意。' },
+  { pair:['子','未'], organ:'膀胱と心包', bodyText:'土が水を極端に抑え込み、下半身の水が偏ってデリケートな部分に負担がかかるため、膀胱炎や結石などのトラブルに注意。' },
+  { pair:['丑','午'], organ:'脾と小腸',   bodyText:'火が土を乾かしすぎ、湿気と熱が体内にこもって栄養を吸収できなくなるため、吸収の低下や胃腸炎、軟便に注意。' },
 ];
 
 // ── 支合 ──
-// bodyText は心（前半）＋体（後半）が混在。「その分、」以降が体テキスト
+// bodyText は「強まる五行：〇｜」冒頭＋心（前半）＋「その分、」以降が体テキスト
 const SHIGO_DATA = [
-  { pair:['子','丑'], elem:'水', bodyText:'深く考え込んだり内面を探求する思考が強まります。その分、水分をためこみやすくなり、冷えや重だるさを感じることがあります。' },
-  { pair:['寅','亥'], elem:'木', bodyText:'目標に向かって前進する行動力が強まります。その分、無意識に気が張り詰め、肩や首のこりを感じることがあります。' },
-  { pair:['卯','戌'], elem:'土', bodyText:'現状を維持し、蓄積していく行動が強まります。その分、体にいろいろなものをためこみやすくなり、胃腸が重く感じることがあります。' },
-  { pair:['辰','酉'], elem:'土', bodyText:'現状を維持し、蓄積していく行動が強まります。その分、体にいろいろなものをためこみやすくなり、胃腸が重く感じることがあります。' },
-  { pair:['巳','申'], elem:'金', bodyText:'白黒をはっきりさせ、無駄を省く合理的な思考が強まります。その分、バリア機能が過敏になり、お肌や呼吸器の乾燥を感じることがあります。' },
-  { pair:['午','未'], elem:'火', bodyText:'感情が豊かになり、外へ向けた自己表現の情熱が強まります。その分、体に熱がこもりやすく、のぼせや動悸を感じることがあります。' },
+  { pair:['子','丑'], elem:'水', bodyText:'強まる五行：水｜深く考え込んだり内面を探求する思考が強まる分、水分をためこみやすくなり、冷えや重だるさを感じることがあります。' },
+  { pair:['寅','亥'], elem:'木', bodyText:'強まる五行：木｜目標に向かって前進する行動力が強まる分、無意識に気が張り詰め、肩や首のこりを感じることがあります。' },
+  { pair:['卯','戌'], elem:'土', bodyText:'強まる五行：土｜現状を維持し、蓄積していく行動が強まる分、体にいろいろなものをためこみやすくなり、胃腸が重く感じることがあります。' },
+  { pair:['辰','酉'], elem:'土', bodyText:'強まる五行：土｜現状を維持し、蓄積していく行動が強まる分、体にいろいろなものをためこみやすくなり、胃腸が重く感じることがあります。' },
+  { pair:['巳','申'], elem:'金', bodyText:'強まる五行：金｜白黒をはっきりさせ、無駄を省く合理的な思考が強まる分、バリア機能が過敏になり、お肌や呼吸器の乾燥を感じることがあります。' },
+  { pair:['午','未'], elem:'火', bodyText:'強まる五行：火｜感情が豊かになり、外へ向けた自己表現の情熱が強まる分、体に熱がこもりやすく、のぼせや動悸を感じることがあります。' },
 ];
 // 支合：バイオ用に体の部分だけを抽出（「その分、」以降）
 function shigo_body(bt) {
@@ -2351,9 +2365,21 @@ const HOSAN_DATA = [
 // ── 刑 ──
 const SANKEI_DATA = [
   { shi:['寅','巳','申'], name:'火の三刑',
-    bodyText:'火のエネルギーが激しくぶつかり合い、無意識に自分を追い込んだり、他者との摩擦が起きやすくなります。熱による炎症に注意。' },
+    bodyText:'火のエネルギーが極限まで高まり、心身が過熱することで強烈な炎症や消耗が起きやすいため、十分な休息が必要。' },
   { shi:['丑','戌','未'], name:'土の三刑',
-    bodyText:'土のエネルギーが重なりすぎて身動きが取りづらくなり、物事の停滞感やしがらみを感じやすくなります。胃腸障害や水滞に注意。' },
+    bodyText:'土のエネルギーが全方向から重なり、気血の巡りが完全に滞るため、強いむくみや重だるさ、慢性的な胃腸障害に注意。' },
+];
+
+// ── 刑：ペアの刑データ（三刑成立時は除外する）──
+const KEI_PAIR_DATA = [
+  // 火の三刑の構成ペア
+  { pair:['巳','申'], organ:'心と大腸',   bodyText:'火（心）が金（大腸・肺）を溶かすように内側で摩擦が起き、呼吸が浅くなりやすいため、免疫力の低下や消耗に注意。' },
+  { pair:['寅','巳'], organ:'胆と心',     bodyText:'木（胆）が火（心）を過剰に燃やしてしまい、上半身に気が上りやすくなるため、動悸や強い炎症に注意。' },
+  { pair:['寅','申'], organ:'胆と大腸',   bodyText:'金（大腸）と木（胆）が鋭く摩擦を起こして交感神経が優位になりやすいため、自律神経の乱れや腸の過敏反応に注意。' },
+  // 土の三刑の構成ペア
+  { pair:['丑','戌'], organ:'脾と胃',     bodyText:'冷たい土と乾いた土が摩擦を起こし、気血の巡りが滞りやすくなるため、水分代謝の悪化や胃腸の機能低下に注意。' },
+  { pair:['戌','未'], organ:'胃と心包',   bodyText:'熱い土同士が摩擦を起こし、熱とストレスがこもるため、自律神経の過緊張からくる胃腸障害や炎症に注意。' },
+  { pair:['丑','未'], organ:'脾と心包',   bodyText:'性質の違う土同士が反発してエネルギーがうまく作れなくなるため、消化吸収へのダメージや強い倦怠感に注意。' },
 ];
 const JIKEI_SHI  = ['亥','辰','酉','午'];
 const JIKEI_BODY = '同じエネルギーが過剰に溢れ、自分のこだわりや感情を持て余して空回りしやすくなります。その臓腑特有の不調に注意。';
@@ -2369,28 +2395,28 @@ function buildIsou(shiArr, kanArr) {
   const alerts = [];
 
   // ── 対冲 ──
-  CHU_DATA.forEach(({ pair, organ, happen, symptom }) => {
+  CHU_DATA.forEach(({ pair, organ, bodyText }) => {
     if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
       items.push({
         group: 'chu',
         pairLabel: `${pair[0]}×${pair[1]}`,
         organ,
         heartText: ISOU_MASTER.chu.heart,
-        bodyText: `${happen}【出やすい症状】${symptom}`,
+        bodyText,
         isChange: false,
       });
     }
   });
 
   // ── 害 ──
-  GAI_DATA.forEach(({ pair, organ, happen, symptom }) => {
+  GAI_DATA.forEach(({ pair, organ, bodyText }) => {
     if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
       items.push({
         group: 'gai',
         pairLabel: `${pair[0]}×${pair[1]}`,
         organ,
         heartText: ISOU_MASTER.gai.heart,
-        bodyText: `${happen}【出やすい症状】${symptom}`,
+        bodyText,
         isChange: false,
       });
     }
@@ -2449,13 +2475,34 @@ function buildIsou(shiArr, kanArr) {
     }
   });
 
-  // ── 刑：三刑 ──
+  // ── 刑：三刑（成立した三刑グループを記録してペア刑除外に使う）──
+  const activeSankeiGroups = [];
   SANKEI_DATA.forEach(({ shi, name, bodyText }) => {
     if (shi.every(s => shiArr.includes(s))) {
+      activeSankeiGroups.push(shi);
       items.push({
-        group: 'kei',
+        group: 'sankei',
         pairLabel: `${name}（${shi.join('・')}）`,
         organ: 'エネルギーの過剰滞留',
+        heartText: ISOU_MASTER.kei.heart,
+        bodyText,
+        isChange: false,
+      });
+    }
+  });
+
+  // ── 刑：ペア刑（三刑の構成要素になっている場合は除外）──
+  KEI_PAIR_DATA.forEach(({ pair, organ, bodyText }) => {
+    // このペアが既成立の三刑に完全に包含される場合はスキップ
+    const absorbedByTri = activeSankeiGroups.some(grp =>
+      pair.every(s => grp.includes(s))
+    );
+    if (absorbedByTri) return;
+    if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
+      items.push({
+        group: 'kei',
+        pairLabel: `${pair[0]}×${pair[1]}`,
+        organ,
         heartText: ISOU_MASTER.kei.heart,
         bodyText,
         isChange: false,
@@ -2504,7 +2551,7 @@ function buildIsou(shiArr, kanArr) {
       if (KANGO_PAIRS.some(p => (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a))) {
         items.push({
           group: 'kango',
-          pairLabel: `干合｜${a}×${b}（${lbl}）`,
+          pairLabel: `${a}×${b}（${lbl}）`,
           organ: '—',
           heartText: ISOU_MASTER.kango.heart,
           bodyText: ISOU_MASTER.kango.bodyFallback,
@@ -2520,7 +2567,7 @@ function buildIsou(shiArr, kanArr) {
         if (ka === kb && sa === sb) {
           items.push({
             group: 'risshin',
-            pairLabel: `律音｜${ka}${sa}（同一干支）`,
+            pairLabel: `${ka}${sa}（同一干支）`,
             organ: '—',
             heartText: ISOU_MASTER.risshin.heart,
             bodyText: ISOU_MASTER.risshin.bodyFallback,
@@ -2540,7 +2587,7 @@ function buildIsou(shiArr, kanArr) {
             if (grp.includes(sa) && grp.includes(sb)) {
               items.push({
                 group: 'daihanka',
-                pairLabel: `大半会｜${ka}${sa}×${kb}${sb}`,
+                pairLabel: `${ka}${sa}×${kb}${sb}`,
                 organ: '—',
                 heartText: ISOU_MASTER.daihanka.heart,
                 bodyText: ISOU_MASTER.daihanka.bodyFallback,
@@ -2561,7 +2608,7 @@ function buildIsou(shiArr, kanArr) {
             CHU_PAIRS_S.some(p => (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa))) {
           items.push({
             group: 'nacchin',
-            pairLabel: `納音｜${ka}${sa}×${kb}${sb}`,
+            pairLabel: `${ka}${sa}×${kb}${sb}`,
             organ: '—',
             heartText: ISOU_MASTER.nacchin.heart,
             bodyText: ISOU_MASTER.nacchin.bodyFallback,
@@ -2593,7 +2640,7 @@ function buildIsou(shiArr, kanArr) {
         if (isGokoku && isChu) {
           items.push({
             group: 'tenkoku',
-            pairLabel: `天剋地冲｜${ka}${sa}×${kb}${sb}`,
+            pairLabel: `${ka}${sa}×${kb}${sb}`,
             organ: '—',
             heartText: ISOU_MASTER.tenkoku.heart,
             bodyText: ISOU_MASTER.tenkoku.bodyFallback,
@@ -2608,19 +2655,34 @@ function buildIsou(shiArr, kanArr) {
 }
 
 // isou-card用HTML（命式内・生まれ持った本質）
+// 語尾変換：「注意。」→「という性質があります。」等、生まれ持った傾向表現に変換
+function toMeishikiTone(text) {
+  if (!text) return text;
+  return text
+    .replace(/に注意が必要です。$/,   'という性質があります。')
+    .replace(/に注意が必要です$/,    'という性質があります')
+    .replace(/に注意。$/,            'といった傾向を持っています。')
+    .replace(/に注意$/,              'といった傾向を持っています')
+    .replace(/が求められる体質です。$/, 'が求められる体質です。')
+    .replace(/が必要。$/,            'が求められる体質です。')
+    .replace(/が必要$/,              'が求められる体質です')
+    .replace(/に注意が必要です。/g,  'という性質があります。')
+    .replace(/に注意。/g,            'といった傾向を持っています。');
+}
+
 function renderIsouItem({ group, pairLabel, organ, heartText, bodyText, isChange }) {
   const m = ISOU_MASTER[group] || {};
-  const label3 = isChange ? '出やすい変化' : '出やすい症状';
+  const organSuffix = organ && organ !== '—' ? `（${organ}）` : '';
+  const bodyConverted = toMeishikiTone(bodyText);
   return `
     <div class="isou-item ${group}">
       <div class="isou-item-header">
         <span class="isou-kind">${m.label || group}</span>
-        <span class="isou-pair">${pairLabel}</span>
-        <span class="isou-direction ${m.dirCls || ''}">${m.direction || ''}</span>
+        <span class="isou-pair">${pairLabel}${organSuffix}</span>
+        ${m.keyword ? `<span class="isou-direction ${m.dirCls || ''}">${m.keyword}</span>` : ''}
       </div>
       <ul class="isou-desc-list">
-        <li><b>心：生まれ持った思考・行動の本質</b><br>${heartText}</li>
-        <li><b>体：負担がかかりやすい臓腑と体質</b><br>${organ !== '—' ? organ + '　' : ''}${bodyText}</li>
+        <li>${bodyConverted}</li>
       </ul>
     </div>`;
 }
@@ -2683,21 +2745,21 @@ function getIsouType(targetShi, shiArr) {
   };
 
   // 対冲（ペアごとに1回）
-  CHU_DATA.forEach(({ pair, symptom }) => {
+  CHU_DATA.forEach(({ pair, bodyText }) => {
     let hit = null;
     for (const ms of shiArr) {
       if ((pair[0]===targetShi&&pair[1]===ms)||(pair[0]===ms&&pair[1]===targetShi)) { hit = ms; break; }
     }
-    if (hit) addHit('chu', hit, symptom);
+    if (hit) addHit('chu', hit, bodyText);
   });
 
   // 害（ペアごとに1回）
-  GAI_DATA.forEach(({ pair, symptom }) => {
+  GAI_DATA.forEach(({ pair, bodyText }) => {
     let hit = null;
     for (const ms of shiArr) {
       if ((pair[0]===targetShi&&pair[1]===ms)||(pair[0]===ms&&pair[1]===targetShi)) { hit = ms; break; }
     }
-    if (hit) addHit('gai', hit, symptom);
+    if (hit) addHit('gai', hit, bodyText);
   });
 
   // 支合（体テキストは「その分、」以降のみ）
@@ -2739,15 +2801,35 @@ function getIsouType(targetShi, shiArr) {
     }
   });
 
-  // 刑：三刑（1グループ1回）
+  // 刑：三刑（1グループ1回）成立した三刑グループを記録
+  const activeSankeiGrps = [];
   SANKEI_DATA.forEach(({ shi: grp, bodyText }) => {
-    if (grp.includes(targetShi)) {
-      const hits = grp.filter(s => s !== targetShi && shiArr.includes(s));
-      if (hits.length > 0) {
-        let added = false;
-        hits.forEach(s => { addHit('kei', s, added ? null : bodyText); added = true; });
+    if (grp.every(s => s === targetShi || shiArr.includes(s))) {
+      // 月の地支を含めて3支揃う場合のみ
+      if (grp.includes(targetShi)) {
+        const others = grp.filter(s => s !== targetShi);
+        if (others.every(s => shiArr.includes(s))) {
+          activeSankeiGrps.push(grp);
+          let added = false;
+          others.forEach(s => { addHit('kei', s, added ? null : bodyText); added = true; });
+        }
       }
     }
+  });
+
+  // 刑：ペア刑（三刑成立時はそのペアを除外）
+  KEI_PAIR_DATA.forEach(({ pair, bodyText }) => {
+    // 月の地支がペアの片方に一致するか確認
+    let hit = null;
+    if (pair[0] === targetShi && shiArr.includes(pair[1])) hit = pair[1];
+    else if (pair[1] === targetShi && shiArr.includes(pair[0])) hit = pair[0];
+    if (!hit) return;
+    // 三刑に包含されるペアはスキップ
+    const absorbedByTri = activeSankeiGrps.some(grp =>
+      pair.every(s => grp.includes(s))
+    );
+    if (absorbedByTri) return;
+    addHit('kei', hit, bodyText);
   });
 
   // 刑：自刑（巡る月の地支が命式と同じ場合）
@@ -2814,25 +2896,44 @@ function getYearIsouType(dayKan, dayShi, shiArr) {
 // 位相チップHTML（バイオリズム用）
 // 表示文脈：運気ブロック
 // =============================================
+// 語尾変換：バイオリズム用「〜という時期」表現に変換
+function toUnkiTone(text) {
+  if (!text) return text;
+  return text
+    .replace(/という性質があります。$/,      'という時期です。')
+    .replace(/という性質があります$/,       'という時期です')
+    .replace(/といった傾向を持っています。$/, 'という時期です。')
+    .replace(/といった傾向を持っています$/,  'という時期です')
+    .replace(/に注意が必要です。$/,          'に注意が必要な時期です。')
+    .replace(/に注意が必要です$/,           'に注意が必要な時期です')
+    .replace(/に注意。$/,                   'に注意が必要な時期です。')
+    .replace(/に注意$/,                    'に注意が必要な時期です')
+    .replace(/が必要。$/,                   'が必要な時期です。')
+    .replace(/が必要$/,                    'が必要な時期です');
+}
+
 function renderIsouChip(item) {
   const m = ISOU_MASTER[item.groupKey];
   if (!m) return '';
-  const withHtml = item.withPills.map(w => `<span class="bio-isou-with">${w}</span>`).join('');
-  const bodyText = item.bodyText || m.bodyFallback;
+  // 命式地支のwithPillsを表示（「強まる五行：〇」は除外）
+  const pillHtml = item.withPills
+    .filter(w => !w.startsWith('強まる五行：'))
+    .map(w => `<span class="bio-isou-with">${w}</span>`).join('');
+  const rawBody = item.bodyText || m.bodyFallback;
+  const bodyText = toUnkiTone(rawBody);
+  const heartText = toUnkiTone(m.heart);
   return `
     <div class="bio-isou-chip ${m.dirCls}">
       <div class="bio-isou-chip-header">
         <span class="bio-isou-chip-label">${m.label}</span>
-        <span class="bio-direction-badge">${m.direction}</span>
-        ${withHtml}
+        ${m.keyword ? `<span class="bio-isou-keyword">${m.keyword}</span>` : ''}
+        ${pillHtml}
       </div>
       <div class="bio-isou-rows">
         <div class="bio-isou-row">
-          <span class="bio-isou-row-label">心</span>
-          <span class="bio-isou-row-text">${m.heart}</span>
+          <span class="bio-isou-row-text">${heartText}</span>
         </div>
         <div class="bio-isou-row">
-          <span class="bio-isou-row-label">体</span>
           <span class="bio-isou-row-text">${bodyText}</span>
         </div>
       </div>

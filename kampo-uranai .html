@@ -1,0 +1,3053 @@
+<!DOCTYPE html>
+<html lang="ja" style="background-color:#f7f2e8!important;color:#1a1614!important;">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="only light">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>漢方占い — 命式鑑定</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================================
+     案1「薬箱」— 和紙×墨×金  全面刷新CSS
+     KAMPO STAND 命式鑑定ツール
+     フォント: Noto Serif JP (本文) / Noto Sans JP (ラベル)
+  ============================================================ */
+
+  /* ── カラートークン ── */
+  :root {
+    color-scheme: only light;
+
+    /* ベース */
+    --washi:     #f7f2e8;   /* 和紙・背景 */
+    --washi-2:   #f0ead8;   /* カード背景 */
+    --washi-3:   #e8e0cc;   /* 区切り・帯 */
+    --white:     #fdfcf7;   /* 純白カード */
+    --ink:       #1a1614;   /* 墨色・主テキスト */
+    --ink-2:     #3a3028;   /* セカンダリテキスト */
+    --muted:     #7a6a56;   /* 補足テキスト */
+    --gold:      #9a7a40;   /* 金罫線・アクセント */
+    --gold-pale: #d4b878;   /* 薄金 */
+    --gold-faint:#f0e8d0;   /* 極薄金 */
+    --line:      rgba(154,122,64,0.18);
+    --line-dark: rgba(154,122,64,0.35);
+    --shadow:    rgba(60,40,10,0.08);
+
+    /* 五行カラー（落ち着いたトーンに統一） */
+    --wood-yo:  #2e6e3a;
+    --wood-in:  #5a9040;
+    --fire-yo:  #c0004a;
+    --fire-in:  #d84870;
+    --earth-yo: #c06010;
+    --earth-in: #a08000;
+    --metal-yo: #5a3a88;
+    --metal-in: #1a2e58;
+    --water-yo: #0878a8;
+    --water-in: #0a7868;
+
+    --red: #8b3a2a;
+    --ink-faint: rgba(26,22,20,0.05);
+  }
+
+  /* ── リセット・ベース ── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html {
+    background-color: var(--washi);
+  }
+
+  body {
+    background-color: var(--washi);
+    color: var(--ink);
+    font-family: 'Noto Serif JP', 'Noto Sans JP', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* 和紙テクスチャ（極細ノイズドット） */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='none'/%3E%3Ccircle cx='1' cy='1' r='0.4' fill='%239a7a40' fill-opacity='0.07'/%3E%3Ccircle cx='3' cy='3' r='0.4' fill='%239a7a40' fill-opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 56px 24px 100px;
+  }
+
+  /* ── ヘッダー ── */
+  header {
+    text-align: center;
+    margin-bottom: 48px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid var(--line-dark);
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40%;
+    height: 1px;
+    background: var(--gold-pale);
+  }
+
+  .brand-mark {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.55em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  h1 {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(26px, 6vw, 36px);
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--ink);
+    line-height: 1.3;
+    margin-bottom: 12px;
+  }
+
+  .subtitle {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    line-height: 2;
+  }
+
+  /* ── 装飾 ── */
+  .ornament {
+    text-align: center;
+    margin: 32px 0;
+    color: var(--gold-pale);
+    font-size: 14px;
+    letter-spacing: 0.8em;
+  }
+
+  /* ── フォームセクション ── */
+  .form-section {
+    background: var(--white);
+    border: 1px solid var(--line-dark);
+    padding: 36px 32px;
+    margin-bottom: 48px;
+    position: relative;
+  }
+
+  /* 四隅装飾 */
+  .form-section::before,
+  .form-section::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-color: var(--gold);
+    border-style: solid;
+  }
+  .form-section::before {
+    top: -1px; left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+  .form-section::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .form-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.55em;
+    color: var(--gold);
+    display: block;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .date-inputs {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 28px;
+  }
+
+  .input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-wrap label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  .input-wrap input {
+    width: 100%;
+    padding: 14px 10px;
+    background: var(--washi);
+    border: 1px solid var(--line-dark);
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px;
+    color: var(--ink);
+    text-align: center;
+    outline: none;
+    transition: border-color 0.25s, background 0.25s;
+    -moz-appearance: textfield;
+    -webkit-appearance: none;
+    border-radius: 0;
+  }
+  .input-wrap input::-webkit-inner-spin-button,
+  .input-wrap input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .input-wrap input:focus {
+    border-color: var(--gold);
+    background: var(--white);
+  }
+
+  .submit-btn {
+    display: block;
+    width: 100%;
+    padding: 17px;
+    background: var(--ink);
+    color: var(--washi);
+    border: none;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.55em;
+    cursor: pointer;
+    transition: background 0.25s, color 0.25s;
+  }
+  .submit-btn:hover {
+    background: var(--gold);
+    color: var(--white);
+  }
+  .submit-btn:active { opacity: 0.85; }
+
+  .error-msg {
+    text-align: center;
+    color: var(--red);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    margin-top: 10px;
+    min-height: 18px;
+  }
+
+  /* ── 結果エリア ── */
+  #result {
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  #result.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── カード共通 ── */
+  .meishiki-card,
+  .gogyou-card,
+  .taishitsu-card,
+  .isou-card {
+    background: var(--white);
+    border: 1px solid var(--line-dark);
+    margin-bottom: 52px;
+    position: relative;
+  }
+
+  /* カード四隅装飾 */
+  .meishiki-card::before, .meishiki-card::after,
+  .gogyou-card::before,  .gogyou-card::after,
+  .taishitsu-card::before, .taishitsu-card::after,
+  .isou-card::before, .isou-card::after {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: var(--gold-pale);
+    border-style: solid;
+  }
+  .meishiki-card::before, .gogyou-card::before,
+  .taishitsu-card::before, .isou-card::before {
+    top: -1px; left: -1px;
+    border-width: 2px 0 0 2px;
+  }
+  .meishiki-card::after, .gogyou-card::after,
+  .taishitsu-card::after, .isou-card::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 2px 2px 0;
+  }
+
+  /* カード眉書き（見出し） */
+  .card-eyebrow {
+    display: block;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-align: center;
+    padding: 16px 0 0;
+  }
+
+  /* ── 命式グリッド ── */
+  .pillars {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding: 18px 24px 22px;
+    align-items: stretch;
+  }
+
+  .pillar {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .pillar-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.35em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .pillar-sublabel {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    opacity: 0.6;
+    font-weight: 400;
+  }
+  .pillar:first-child .pillar-label {
+    color: var(--gold);
+    font-weight: 500;
+  }
+  .pillar:first-child .pillar-sublabel {
+    color: var(--gold);
+    opacity: 0.6;
+  }
+
+  /* 天干・地支カード — 真四角・金罫 */
+  .eto-card {
+    width: 100%;
+    padding: 12px 6px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  .eto-attr {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.12em;
+    color: rgba(255,255,255,0.75);
+    display: block;
+    line-height: 1;
+  }
+
+  .eto-char {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    display: block;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+  }
+
+  .eto-symbol {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.65);
+    display: block;
+    line-height: 1.3;
+  }
+
+  .pillar-season {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    display: block;
+    min-height: 14px;
+    margin-top: 2px;
+  }
+
+  /* ── 日柱基本設定パネル ── */
+  .essence-block {
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  /* 「生まれの本質タイプ」タイトル行 */
+  .essence-block-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-align: center;
+    padding: 16px 0 0;
+    display: block;
+    background: var(--washi-2);
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 13px;
+  }
+
+  .essence-header {
+    padding: 20px 22px 18px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .essence-kanshi-badge {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 72px;
+  }
+
+  /* 番号（大きな数字のみ） */
+  .essence-kanshi-no {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    display: block;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.2);
+    letter-spacing: -0.02em;
+  }
+
+  /* 干支2文字 */
+  .essence-kanshi-chars {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.9);
+    line-height: 1.2;
+    display: block;
+    letter-spacing: 0.12em;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+
+  /* 読み仮名（かのと・み） */
+  .essence-kanshi-yomi-combined {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    color: rgba(255,255,255,0.6);
+    display: block;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  .essence-header-body { flex: 1; min-width: 0; }
+
+  .essence-eyebrow {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: rgba(255,255,255,0.55);
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .essence-group {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 7px;
+    display: block;
+  }
+
+  .essence-catch {
+    font-family: 'Noto Serif JP', serif;
+    font-size: clamp(13px, 2.8vw, 16px);
+    font-weight: 600;
+    line-height: 1.75;
+    color: #fff;
+    display: block;
+  }
+
+  .essence-body {
+    padding: 20px 22px 22px;
+    background: var(--washi-2);
+    border-top: 1px solid var(--line);
+  }
+
+  .essence-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 2.4;
+    color: var(--ink-2);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── 五行バランス ── */
+  .gogyou-card { padding: 28px 32px; }
+
+  .gogyou-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 28px;
+    display: block;
+  }
+
+  .gogyou-bars { display: flex; flex-direction: column; gap: 20px; }
+
+  .gogyou-row {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .gogyou-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .bar-track {
+    height: 6px;
+    background: var(--washi-3);
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+  }
+
+  .gogyou-count {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: left;
+    padding-left: 4px;
+  }
+
+  .wood  .bar-fill { background: var(--wood-yo); }
+  .fire  .bar-fill { background: var(--fire-yo); }
+  .earth .bar-fill { background: var(--earth-yo); }
+  .metal .bar-fill { background: var(--metal-yo); }
+  .water .bar-fill { background: var(--water-yo); }
+  .wood  .gogyou-name { color: var(--wood-yo); }
+  .fire  .gogyou-name { color: var(--fire-yo); }
+  .earth .gogyou-name { color: var(--earth-yo); }
+  .metal .gogyou-name { color: var(--metal-yo); }
+  .water .gogyou-name { color: var(--water-yo); }
+  .wood  .gogyou-count { color: var(--wood-yo); }
+  .fire  .gogyou-count { color: var(--fire-yo); }
+  .earth .gogyou-count { color: var(--earth-yo); }
+  .metal .gogyou-count { color: var(--metal-yo); }
+  .water .gogyou-count { color: var(--water-yo); }
+
+  /* ── 体質タイプカード ── */
+  .taishitsu-card { padding: 28px 32px; }
+
+  .taishitsu-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 32px;
+    display: block;
+  }
+
+  .taishitsu-list { display: flex; flex-direction: column; gap: 28px; }
+
+  .taishitsu-section-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .taishitsu-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line-dark);
+    align-self: center;
+  }
+
+  /* section-labelの説明文（ラベルと同行・右側に小さく） */
+  .taishitsu-section-desc {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9.5px;
+    font-weight: 400;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .taishitsu-item {
+    border: 1px solid var(--line-dark);
+    overflow: hidden;
+  }
+
+  /* ヘッダーバー */
+  .taishitsu-item-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+  }
+
+  /* 干バッジ — 真四角 */
+  .taishitsu-kan-badge {
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: 2px;
+  }
+  .taishitsu-kan-char {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 24px;
+    color: #fff;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+  }
+  .taishitsu-kan-read {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8px;
+    color: rgba(255,255,255,0.65);
+    display: block;
+    letter-spacing: 0.05em;
+  }
+
+  .taishitsu-header-body { flex: 1; min-width: 0; }
+
+  .taishitsu-gogyou {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.6);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .taishitsu-type {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+  }
+
+  /* 病証ラベル */
+  .taishitsu-byosho {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 7px;
+  }
+  .taishitsu-byosho-badge {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: rgba(255,255,255,0.82);
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 2px 9px;
+    white-space: nowrap;
+  }
+
+  /* 詳細ボディ */
+  .taishitsu-item-body {
+    padding: 0;
+    background: var(--white);
+  }
+
+  /* 4項目縦積みリスト */
+  .taishitsu-detail { list-style: none; }
+
+  .taishitsu-detail li {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    background: var(--white);
+  }
+  .taishitsu-detail li:last-child { border-bottom: none; }
+
+  /* 行ごとの背景色：2トーンで交互に */
+  .taishitsu-detail .row-signs { background: var(--washi-2); }
+  .taishitsu-detail .row-tea   { background: var(--washi-2); }
+
+  .taishitsu-detail-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .taishitsu-detail-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold-faint);
+    max-width: 36px;
+  }
+
+  .taishitsu-detail-icon { font-size: 11px; }
+
+  .taishitsu-detail-body {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 2.1;
+    color: var(--ink);
+    letter-spacing: 0.03em;
+  }
+
+  /* 食材ラベルバッジ */
+  .food-label-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .food-label-badge {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    padding: 2px 9px;
+    border: 1px solid currentColor;
+    white-space: nowrap;
+  }
+  .food-label-badge.sour    { color: #7a5a00; background: #fdf8e8; border-color: #c8a840; }
+  .food-label-badge.bitter  { color: #2a5a30; background: #eef6f0; border-color: #5a9040; }
+  .food-label-badge.sweet   { color: #7a3800; background: #faf2ea; border-color: #c06010; }
+  .food-label-badge.spicy   { color: #780000; background: #faf0ef; border-color: #b02020; }
+  .food-label-badge.salty   { color: #0a3a58; background: #eef4fa; border-color: #0878a8; }
+  .food-label-badge.green   { color: #2a5a30; background: #eef6f0; border-color: #5a9040; }
+  .food-label-badge.red     { color: #780000; background: #faf0ef; border-color: #c0004a; }
+  .food-label-badge.black   { color: #2a2a2a; background: #f4f2f0; border-color: #666; }
+  .food-label-badge.white   { color: #4a4a4a; background: #fafaf8; border-color: #bbb; }
+  .food-label-badge.yellow  { color: #7a5a00; background: #fdf8e8; border-color: #a08000; }
+  .food-label-badge.sea     { color: #0a3a58; background: #eef4fa; border-color: #0878a8; }
+  .food-label-badge.ferment { color: #5a3a18; background: #faf5ee; border-color: #9a7a40; }
+
+  /* 十干茶リンク */
+  .tea-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    background: transparent;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .tea-link-btn:hover {
+    background: var(--gold);
+    color: var(--white);
+  }
+  .tea-link-btn::before { content: '🍵'; font-size: 11px; }
+
+  /* 解説ブロック（食材・茶の補足説明）*/
+  .taishitsu-detail-note {
+    display: block;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--white);
+    border-left: 3px solid var(--gold-pale);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11.5px;
+    font-weight: 400;
+    line-height: 2.0;
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
+  }
+
+  .taishitsu-desc { font-size: 13px; line-height: 2.0; color: var(--muted); }
+  .taishitsu-empty { text-align: center; font-size: 13px; color: var(--muted); padding: 16px 0; }
+
+  /* ── 位相法カード ── */
+  .isou-card { padding: 28px 32px; }
+
+  .isou-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 26px;
+    display: block;
+  }
+
+  .isou-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .isou-item {
+    border-left: 3px solid var(--line-dark);
+    padding: 13px 16px;
+    background: var(--washi-2);
+  }
+  .isou-item.chu   { border-left-color: var(--fire-yo); }
+  .isou-item.gai   { border-left-color: var(--earth-in); }
+  .isou-item.shigo { border-left-color: var(--water-yo); }
+  .isou-item.sangi { border-left-color: var(--wood-yo); }
+  .isou-item.hosan { border-left-color: var(--metal-yo); }
+  .isou-item.kei    { border-left-color: var(--earth-yo); }
+  .isou-item.sankei { border-left-color: var(--earth-yo); }
+  /* 天干条件位相法 */
+  .isou-item.kango    { border-left-color: #0a6878; }
+  .isou-item.risshin  { border-left-color: #0a6878; }
+  .isou-item.daihanka { border-left-color: #2a5888; }
+  .isou-item.nacchin  { border-left-color: #a01838; }
+  .isou-item.tenkoku  { border-left-color: #a01838; }
+
+  /* isou-itemヘッダー：位相名・ペア・融合/分裂バッジ */
+  .isou-item-header {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 7px;
+    margin-bottom: 10px;
+  }
+
+  .isou-kind {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    display: inline-block;
+    padding: 2px 10px;
+    color: #fff;
+  }
+  .isou-item.chu   .isou-kind { background: var(--fire-yo); }
+  .isou-item.gai   .isou-kind { background: var(--earth-in); }
+  .isou-item.shigo .isou-kind { background: var(--water-yo); }
+  .isou-item.sangi .isou-kind { background: var(--wood-yo); }
+  .isou-item.hosan .isou-kind { background: var(--metal-yo); }
+  .isou-item.kei    .isou-kind { background: var(--earth-yo); }
+  .isou-item.sankei .isou-kind { background: var(--earth-yo); }
+  /* 天干条件位相法 */
+  .isou-item.kango    .isou-kind { background: #0a6878; }
+  .isou-item.risshin  .isou-kind { background: #0a6878; }
+  .isou-item.daihanka .isou-kind { background: #2a5888; }
+  .isou-item.nacchin  .isou-kind { background: #a01838; }
+  .isou-item.tenkoku  .isou-kind { background: #a01838; }
+
+  .isou-pair {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+  }
+
+  .isou-direction {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    padding: 1px 8px;
+    border: 1px solid;
+    margin-left: auto;
+  }
+  /* 融合/分裂の色 */
+  .bio-fusion      .isou-direction,
+  .isou-direction.bio-fusion      { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
+  .bio-fusion-teal .isou-direction,
+  .isou-direction.bio-fusion-teal { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
+  .bio-brake       .isou-direction,
+  .isou-direction.bio-brake       { color: #a01838; border-color: #d89090; background: #faf0f2; }
+  .bio-brake-amber .isou-direction,
+  .isou-direction.bio-brake-amber { color: #886000; border-color: #c8a830; background: #fdf8e8; }
+
+  .isou-desc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .isou-desc-list li {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.75;
+    color: var(--ink-2);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+  .isou-desc-list li b {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0;
+    line-height: 1.4;
+  }
+
+  .isou-none {
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    padding: 8px 0;
+  }
+
+  /* リーチアラートをisou-card内に統合 */
+  .isou-reach {
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line-dark);
+  }
+
+  .isou-reach .reach-alert-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .isou-reach .reach-alert-title::before,
+  .isou-reach .reach-alert-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold-pale);
+  }
+
+  /* ── リーチアラート ── */
+  .reach-alert { margin-bottom: 36px; }
+
+  .reach-alert-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .reach-alert-title::before,
+  .reach-alert-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--gold-pale);
+  }
+
+  .reach-alert-item {
+    border: 1px solid var(--gold-pale);
+    background: var(--gold-faint);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .reach-alert-item:last-child { margin-bottom: 0; }
+
+  .reach-alert-item-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 10px;
+  }
+  .reach-alert-item-title::before { content: '⚠'; font-size: 13px; color: var(--gold); }
+
+  .reach-alert-desc {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.9;
+    color: var(--ink-2);
+    margin-bottom: 9px;
+  }
+
+  .reach-alert-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .reach-alert-list li {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.9;
+    color: var(--ink-2);
+    padding-left: 11px;
+    border-left: 2px solid var(--gold-pale);
+  }
+  .reach-alert-list li b {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 2px;
+    color: var(--gold);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+  }
+
+  /* ── 運気とバイオリズム ── */
+  .bio-section { margin-bottom: 52px; }
+
+  .bio-section-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  /* 2026年カード */
+  .bio-year-card {
+    background: var(--ink);
+    padding: 24px 22px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--ink-2);
+  }
+  .bio-year-card::after {
+    content: '午';
+    position: absolute;
+    right: -10px; top: -14px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 100px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+  .bio-year-eyebrow {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.45em;
+    color: var(--gold-pale);
+    display: block;
+    margin-bottom: 7px;
+  }
+  .bio-year-title {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--washi);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .bio-year-theme {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    color: var(--gold-pale);
+    display: block;
+    margin-bottom: 16px;
+  }
+  .bio-year-items { display: flex; flex-direction: column; gap: 8px; }
+  .bio-year-item {
+    background: rgba(255,255,255,0.06);
+    border-left: 2px solid rgba(154,122,64,0.5);
+    padding: 9px 13px;
+  }
+  .bio-year-item-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: var(--gold-pale);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .bio-year-item-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.85;
+    color: var(--washi);
+  }
+  .bio-year-isou { margin-top: 14px; display: flex; flex-direction: column; gap: 7px; }
+  .bio-year-isou-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    color: var(--gold-pale);
+    display: block;
+    margin-bottom: 2px;
+    opacity: 0.7;
+  }
+
+  /* 月別 */
+  .bio-month-title {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-align: center;
+    margin-bottom: 16px;
+    margin-top: 44px;
+    display: block;
+  }
+  .bio-month-list { display: flex; flex-direction: column; gap: 6px; }
+
+  /* 平穏な月 */
+  .bio-month-item {
+    background: var(--white);
+    border: 1px solid var(--line);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bio-month-no {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+    width: 26px;
+    text-align: right;
+    line-height: 1;
+  }
+  .bio-month-shi-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    color: var(--muted);
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+  .bio-month-calm-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.7;
+    flex: 1;
+  }
+
+  /* 位相あり月 */
+  .bio-month-item.has-isou {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0;
+    border: 1px solid var(--line);
+    background-color: #fdfcf7;
+    gap: 0;
+  }
+
+  /* 季節カラー：すべて統一色（和紙ベース） */
+  .bio-season-spring,
+  .bio-season-summer,
+  .bio-season-autumn,
+  .bio-season-winter { background-color: var(--washi-2) !important; border-color: var(--line-dark) !important; }
+
+  .bio-month-item.has-isou.bio-season-spring,
+  .bio-month-item.has-isou.bio-season-summer,
+  .bio-month-item.has-isou.bio-season-autumn,
+  .bio-month-item.has-isou.bio-season-winter { background-color: var(--washi-2) !important; border-color: var(--line-dark) !important; }
+
+  .bio-month-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: transparent;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+  .bio-month-item.has-isou.bio-season-spring .bio-month-header,
+  .bio-month-item.has-isou.bio-season-summer .bio-month-header,
+  .bio-month-item.has-isou.bio-season-autumn .bio-month-header,
+  .bio-month-item.has-isou.bio-season-winter .bio-month-header { border-bottom-color: var(--line-dark); }
+  .bio-month-isou-badge {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    padding: 2px 9px;
+    flex-shrink: 0;
+    border: 1px solid;
+    margin-left: auto;
+  }
+  .bio-month-body {
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 9px 14px 12px;
+  }
+
+  /* 位相チップ */
+  .bio-isou-chip {
+    overflow: hidden;
+    border-left: 3px solid;
+    background-color: #fdfcf7;
+    margin-bottom: 3px;
+  }
+  .bio-isou-chip:last-child { margin-bottom: 0; }
+  .bio-isou-chip-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 7px 11px 5px;
+  }
+  .bio-isou-chip-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+  }
+  /* キーワードバッジ */
+  .bio-isou-keyword {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 1px 8px;
+    border: 1px solid;
+    flex-shrink: 0;
+  }
+
+  .bio-isou-with {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 500;
+    padding: 1px 7px;
+    border: 1px solid;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    margin-left: auto;
+  }
+  .bio-isou-rows { display: flex; flex-direction: column; gap: 0; }
+  .bio-isou-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    padding: 5px 11px;
+    border-top: 1px solid;
+  }
+  .bio-isou-row-label {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    flex-shrink: 0;
+    width: 14px;
+  }
+  .bio-isou-row-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.75;
+    flex: 1;
+  }
+
+  /* 融合系（墨青） */
+  .bio-fusion { border-left-color: #2a5888; }
+  .bio-fusion .bio-isou-chip-label  { color: #1a3860; }
+  .bio-fusion .bio-isou-keyword     { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
+  .bio-fusion .bio-isou-with        { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
+  .bio-fusion .bio-isou-row         { border-top-color: #d0dff0; }
+  .bio-fusion .bio-isou-row-label   { color: #2a5888; }
+  .bio-fusion .bio-isou-row-text    { color: var(--ink-2); }
+  .bio-badge-fusion { color: #2a5888; border-color: #8ab0d0; background: #f0f4f9; }
+
+  /* 融合系ターコイズ */
+  .bio-fusion-teal { border-left-color: #0a6878; }
+  .bio-fusion-teal .bio-isou-chip-label  { color: #084858; }
+  .bio-fusion-teal .bio-isou-keyword     { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
+  .bio-fusion-teal .bio-isou-with        { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
+  .bio-fusion-teal .bio-isou-row         { border-top-color: #c0e0e8; }
+  .bio-fusion-teal .bio-isou-row-label   { color: #0a6878; }
+  .bio-fusion-teal .bio-isou-row-text    { color: var(--ink-2); }
+  .bio-badge-fusion-teal { color: #0a6878; border-color: #70b8c8; background: #eef7f9; }
+
+  /* 分裂系（朱） */
+  .bio-brake { border-left-color: #a01838; }
+  .bio-brake .bio-isou-chip-label  { color: #800820; }
+  .bio-brake .bio-isou-keyword     { color: #a01838; border-color: #d89090; background: #faf0f2; }
+  .bio-brake .bio-isou-with        { color: #a01838; border-color: #d89090; background: #faf0f2; }
+  .bio-brake .bio-isou-row         { border-top-color: #f0d0d8; }
+  .bio-brake .bio-isou-row-label   { color: #a01838; }
+  .bio-brake .bio-isou-row-text    { color: var(--ink-2); }
+  .bio-badge-brake { color: #a01838; border-color: #d89090; background: #faf0f2; }
+
+  /* 分裂系アンバー */
+  .bio-brake-amber { border-left-color: #886000; }
+  .bio-brake-amber .bio-isou-chip-label  { color: #604000; }
+  .bio-brake-amber .bio-isou-keyword     { color: #886000; border-color: #c8a830; background: #fdf8e8; }
+  .bio-brake-amber .bio-isou-with        { color: #886000; border-color: #c8a830; background: #fdf8e8; }
+  .bio-brake-amber .bio-isou-row         { border-top-color: #e8d898; }
+  .bio-brake-amber .bio-isou-row-label   { color: #886000; }
+  .bio-brake-amber .bio-isou-row-text    { color: var(--ink-2); }
+  .bio-badge-brake-amber { color: #886000; border-color: #c8a830; background: #fdf8e8; }
+
+  /* 年カード内チップ上書き */
+  .bio-year-isou .bio-isou-chip {
+    background: rgba(255,255,255,0.08);
+    border-left-color: rgba(154,122,64,0.6);
+  }
+  .bio-year-isou .bio-isou-chip-label { color: var(--washi) !important; }
+  .bio-year-isou .bio-isou-keyword    { color: var(--gold-pale) !important; border-color: rgba(154,122,64,0.4) !important; background: rgba(255,255,255,0.06) !important; }
+  .bio-year-isou .bio-isou-with       { color: var(--gold-pale) !important; border-color: rgba(154,122,64,0.4) !important; background: rgba(255,255,255,0.06) !important; }
+  .bio-year-isou .bio-isou-row        { border-top-color: rgba(255,255,255,0.1) !important; }
+  .bio-year-isou .bio-isou-row-label  { color: var(--gold-pale) !important; }
+  .bio-year-isou .bio-isou-row-text   { color: rgba(247,242,232,0.88) !important; }
+
+  /* bio-isou-row-textも固定色（ダークモードで消えない） */
+  .bio-isou-row-text {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.75;
+    flex: 1;
+    color: #3a3028 !important;
+  }
+
+  /* ── フッター ── */
+  .site-footer {
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid var(--line-dark);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .site-footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .site-footer-name {
+    font-family: 'Noto Serif JP', serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--ink);
+    display: block;
+  }
+
+  .site-footer-handle {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    display: block;
+  }
+
+  .site-footer-note {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.9;
+    opacity: 0.75;
+  }
+
+  .site-footer-disclaimer {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    line-height: 2.0;
+    color: var(--muted);
+    text-align: left;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    background: var(--washi-2);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── フッター注記（旧） ── */
+  .note {
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    line-height: 2.4;
+    margin-top: 40px;
+    opacity: 0.7;
+  }
+
+  /* ── レスポンシブ ── */
+  @media (max-width: 480px) {
+    .container { padding: 36px 16px 72px; }
+    .form-section { padding: 26px 18px; }
+    .pillars { padding: 12px 12px 16px; gap: 6px; }
+    .taishitsu-card, .gogyou-card, .isou-card { padding: 22px 16px; }
+    .essence-header { padding: 16px 14px 14px; gap: 12px; }
+    .essence-body { padding: 16px 14px; }
+    .eto-char { font-size: 28px; }
+    .taishitsu-type { font-size: 16px; }
+    .taishitsu-detail li { padding: 12px 14px; }
+    .taishitsu-detail-note { padding: 8px 11px; font-size: 11px; }
+    .gogyou-card { padding: 22px 18px; }
+    .isou-card { padding: 22px 18px; }
+  }
+
+  /* ── ダークモード完全無効化（固定値で上書き） ── */
+  @media (prefers-color-scheme: dark) {
+    html { background-color: #f7f2e8 !important; }
+    body { background-color: #f7f2e8 !important; color: #1a1614 !important; }
+
+    /* カード類 */
+    .meishiki-card, .gogyou-card, .taishitsu-card, .isou-card {
+      background-color: #fdfcf7 !important; color: #1a1614 !important;
+    }
+    .taishitsu-item-body, .essence-body {
+      background-color: #fdfcf7 !important; color: #1a1614 !important;
+    }
+    .taishitsu-detail li { background-color: #fdfcf7 !important; }
+    .taishitsu-detail .row-signs,
+    .taishitsu-detail .row-tea { background-color: #f0ead8 !important; }
+    .isou-item { background-color: #f0ead8 !important; }
+    .reach-alert-item { background-color: #f0e8d0 !important; color: #1a1614 !important; }
+
+    /* フォーム */
+    .form-section { background-color: #fdfcf7 !important; }
+    .input-wrap input { background-color: #f0ead8 !important; color: #1a1614 !important; }
+
+    /* 月ボックス */
+    .bio-month-item { background-color: #fdfcf7 !important; color: #1a1614 !important; }
+    .bio-month-calm-text { color: #7a6a56 !important; }
+    .bio-month-no { color: #9a7a40 !important; }
+    .bio-month-shi-label { color: #7a6a56 !important; }
+    .bio-season-spring,
+    .bio-season-summer,
+    .bio-season-autumn,
+    .bio-season-winter { background-color: #f0ead8 !important; }
+
+    /* 位相チップ（月運）*/
+    .bio-isou-chip { background-color: #fdfcf7 !important; border-color: #d0c8b0 !important; }
+    .bio-isou-row-text { color: #3a3028 !important; }
+
+    /* 年カード内チップ（ダーク背景のまま維持・テキストは白） */
+    .bio-year-isou .bio-isou-chip {
+      background-color: rgba(255,255,255,0.10) !important;
+      border-color: rgba(154,122,64,0.5) !important;
+    }
+    .bio-year-isou .bio-isou-chip-label { color: #f0e8d0 !important; }
+    .bio-year-isou .bio-isou-keyword    { color: #d4b878 !important; border-color: rgba(154,122,64,0.5) !important; background: rgba(255,255,255,0.06) !important; }
+    .bio-year-isou .bio-isou-with       { color: #d4b878 !important; border-color: rgba(154,122,64,0.5) !important; background: rgba(255,255,255,0.06) !important; }
+    .bio-year-isou .bio-isou-row        { border-top-color: rgba(255,255,255,0.12) !important; }
+    .bio-year-isou .bio-isou-row-text   { color: #f0e8d0 !important; }
+
+    /* 本文テキスト類 */
+    .taishitsu-detail-body { color: #1a1614 !important; }
+    .taishitsu-detail-note { background-color: #f8f4ec !important; color: #3a3028 !important; }
+    .taishitsu-detail-label { color: #9a7a40 !important; }
+    .taishitsu-type { color: #f0e8d0 !important; }
+    .taishitsu-section-label { color: #1a1614 !important; }
+    .taishitsu-section-desc { color: #7a6a56 !important; }
+    .isou-desc-list li { color: #3a3028 !important; }
+    .isou-pair { color: #1a1614 !important; }
+    .essence-catch { color: #f0e8d0 !important; }
+    .essence-group { color: #d4b878 !important; }
+    .essence-text { color: #3a3028 !important; }
+    .reach-alert-desc, .reach-alert-list li { color: #3a3028 !important; }
+    .reach-alert-list b { color: #9a7a40 !important; }
+    .bio-year-item-text { color: #f7f2e8 !important; }
+    .bio-year-title { color: #f7f2e8 !important; }
+    .bio-year-card { background-color: #1a1614 !important; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <span class="brand-mark">KAMPO STAND</span>
+    <h1>命式鑑定</h1>
+    <p class="subtitle">生年月日から、あなたの本質と<br>五行のバランスを読み解きます</p>
+  </header>
+
+  <div class="ornament"><span>✦</span></div>
+
+  <div class="form-section">
+    <span class="form-label">生 年 月 日 を 入 力</span>
+    <div class="date-inputs">
+      <div class="input-wrap">
+        <label>年</label>
+        <input type="number" id="year" placeholder="1985" min="1910" max="2050">
+      </div>
+      <div class="input-wrap">
+        <label>月</label>
+        <input type="number" id="month" placeholder="7" min="1" max="12">
+      </div>
+      <div class="input-wrap">
+        <label>日</label>
+        <input type="number" id="day" placeholder="15" min="1" max="31">
+      </div>
+    </div>
+    <button class="submit-btn" onclick="calculate()">鑑 定 す る</button>
+    <p class="error-msg" id="error"></p>
+  </div>
+
+  <!-- 印刷機能削除済み -->
+
+  <div id="result">
+    <div class="meishiki-card">
+      <span class="card-eyebrow">命 式</span>
+      <div class="pillars" id="pillars-grid">
+        <div class="pillar">
+          <span class="pillar-label">日 柱<span class="pillar-sublabel">本 質</span></span>
+          <div class="eto-card" id="day-kan-card">
+            <span class="eto-attr" id="day-kan-attr"></span>
+            <span class="eto-char" id="day-kan">—</span>
+            <span class="eto-symbol" id="day-kan-symbol"></span>
+          </div>
+          <div class="eto-card" id="day-shi-card">
+            <span class="eto-attr" id="day-shi-attr"></span>
+            <span class="eto-char" id="day-shi">—</span>
+            <span class="eto-symbol" id="day-shi-symbol"></span>
+          </div>
+          <span class="pillar-season" id="day-season"></span>
+        </div>
+        <div class="pillar">
+          <span class="pillar-label">月 柱<span class="pillar-sublabel">個 人</span></span>
+          <div class="eto-card" id="month-kan-card">
+            <span class="eto-attr" id="month-kan-attr"></span>
+            <span class="eto-char" id="month-kan">—</span>
+            <span class="eto-symbol" id="month-kan-symbol"></span>
+          </div>
+          <div class="eto-card" id="month-shi-card">
+            <span class="eto-attr" id="month-shi-attr"></span>
+            <span class="eto-char" id="month-shi">—</span>
+            <span class="eto-symbol" id="month-shi-symbol"></span>
+          </div>
+          <span class="pillar-season" id="month-season"></span>
+        </div>
+        <div class="pillar">
+          <span class="pillar-label">年 柱<span class="pillar-sublabel">社 会</span></span>
+          <div class="eto-card" id="year-kan-card">
+            <span class="eto-attr" id="year-kan-attr"></span>
+            <span class="eto-char" id="year-kan">—</span>
+            <span class="eto-symbol" id="year-kan-symbol"></span>
+          </div>
+          <div class="eto-card" id="year-shi-card">
+            <span class="eto-attr" id="year-shi-attr"></span>
+            <span class="eto-char" id="year-shi">—</span>
+            <span class="eto-symbol" id="year-shi-symbol"></span>
+          </div>
+          <span class="pillar-season" id="year-season"></span>
+        </div>
+      </div>
+
+      <div class="essence-block" id="essence-block">
+        <div class="essence-block-title" id="essence-block-title">生 ま れ の 本 質 タ イ プ</div>
+        <div class="essence-header" id="essence-header">
+          <!-- 干支バッジ（天干＋地支の二枚組） -->
+          <div class="essence-kanshi-badge">
+            <span class="essence-kanshi-no" id="essence-kanshi-no">—</span>
+            <span class="essence-kanshi-chars" id="essence-kanshi-chars">—</span>
+            <span class="essence-kanshi-yomi-combined" id="essence-kanshi-yomi-combined"></span>
+          </div>
+          <!-- テキストエリア -->
+          <div class="essence-header-body">
+            <span class="essence-eyebrow" id="essence-eyebrow">基 本 設 定</span>
+            <span class="essence-group" id="essence-group"></span>
+            <span class="essence-catch" id="essence-catch"></span>
+          </div>
+        </div>
+        <div class="essence-body">
+          <p class="essence-text" id="essence-text"></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="gogyou-card">
+      <span class="gogyou-title">五 行 バ ラ ン ス</span>
+      <div class="gogyou-bars">
+        <div class="gogyou-row wood">
+          <span class="gogyou-name">木</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-wood"></div></div>
+          <span class="gogyou-count" id="cnt-wood">0</span>
+        </div>
+        <div class="gogyou-row fire">
+          <span class="gogyou-name">火</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-fire"></div></div>
+          <span class="gogyou-count" id="cnt-fire">0</span>
+        </div>
+        <div class="gogyou-row earth">
+          <span class="gogyou-name">土</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-earth"></div></div>
+          <span class="gogyou-count" id="cnt-earth">0</span>
+        </div>
+        <div class="gogyou-row metal">
+          <span class="gogyou-name">金</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-metal"></div></div>
+          <span class="gogyou-count" id="cnt-metal">0</span>
+        </div>
+        <div class="gogyou-row water">
+          <span class="gogyou-name">水</span>
+          <div class="bar-track"><div class="bar-fill" id="bar-water"></div></div>
+          <span class="gogyou-count" id="cnt-water">0</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="taishitsu-card">
+      <span class="taishitsu-title">漢 方 体 質 タ イ プ</span>
+      <div class="taishitsu-list" id="taishitsu-list">
+      </div>
+    </div>
+
+    <div class="isou-card" id="isou-card" style="display:none;">
+      <span class="isou-title">地支による生まれの体調の影響</span>
+      <div class="isou-list" id="isou-list"></div>
+      <div class="isou-reach" id="reach-alert" style="display:none;"></div>
+    </div>
+
+    <!-- 運気とバイオリズム -->
+    <div class="bio-section" id="bio-section" style="display:none;">
+      <div class="bio-section-title">運 気 と バ イ オ リ ズ ム</div>
+      <div class="bio-year-card" id="bio-year-card"></div>
+      <div class="bio-month-title">毎 月 の 運 気 バ イ オ リ ズ ム</div>
+      <div class="bio-month-list" id="bio-month-list"></div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="site-footer-brand">
+        <span class="site-footer-name">KAMPO STAND ／ 漢方占い</span>
+        <span class="site-footer-handle">@ochapansan</span>
+      </div>
+      <p class="site-footer-note">月柱は天文計算ベースの節入り日（JST）で算出しています（1910〜2050年）</p>
+      <p class="site-footer-disclaimer">本コンテンツは占いと食養生に関する参考情報を提供するものです。医療行為・疾病の診断・治療・予防を目的とするものではありません。体の不調や健康上の心配がある場合は、自己判断せず、医師など専門家または医療機関にご相談ください。</p>
+    </footer>
+  </div>
+
+</div>
+
+<script>
+// =============================================
+// 定数定義
+// =============================================
+
+const KAN = ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'];
+
+// 天干の陰陽（陽：甲丙戊庚壬、陰：乙丁己辛癸）
+const KAN_YO = { '甲':1,'乙':0,'丙':1,'丁':0,'戊':1,'己':0,'庚':1,'辛':0,'壬':1,'癸':0 };
+
+// 地支の陰陽（子寅辰午申戌＝陽、丑卯巳未酉亥＝陰）
+const SHI_YO = { '子':1,'丑':0,'寅':1,'卯':0,'辰':1,'巳':0,'午':1,'未':0,'申':1,'酉':0,'戌':1,'亥':0 };
+
+// 日干の象意
+const KAN_SYMBOL = {
+  '甲':'大木','乙':'草花','丙':'太陽','丁':'灯火','戊':'山岳',
+  '己':'大地','庚':'岩石','辛':'宝石','壬':'海洋','癸':'雨水'
+};
+
+// 十干の読み（バッジ用）
+const KAN_READ = {
+  '甲':'きのえ','乙':'きのと','丙':'ひのえ','丁':'ひのと','戊':'つちのえ',
+  '己':'つちのと','庚':'かのえ','辛':'かのと','壬':'みずのえ','癸':'みずのと'
+};
+
+// 十干カラー（KAMPO STANDパレット）
+const KAN_COLOR = {
+  '甲': { bg: '#2e7d4f', text: '#ffffff', label: '木＋' },
+  '乙': { bg: '#6db33f', text: '#ffffff', label: '木－' },
+  '丙': { bg: '#d4006e', text: '#ffffff', label: '火＋' },
+  '丁': { bg: '#e8507a', text: '#ffffff', label: '火－' },
+  '戊': { bg: '#e07020', text: '#ffffff', label: '土＋' },
+  '己': { bg: '#c49a00', text: '#ffffff', label: '土－' },
+  '庚': { bg: '#6e3ea8', text: '#ffffff', label: '金＋' },
+  '辛': { bg: '#1a3560', text: '#ffffff', label: '金－' },
+  '壬': { bg: '#1a8fc0', text: '#ffffff', label: '水＋' },
+  '癸': { bg: '#2ab8b0', text: '#ffffff', label: '水－' },
+};
+
+// 地支の五行象意（天干と同じ象意テーブルから引く）
+const SHI_SYMBOL = {
+  '子':'海洋', '丑':'大地', '寅':'大木', '卯':'草花',
+  '辰':'山岳', '巳':'灯火', '午':'太陽', '未':'大地',
+  '申':'岩石', '酉':'宝石', '戌':'山岳', '亥':'雨水'
+};
+
+// 地支の陰陽ラベル（五行 + 陰陽）
+const SHI_ATTR = {
+  '子':'水＋', '丑':'土－', '寅':'木＋', '卯':'木－',
+  '辰':'土＋', '巳':'火－', '午':'火＋', '未':'土－',
+  '申':'金＋', '酉':'金－', '戌':'土＋', '亥':'水－'
+};
+
+// 地支の五行カラー（天干カラーに準じる）
+const SHI_COLOR = {
+  '子': { bg: '#1a8fc0' },  /* 水＋ → 壬色 */
+  '丑': { bg: '#c49a00' },  /* 土－ → 己色 */
+  '寅': { bg: '#2e7d4f' },  /* 木＋ → 甲色 */
+  '卯': { bg: '#6db33f' },  /* 木－ → 乙色 */
+  '辰': { bg: '#e07020' },  /* 土＋ → 戊色 */
+  '巳': { bg: '#e8507a' },  /* 火－ → 丁色 */
+  '午': { bg: '#d4006e' },  /* 火＋ → 丙色 */
+  '未': { bg: '#c49a00' },  /* 土－ → 己色 */
+  '申': { bg: '#6e3ea8' },  /* 金＋ → 庚色 */
+  '酉': { bg: '#1a3560' },  /* 金－ → 辛色 */
+  '戌': { bg: '#e07020' },  /* 土＋ → 戊色 */
+  '亥': { bg: '#2ab8b0' },  /* 水－ → 癸色 */
+};
+
+// 月支の季節
+const SHI_SEASON = {
+  '寅':'春','卯':'春','辰':'春',
+  '巳':'夏','午':'夏','未':'夏',
+  '申':'秋','酉':'秋','戌':'秋',
+  '亥':'冬','子':'冬','丑':'冬'
+};
+
+// 十干体質タイプ（詳細版）
+const TAISHITSU = {
+  '甲': {
+    type: '肝実・イライラタイプ', yo: true, elem: '木',
+    organ: '肝実', byosho: ['気滞', '肝熱'],
+    tendency: '肝の働きが強まりやすく、気が上へ上へと昇りやすい性質があります。エネルギーが過剰になって熱がこもることで、心身の緊張やソワソワとした落ち着かなさが現れやすくなります。',
+    signs: 'イライラしてカッとなりやすい、そわそわして落ち着かない、目の充血、頭痛、肩こりが続く、胸や脇腹が張って痛む',
+    foodLabel: [{ text: '酸味', cls: 'sour' }, { text: '香り', cls: 'ferment' }],
+    food: 'レモン、みかん、梅干し、お酢、セロリ、しそ、パクチー、みょうが。【解説】酸味が肝の過剰な働きを抑え、香りのある食材が滞った気の流れをスムーズにすることで、イライラした気持ちをスッキリと整えてくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/62f733fdbef381335a0f6566',
+    tea: '【甲】きのえブレンド（菊花茶×ミント）【解説】菊花が昇りすぎた肝の熱（肝熱）を冷まして目の疲れや頭痛を鎮め、レモングラスとミントが滞った気を巡らせて発散させます。',
+  },
+  '乙': {
+    type: '肝虚・うつうつタイプ', yo: false, elem: '木',
+    organ: '肝虚', byosho: ['気滞', '肝血虚'],
+    tendency: '肝の働きが不足しやすく、気の巡りが滞りやすい傾向を持っています。エネルギーが行き詰まることで、気分の浮き沈みや気疲れが出やすくなります。',
+    signs: '気持ちの浮き沈みが激しい、お腹が張ってガスがたまる、下痢と便秘を繰り返す、生理不順がよくある、朝起きるのがつらい',
+    foodLabel: [{ text: '緑色', cls: 'green' }, { text: '色の濃いもの', cls: 'bitter' }],
+    food: 'ほうれん草、小松菜、ブロッコリー、アスパラガス、にんじん、黒ごま、あさり、レバー。【解説】緑色の食材が肝を助け、肝の血を補う食材が自律神経の安定に必要な「血（栄養）」を補充することで、しなやかでスムーズな気の巡りを取り戻してくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/631ecccb60bab44fabfbbbcf',
+    tea: '【乙】きのとブレンド（月桃茶×レモングラス）【解説】月桃とレモングラスが滞った気を動かしてリフレッシュさせ、緑豆が余分な熱を取り除きながら不足した潤いを補います。',
+  },
+  '丙': {
+    type: '心実・ドキドキタイプ', yo: true, elem: '火',
+    organ: '心実', byosho: ['心熱', '血熱'],
+    tendency: '心の機能が強まりやすく、血が熱を持つことで巡りのスピードが過剰になりやすい性質があります。そのため、体内に炎症や赤み、ほてりが生じやすくなります。',
+    signs: '脈が速く動悸がする時がある、暑がりで汗をかきやすい、赤くてかゆい皮膚炎、にきびが出る、顔が赤くてのぼせやすい、心が興奮して眠れない',
+    foodLabel: [{ text: '苦味', cls: 'bitter' }, { text: '熱を冷ますもの', cls: 'green' }],
+    food: 'ゴーヤー、緑茶、コーヒー、カカオ、すいか、きゅうり、トマト、なす。【解説】苦味のある食材がこもった熱を冷まし、水分をたっぷり含む夏野菜が熱で失われた潤いを補給することで、血管の過度な興奮や炎症を鎮めてくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326ba8723747f2c6461fbec',
+    tea: '【丙】ひのえブレンド（小豆茶×ルイボス）【解説】ルイボスと小豆が血の熱を冷まし、ハイビスカスの酸味が水分を補給します。カカオの香りが、ドキドキと高ぶった心を落ち着かせてくれます。',
+  },
+  '丁': {
+    type: '心虚・はらはらタイプ', yo: false, elem: '火',
+    organ: '心虚', byosho: ['瘀血', '血虚'],
+    tendency: '心の力が不足しやすく、血の巡りがスムーズにいかない傾向があります。血流が停滞する「瘀血（おけつ）」と、血が足りない「血虚（けっきょ）」が重なり、不安感が出やすくなります。',
+    signs: '肩こりや生理痛が同じ場所に続く、貧血、息切れがする、手足や指先が冷えやすい、不眠、不安感がある、シミや肌のくすみが気になる',
+    foodLabel: [{ text: '赤色', cls: 'red' }, { text: 'たんぱく質', cls: 'sweet' }],
+    food: 'まぐろ、赤身肉、にんじん、トマト、豚肉、レバー、黒豆、くるみ。【解説】赤色の食材と良質なたんぱく質が、足りない血を養う「補血」の役割を果たします。血の質と量が高まることで滞りが改善され、心が穏やかに整います。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326bcb125c90669144d7165',
+    tea: '【丁】ひのとブレンド（黒豆茶×サフラワー）【解説】サフラワー（紅花）とアンゼリカが血の巡りを促して滞りを流し、黒豆が血の栄養を補うことで、不安感や冷え、しつこい痛みを和らげます。',
+  },
+  '戊': {
+    type: '脾実・ガツガツタイプ', yo: true, elem: '土',
+    organ: '脾実', byosho: ['胃熱', '湿熱'],
+    tendency: '胃腸（脾）の働きが強まりやすく、内部に熱がこもりやすい性質があります。そこに余分な水分が混ざることで、粘り気のある「湿熱（しつねつ）」が生まれ、体に負担をかけます。',
+    signs: '食欲が止まらなくて食べすぎる、胃痛、胸やけがする、吐き気、げっぷが出る、便秘、吹き出物が気になる、汗がベタベタして口がネバつく',
+    foodLabel: [{ text: '甘味', cls: 'sweet' }, { text: '食物繊維', cls: 'green' }],
+    food: '白米、じゃがいも、かぼちゃ、キャベツ、大根、ごぼう、れんこん、りんご。【解説】穀類や芋類の自然な甘みが胃腸の働きを穏やかに助け、豊富な食物繊維が停滞したベトベトの湿熱を外へ押し出すサポートをしてくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326cdbec36dbe536f8c3b82',
+    tea: '【戊】つちのえブレンド（カモミール×ターメリック）【解説】ターメリック（ウコン）が胃腸のこもった熱を流し、なつめが消化器を保護します。カモミールが緊張をゆるめてリラックスさせてくれます。',
+  },
+  '己': {
+    type: '脾虚・くよくよタイプ', yo: false, elem: '土',
+    organ: '脾虚', byosho: ['気虚', '脾虚'],
+    tendency: '胃腸（脾）の力が不足しやすく、消化吸収機能が弱い傾向があります。エネルギーをうまく作り出せないため疲れやすく、心配事があるとすぐに胃腸の不調に響いてしまいます。',
+    signs: '疲れやすくて体がだるい、食欲がなくて食べられない、お腹が冷えて便がゆるい、少し食べてもすぐ太る、ためこんで思い悩みがち',
+    foodLabel: [{ text: '黄色', cls: 'yellow' }, { text: '気を補うもの', cls: 'sweet' }],
+    food: 'さつまいも、とうもろこし、かぼちゃ、大豆、しいたけ、鶏肉、かつお、えび。【解説】黄色の食材とお腹に気を補う食材が、胃腸を元気に立て直します。消化吸収がスムーズになることで、全身へエネルギーを行き渡らせてくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326d166fd12d15177ab07cc',
+    tea: '【己】つちのとブレンド（台湾金萱茶×なつめ）【解説】なつめが不足したエネルギーを補い、アンゼリカが血を養います。台湾金萱茶と桂花の甘い香りがお腹を温め、気力を呼び戻してくれます。',
+  },
+  '庚': {
+    type: '肺実・ムズムズタイプ', yo: true, elem: '金',
+    organ: '肺実', byosho: ['風熱寒', '表証'],
+    tendency: '肺の働きが強まりやすく、体表にたまった邪気を追い出そうとする防衛反応が過剰になりやすい性質があります。気がうまく発散できないと「邪気」が体表に留まり、ムズムズとした不快感として現れます。',
+    signs: '肌のかゆみ、乾燥が気になる、気温や湿度の変化に敏感、のどの風邪を引きやすい、せき、たんがよく出る、便秘しやすい',
+    foodLabel: [{ text: '辛味', cls: 'spicy' }, { text: '酸＋甘', cls: 'sour' }],
+    food: 'ねぎ、にんにく、しょうが、大根、トマト、りんご、はちみつ、梅干し。【解説】辛味が体表の巡りを活性化させて邪気を発散させ、酸味と甘味を組み合わせた食材が発散で失われがちな潤いを守り、バリア機能を正常に整えてくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326d90ced4ab02ebbddc59f',
+    tea: '【庚】かのえブレンド（プーアル茶×みかんの皮）【解説】陳皮（みかんの皮）とコリアンダーシードが体表の滞りを散らし、キンセンカが皮膚や粘膜を保護します。プーアル茶が不快感をスッキリと流します。',
+  },
+  '辛': {
+    type: '肺虚・ひりひりタイプ', yo: false, elem: '金',
+    organ: '肺虚', byosho: ['肺陰虚'],
+    tendency: '肺のバリア機能が非常に繊細で、潤いをきれいに保とうとしすぎるあまり、かえって外の刺激に対してデリケートになりやすい傾向を持っています。',
+    signs: '空気の流れや汚れに敏感、鼻水、鼻づまりがよく起きる、敏感肌でかぶれやすい、呼吸が浅く声が出づらい、花粉症がつらい',
+    foodLabel: [{ text: '白色', cls: 'white' }, { text: '潤いを補うもの', cls: 'ferment' }],
+    food: '白菜、れんこん、白きくらげ、豆腐、白ごま、くるみ、松の実、チーズ。【解説】白色の食材が肺や皮膚にたっぷりと潤いを届け、自然な油分を持つ食材が粘膜を保護するオイルの役割を果たして、デリケートなバリア機能を内側から守ります。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326e1f62e745237abed5452',
+    tea: '【辛】かのとブレンド（ハトムギ×ココナッツ）【解説】ココナッツが乾燥した肺に潤いを届け、ハトムギとびわの葉がお肌を整えます。ゆずの香りがデリケートな心身を優しく包み込んでくれます。',
+  },
+  '壬': {
+    type: '腎実・ポヨポヨタイプ', yo: true, elem: '水',
+    organ: '腎実', byosho: ['水滞', '痰湿'],
+    tendency: '腎の働きが強まりやすく、体内に水分をためこみやすい性質があります。余分な「水」が停滞することで体が重だるくなり、冷えによる痛みも生じやすくなります。',
+    signs: 'むくみやすい、水太り、胃がポチャポチャ音がする、下半身が冷えやすい、体が重だるい、冷えによる関節痛がある',
+    foodLabel: [{ text: '鹹味', cls: 'sea' }, { text: '水はけを良くするもの', cls: 'salty' }],
+    food: '昆布、わかめ、あさり、タコ、黒豆、はと麦、冬瓜、あじ。【解説】海の幸が持つ「鹹味（かんみ）」と水はけを助ける食材が、停滞した過剰な水分を動かし、ポヨポヨとしたむくみや冷えをスッキリと整えてくれます。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326e42923747f153b61f82f',
+    tea: '【壬】みずのえブレンド（杜仲茶×シナモン）【解説】シナモンが体を芯から温め、杜仲茶と玉椿（女貞子）が腎を助けて水の巡りを促します。ジャスミンの香りが重だるさを排出させます。',
+  },
+  '癸': {
+    type: '腎虚・からからタイプ', yo: false, elem: '水',
+    organ: '腎虚', byosho: ['陰虚', '精虚'],
+    tendency: '腎の力が不足しやすく、生命力の源である「精（せい）」や体の潤いが足りなくなりやすい傾向があります。体の中が乾きやすく、老化のサインが早めに出やすくなります。',
+    signs: '顔や手足がほてりやすい、目の乾きが気になる、足腰が疲れやすい、白髪、抜け毛が気になる、夜中にトイレに起きる',
+    foodLabel: [{ text: '黒色', cls: 'black' }, { text: '体を温めるもの', cls: 'spicy' }],
+    food: '黒米、黒豆、黒ごま、黒きくらげ、くるみ、えび、にら、しょうが。【解説】黒色の食材が腎に栄養を届けて生命力を蓄える力を高め、体を温める食材が冷えた芯に熱を灯すことで、若々しくエネルギッシュな体作りをサポートします。',
+    teaUrl: 'https://kampotakeru.stores.jp/items/6326e6a0f3086568d563128d',
+    tea: '【癸】みずのとブレンド（玄米茶×スパイス）【解説】たんぽぽの根と玄米がエネルギーを補給します。シナモンやクローブ、フェンネルなどのスパイスが体を芯から温め、生命力を調律してくれます。',
+  },
+};
+
+// 五行→陰干（五行0のとき）
+const ELEM_IN_KAN = { '木':'乙', '火':'丁', '土':'己', '金':'辛', '水':'癸' };
+
+const SHI = ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'];
+
+// 天干の五行
+const KAN_ELEM = {
+  '甲':'木','乙':'木','丙':'火','丁':'火','戊':'土',
+  '己':'土','庚':'金','辛':'金','壬':'水','癸':'水'
+};
+
+// 地支の五行
+const SHI_ELEM = {
+  '子':'水','丑':'土','寅':'木','卯':'木','辰':'土','巳':'火',
+  '午':'火','未':'土','申':'金','酉':'金','戌':'土','亥':'水'
+};
+
+// 地支の読み
+const SHI_READ = {
+  '子':'ね','丑':'うし','寅':'とら','卯':'う','辰':'たつ','巳':'み',
+  '午':'うま','未':'ひつじ','申':'さる','酉':'とり','戌':'いぬ','亥':'い'
+};
+
+// =============================================
+// 地支の月番号変換（リーチアラート用）
+// =============================================
+const SHI_MONTH = {
+  '寅':2,'卯':3,'辰':4,'巳':5,'午':6,'未':7,
+  '申':8,'酉':9,'戌':10,'亥':11,'子':12,'丑':1
+};
+
+// =============================================
+// 節入り日テーブル（天文計算ベース 1910〜2050年）
+// =============================================
+const SETSU_TABLE = {"1910":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1911":{"1":6,"2":5,"3":7,"4":6,"5":7,"6":7,"7":8,"8":9,"9":9,"10":9,"11":8,"12":8},"1912":{"1":7,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1913":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1914":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1915":{"1":6,"2":5,"3":7,"4":6,"5":7,"6":7,"7":8,"8":9,"9":9,"10":9,"11":8,"12":8},"1916":{"1":7,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1917":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1918":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1919":{"1":6,"2":5,"3":7,"4":6,"5":6,"6":7,"7":8,"8":9,"9":9,"10":9,"11":8,"12":8},"1920":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1921":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1922":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1923":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":7,"7":8,"8":8,"9":9,"10":9,"11":8,"12":8},"1924":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1925":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":7},"1926":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1927":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":7,"7":8,"8":8,"9":9,"10":9,"11":8,"12":8},"1928":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1929":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":7},"1930":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1931":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":7,"7":8,"8":8,"9":9,"10":9,"11":8,"12":8},"1932":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1933":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1934":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1935":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":7,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1936":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1937":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1938":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1939":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1940":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1941":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1942":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1943":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1944":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1945":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1946":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1947":{"1":6,"2":5,"3":6,"4":6,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1948":{"1":6,"2":5,"3":6,"4":5,"5":5,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1949":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1950":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1951":{"1":6,"2":5,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1952":{"1":6,"2":5,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1953":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1954":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1955":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1956":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1957":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1958":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":7},"1959":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1960":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1961":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1962":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1963":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1964":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1965":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1966":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1967":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1968":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1969":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1970":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1971":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1972":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1973":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1974":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1975":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1976":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1977":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"1978":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1979":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1980":{"1":6,"2":5,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1981":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1982":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1983":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1984":{"1":6,"2":5,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1985":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1986":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1987":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":8,"8":8,"9":8,"10":9,"11":8,"12":8},"1988":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1989":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1990":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1991":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1992":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1993":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"1994":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1995":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"1996":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1997":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"1998":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"1999":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2000":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2001":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2002":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2003":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2004":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2005":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2006":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2007":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2008":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2009":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2010":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2011":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":9,"11":8,"12":7},"2012":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2013":{"1":5,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2014":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2015":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2016":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2017":{"1":5,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2018":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2019":{"1":6,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2020":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2021":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2022":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2023":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2024":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":7},"2025":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2026":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":6,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2027":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":8,"12":7},"2028":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":6},"2029":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2030":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2031":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2032":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":6},"2033":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2034":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2035":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2036":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":6},"2037":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2038":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2039":{"1":5,"2":4,"3":6,"4":5,"5":6,"6":6,"7":7,"8":8,"9":8,"10":8,"11":7,"12":7},"2040":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":6},"2041":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2042":{"1":5,"2":4,"3":5,"4":5,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2043":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2044":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":8,"11":7,"12":6},"2045":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2046":{"1":5,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2047":{"1":5,"2":4,"3":6,"4":5,"5":5,"6":6,"7":7,"8":7,"9":8,"10":8,"11":7,"12":7},"2048":{"1":6,"2":4,"3":5,"4":4,"5":5,"6":5,"7":6,"8":7,"9":7,"10":7,"11":7,"12":6},"2049":{"1":5,"2":3,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7},"2050":{"1":5,"2":4,"3":5,"4":4,"5":5,"6":5,"7":7,"8":7,"9":7,"10":8,"11":7,"12":7}};
+
+function getSetsubi(year, solarMonth) {
+  const y = String(year), m = String(solarMonth);
+  if (SETSU_TABLE[y] && SETSU_TABLE[y][m] !== undefined) return SETSU_TABLE[y][m];
+  return [6,5,6,5,6,6,7,7,8,8,7,7][solarMonth - 1];
+}
+
+function getMonthShi(year, month, day) {
+  const setsu = getSetsubi(year, month);
+  const monthToShi = [1,2,3,4,5,6,7,8,9,10,11,0];
+  if (day >= setsu) return monthToShi[month - 1];
+  const prev = month === 1 ? 12 : month - 1;
+  return monthToShi[prev - 1];
+}
+
+function getMonthKan(yearKanIndex, monthShiIndex) {
+  const baseKan = [2,4,6,8,0];
+  const base = baseKan[yearKanIndex % 5];
+  const offset = (monthShiIndex - 2 + 12) % 12;
+  return (base + offset) % 10;
+}
+
+function getYearKanShi(year, month, day) {
+  const setsu2 = getSetsubi(year, 2);
+  const effectiveYear = (month === 1 || (month === 2 && day < setsu2)) ? year - 1 : year;
+  const base = (effectiveYear - 4) % 60;
+  const kanIdx = ((base % 10) + 10) % 10;
+  const shiIdx = ((base % 12) + 12) % 12;
+  return { kanIdx, shiIdx, kan: KAN[kanIdx], shi: SHI[shiIdx] };
+}
+
+function getDayKanShi(year, month, day) {
+  const base = new Date(1900, 0, 1);
+  const target = new Date(year, month - 1, day);
+  const diff = Math.round((target - base) / 86400000);
+  const idx60 = ((diff + 10) % 60 + 60) % 60;
+  return { kanIdx: idx60 % 10, shiIdx: idx60 % 12, kan: KAN[idx60 % 10], shi: SHI[idx60 % 12] };
+}
+
+// =============================================
+// 60干支データ（日柱基本設定）
+// =============================================
+const KANSHI_DATA = {
+  '甲子':{ group:'燥 DRY ／ 芸術家', catch:'純粋でまっすぐで、ちょっと天然なところもあるけれど憎めないお人好しな人。', personality:'本能的に筋がよく、一度のめり込んだら誰よりも深く追求します。嘘がつけない正直さがあるのに、なぜか誤解されやすい不思議な人。根はさみしがり屋でマイペースなところもありますが、悪気はまったくないのでなぜか憎めない。たまには「仕方ないよね」と流せるようになると、ぐっと生きやすくなります。' },
+  '乙丑':{ group:'燥 DRY ／ 芸術家', catch:'華やかに見えても、実は静かでインドアなマイペースな人。', personality:'内心はわりと強情で、自分の思うように物事を選びたいタイプ。警戒心からか明るく振る舞って、周りに合わせて無理をしてしまうことも。好きなことを見つけると、どんどん掘り下げる一途さがあります。大器晩成型なので、しっかり根が張るまでじっくり続けていくのが合っています。' },
+  '丙寅':{ group:'燥 DRY ／ 芸術家', catch:'明るく愛にあふれて、まわりに光と温かみをふりまく人。', personality:'何でもやればこなせちゃう、負けず嫌いで万能なすごい人。勢いが良すぎて、細かいところが見えない時があります。情熱的で自己主張が激しいので、少し周りを圧倒してしまうことも。気持ちばかりにとらわれず、物事の本質を追求するようになるとさらに輝きます。' },
+  '丁卯':{ group:'燥 DRY ／ 芸術家', catch:'ミステリアスな魅力を持った、神秘的な秘密主義者。', personality:'温厚で誠実な性格で、保守的なところもあるやや堅苦しい人。かなりの慎重派なので、行動するまでに時間がかかります。自分の夢や理想には、とてつもなく力強い意志で叶えます。言葉がストレートになることもあるけれど、身内にはとても優しい人情と愛情の人です。' },
+  '戊辰':{ group:'燥 DRY ／ 芸術家', catch:'自分の道を自ら切り開いて進んでいく、勇敢なチャレンジャー。', personality:'淡々としたイメージなのに、なぜか不思議なオーラがあります。たくましい生活力と精神力で、内に強い自己主張を秘めています。納得がいかない時は、強い正義感から熱く反発することもあります。負けん気の強さと愛嬌を持っていれば、てっぺんに登れます。' },
+  '己巳':{ group:'燥 DRY ／ 芸術家', catch:'さらっとしてそうなのに、論理的に物事をじっくり分析する人。', personality:'柔らかい雰囲気の中身は、自分の信念を曲げない頑固な人。表と裏のギャップに、自分で悩んじゃうようなところもあります。好き嫌いがはっきりしていて、苦手な人とは少し距離を置きがちです。周りを気にしすぎずに粘り強く続ければ、いつかうまくいきます。' },
+  '庚午':{ group:'燥 DRY ／ 芸術家', catch:'強そうに見えて、実はさみしがり屋で繊細な人。', personality:'考え方は意外と単純でさっぱりしてるので、分かりやすい人。人の気持ちに同情しやすく、つい自分にも他人にも厳しくなってしまうことも。自分のテリトリーを乱すような人には、果敢に立ち向かいます。不安と心配が多いけど、落ち着いてクリアすれば運が開けます。' },
+  '辛未':{ group:'燥 DRY ／ 芸術家', catch:'親しみやすさの中にも、気品と自信のある落ち着いたしっかりさん。', personality:'物事をよく考えて、慎重に計画を立ててから進めたい人です。おっとりしているように見えて、実はしっかり人を見抜きます。どんな環境でも地道に努力する忍耐力は、誰にも負けません。頑固だけど押しに弱いので、意地にならず素直になるとうまくいきます。' },
+  '壬申':{ group:'燥 DRY ／ 芸術家', catch:'明るくて愛のある、夢とロマンの向上心あふれる冒険家。', personality:'知的好奇心が強く、どうしてこうなるのか知りたがります。フットワークが軽いので誤解されやすいですが、ちゃんと考えてます。調子に乗るとぐんぐん波に乗っちゃうので、誰かに止めてもらうのが吉。気に入られ方を知っているので、それを生かせるとうまくいきます。' },
+  '癸酉':{ group:'燥 DRY ／ 芸術家', catch:'しっとり穏やかにしてても、頭のキレる効率重視なスマートな人。', personality:'いろんな幅広い知識を持ち、事細かに計算してからやります。完全主義でムダを嫌うので、融通が利かないことがあります。頭が良くて手先が器用なので、あれこれ手を出して器用貧乏になりがちです。自分のことよりも、人を助ける気持ちを持つとうまくいきます。' },
+  '甲戌':{ group:'暑 HOT ／ 芸能人', catch:'ここぞという時に頑張り過ぎちゃう、合理的な完璧主義者。', personality:'勝ち気な性格なので、一人で抱え込んで自分を強く見せたくなりがちです。性格はまじめな正直者で、いつも夢見るロマンチスト。たまに思ったことをストレートに言って、驚かれることもあります。ハマりすぎることがあるので、お金や体力の使いすぎには注意が必要です。' },
+  '乙亥':{ group:'暑 HOT ／ 芸能人', catch:'たくましく時間をかけて、一つのことを追求して身にする人。', personality:'自信はあるけどそれをひけらかさず、ここぞという時にこっそり出してきます。誰とでも平等でいたいので、自分と同じ目線で話します。少し近寄りがたく見られることもありますが、先が見えてしまうだけなんです。頭の回転の早さを協調性につなげられれば、うまくいきます。' },
+  '丙子':{ group:'暑 HOT ／ 芸能人', catch:'持って生まれた才能と、ほがらかな個性が魅力的な人。', personality:'自分の強さを知っているので、ムリをしない働き方ができます。余裕のある自由で無邪気な雰囲気が、共感を得られます。気まぐれだけど変化に強く、どんな時も乗り越えられます。自分は普通のつもりでも、個性が強すぎる時があるので気をつけましょう。' },
+  '丁丑':{ group:'暑 HOT ／ 芸能人', catch:'人に優しく自分にきびしい、情熱を内に秘めた穏やかな人。', personality:'熱しやすく冷めやすいので、感情がイマイチつかめないところがあります。我慢できなくなると感情が溢れ出すこともあるので注意。物事に対して人一倍強いこだわりを持つので、優しく見守ってください。急がずに小さなことからコツコツとやると、うまくいきます。' },
+  '戊寅':{ group:'暑 HOT ／ 芸能人', catch:'向上心と上昇志向が強く、密かにリーダーシップを秘めた人。', personality:'全体の中で自分の立ち位置を、客観的に見ながら行動します。プライドと自意識の高さを隠せない不器用な一面もあります。社長や芸能人など、人前に立つ仕事ならうまくいきます。いつも謙虚な姿勢を忘れずにいれば、よく引き立てられます。' },
+  '己卯':{ group:'暑 HOT ／ 芸能人', catch:'表立って勝負はせずに、状況を静かに見極めるひかえめな人。', personality:'触れるとじっくり熱せられた土のようにアツい感情の持ち主。粘り強い性格だけど、我慢してストレスをため込みやすいかも。新しくて楽しめることを見つけると、夢中になって頑張れます。落ち着いているのに軽快で、そのギャップが好かれやすい人です。' },
+  '庚辰':{ group:'暑 HOT ／ 芸能人', catch:'天真爛漫で豪快で頑固なところもあるけど、なぜか好かれる人。', personality:'物静かそうに見えるのは、強い意志と警戒心があるからです。裏表が全くなく自分の気持ちに正直なので、嘘がつけません。物事をやり遂げる根性とパワーが、人々に尊敬されます。大きな舞台で活躍できるようなところで、力を発揮します。' },
+  '辛巳':{ group:'暑 HOT ／ 芸能人', catch:'自分自身と感性を研ぎ澄まし続ける、シュッとしたストイックな人。', personality:'精神世界と現実世界を結びつけられる、独自の感性を持つ人。理想を求めすぎて、できないことに手を出しがちです。インスピレーションが強く、思ったことが現実になったりします。人への偏見がなく、自由な発想ができる社交性もあります。' },
+  '壬午':{ group:'暑 HOT ／ 芸能人', catch:'急激に感情が変化する、豊かな感受性の持ち主。', personality:'いろんなことを思いつくけど、興味が移ろいやすいところもあります。一目会っただけで、どんな人か分かっちゃう特技があります。人の言うことより自分のことを信じる方が、やる気が出ます。人生も感情も波は激しいけど、流れに乗ればうまくいきます。' },
+  '癸未':{ group:'暑 HOT ／ 芸能人', catch:'甘え上手な一方で、芯は強くて中身は意外と頑固な人。', personality:'自分の想いとやり方があるので、うまくいかないと悩みます。外の明るさと中身の生真面目さは、優しさの表れなんです。たまに感情がいっぱいになって、衝動的になってしまうところがあります。自分の性格を自覚して、自制するようにするとうまくいきます。' },
+  '甲申':{ group:'熱 HEAT ／ 技術者', catch:'何でもできちゃうけど、エネルギーが大きすぎて持て余す人。', personality:'いつもパワフルに働いている方が、元気でいられます。器用貧乏なので、一つに集中して頑張ればスペシャリストに。根はまじめで愛嬌があり、人懐っこいのでよく愛されます。いろんなことに手を出さず、長く続けられることを大事にするとうまくいきます。' },
+  '乙酉':{ group:'熱 HEAT ／ 技術者', catch:'裏表がなく、ほのぼの親しみやすくて一本気で底抜けな人。', personality:'自分の経験したことがすべてで、自分の信念を曲げません。鋭い観察力で、大事な押さえどころはきっちりと押さえます。気取らずに嫌みのない明るい性格は、みんなの人気者です。少し自分の世界に没入しすぎるところもあるので、協調性も持ちましょう。' },
+  '丙戌':{ group:'熱 HEAT ／ 技術者', catch:'開けっぴろげで人懐っこく社交的なコミュニケーション名人。', personality:'いつも人を慕って、たくさんの友達を連れて楽しく遊びます。社交の場で培ったセンスを発揮できる仕事が向いてます。本能に忠実なところがあって、夢中になりすぎることがあります。真正面からでなく、負けて勝つようなやり方が得意です。' },
+  '丁亥':{ group:'熱 HEAT ／ 技術者', catch:'人が思いつかない発想と、鋭いインスピレーションを持つ人。', personality:'繊細で感受性が強いので、人にはとっても優しくなれます。たまに60パターンの中で一番強い霊感を持つ人がいます。精神性を大事にしながら、巧みに表現できるアーティスト肌。一人で自分の世界を広げるような生き方が、気楽で好きです。' },
+  '戊子':{ group:'熱 HEAT ／ 技術者', catch:'孤高のオーラを持った、感情豊かな芯の強い人。', personality:'強烈な個性を持っているので、流されずに自分流を貫きます。気まぐれな性格で、独自の道を歩む才能があります。態度は大きく見えても、気は小さいせいか少し強がってしまうことも。自分だけの型を見つけて、一芸に秀でれば成功します。' },
+  '己丑':{ group:'熱 HEAT ／ 技術者', catch:'人に媚びず、もくもくとマイペースに自己流で生きている人。', personality:'時々熱くなると、自己主張しすぎて引かれる時があります。ガツガツせず、軽やかに平和な日々を過ごせれば満足です。じっくり焦らず、コツコツ積み上げてきた経験が花開きます。ムリをせず食べ物に気をつければ、わりと長生きできます。' },
+  '庚寅':{ group:'熱 HEAT ／ 技術者', catch:'夢と人情を大事に掲げる、パワーと正義感あふれる理想家。', personality:'型にはまらない空想力と、切れ味鋭い感性でばっさりいきます。たまに理想が高すぎて、そのギャップで落ち込んでしまうことも。それでも諦めない向上心が、みんなに応援されて頑張れます。気分屋なところがあるので、カッとなる前に深呼吸しましょう。' },
+  '辛卯':{ group:'熱 HEAT ／ 技術者', catch:'シンプルにこだわって、自分を磨き続ける超ストイックな人。', personality:'内面のプライドと自意識の高さが、成功へと導いてくれます。合理的なところがあり、いつも決まったものを身につけています。愛情にあふれていて面倒見がいいので、人が寄ってきます。たまにキャパオーバーになるので、ほどほどにしてください。' },
+  '壬辰':{ group:'熱 HEAT ／ 技術者', catch:'嵐の前の静けさと、いざとなったら火を噴く冷静と度胸の人。', personality:'大人しそうに見えて、内面は巨大なエネルギーの激しさを持つ。なんでもありの柔軟性で、どんなところにも飛び込みます。不器用そうに見えて、人の気持ちが分かる優しさがあります。いきなり動き出すので、びっくりさせないようにしましょう。' },
+  '癸巳':{ group:'熱 HEAT ／ 技術者', catch:'器用に顔を使い分ける、不思議な魅力の人。', personality:'かわいげがありほっとけないので、なぜか個性的な人が集まります。人と人との間に立って、利益を生み出すことができます。少し疑い深く思い込みやすいので、思い切りも必要です。移り気なところがあるので、粘り強くあたれば成功します。' },
+  '甲午':{ group:'湿 HUMID ／ 実業家', catch:'ピュアで人を疑うことを知らない、優しすぎるお人好しな人。', personality:'こう見えて繊細なので、何かあるとすぐ心を閉ざしてしまうことも。人に対する思いやりは強く、惜しげもなく愛情を注ぎます。自分のことよりも他人を大事にすると、運が開けます。スタイルが良くて、個性的な人を好きになりがちです。' },
+  '乙未':{ group:'湿 HUMID ／ 実業家', catch:'どんなところでもきっちり仕上げる、安心円満な楽天家。', personality:'いつも平常心で、慌てたりハメを外したりしない方です。マジメすぎる印象だが、好きなことへの好奇心は強いです。理性的で礼儀正しいので、目上からは気に入られやすいです。安定感は抜群なので、一緒にいると穏やかに過ごせます。' },
+  '丙申':{ group:'湿 HUMID ／ 実業家', catch:'夢やロマンが大好きで、やや現実離れしたロマンチストな人。', personality:'感受性が豊かで、自分の直感を信じて行動しがちです。どこで見つけたのか分からない、すごいものを隠してます。夢も大事ですが、現実のステップも着実に踏みましょう。自由に夢を見させてのびのびさせると、才能が開花されます。' },
+  '丁酉':{ group:'湿 HUMID ／ 実業家', catch:'闘志を秘めつつ自分の思いをぶつけてくる、義理と人情の人。', personality:'怖いもの知らずで無鉄砲なくせに、絶叫系はキライです。ほのぼのとして明るく、ビジネスでは頭がキレる策士です。怒らせると怖いけれど、仲間にしたら頼れるNo.1。機嫌が悪くなったら、誰か褒めちぎって立ててあげてください。' },
+  '戊戌':{ group:'湿 HUMID ／ 実業家', catch:'強い信念を持つ、強情で不器用な人。', personality:'好き嫌いが激しく、夢中になると納得がいくまでやります。プライドと自尊心は高く、常に自分を良く見せがちです。できれば高い山の上とか、タワマンに住みたいと思ってます。みんなを集めて、中心になってワイワイするのが大好きです。' },
+  '己亥':{ group:'湿 HUMID ／ 実業家', catch:'変化を好む、カメレオンのような人。', personality:'誠実で素直な人だけど、周りの変化を察知して柔軟に自分を変えていきます。考えを態度に出さないまま、実は水面下で進めています。自分の居場所を求めてさまよいながら、一人で行動します。波乱の道をめげずに進めば、やがて大きなものが実ります。' },
+  '庚子':{ group:'湿 HUMID ／ 実業家', catch:'かなり心配性だけど、ずば抜けた直感力と空想力のある人。', personality:'自分を客観視しながら、常に先を見据えて行動します。シャープでキレすぎる頭脳と、繊細でデリケートな精神。小さい頃に過保護に育てられると、少しデリケートになりやすいです。精神的なつながりを、目に見える形で表されると安心できます。' },
+  '辛丑':{ group:'湿 HUMID ／ 実業家', catch:'能ある鷹は爪を隠して、いつも無邪気にふるまう癒しの人。', personality:'聡明で論理的かつ、ユーモアセンスを持つタレント性。裏ではコツコツと自分を律しながら、地道に努力を続ける。ボーッとしているように見えて、実は意外と結構頑張ってます。のんびりした雰囲気は、自然と周りをなごませてくれます。' },
+  '壬寅':{ group:'湿 HUMID ／ 実業家', catch:'のんびり見えるけど、アクティブな目立ちたがり屋さん。', personality:'すぐれた直感力とパワーで、いろんな人に頼られがちです。自意識とおしゃれ度が高く、単独で行動する方が好きです。苦境に立たされても、果敢に立ち向かい解決しようとします。見た目は大人しそうなのに、秘めたるパワーは最強です。' },
+  '癸卯':{ group:'湿 HUMID ／ 実業家', catch:'陰で責任感が強く、縁の下を支えるしっかり者の実力者。', personality:'前へは出ないけど、マジメさで周りから引き立てられます。聡明で気品のある人柄で、中身はこだわりの完全主義者。人に気を遣いすぎて、ちょっとストレスになりやすいです。現実と守りをしっかり意識すると、平穏な暮らしができます。' },
+  '甲辰':{ group:'風 WIND ／ 会社員', catch:'好きなことにひたすらまっしぐらにのめり込んで追求する人。', personality:'あまり器用ではないので、同時にいろんなことはできません。気持ちはのびのびしてるけど、行動はかなり慎重です。自分への甘えは許せないので、地道にコツコツ努力を重ねます。信じやすいところがあるけど、それが原動力になってます。' },
+  '乙巳':{ group:'風 WIND ／ 会社員', catch:'穏やかで明るさがあり、人からの注目を浴びる人です。', personality:'内面は感受性が強く、表とは裏腹に警戒心が強いです。人情が深く、不安と近いから多少周りに気を遣いすぎます。さみしがり屋のせいか、行動力はめちゃくちゃあります。見えないところで気配りをして、人をつないでまとめることが得意です。' },
+  '丙午':{ group:'風 WIND ／ 会社員', catch:'周りを巻き込むほどパワフルな、圧倒的なリーダー。', personality:'若い頃に多くの経験を積むと、仕事で大成できます。大人しそうに見えて、人のことはよく見ています。どんな時でも、オンとオフはきっちり分けさせてもらいます。仕事で世の中に貢献することに、生きがいを感じます。' },
+  '丁未':{ group:'風 WIND ／ 会社員', catch:'気さくで愛嬌があり、その場の雰囲気に合わせられる人。', personality:'本心は謎めいていて、何を考えているか伝わりづらいです。たまに思いついて、鋭い一言が急に飛び出すことも。軽やかなのに芯の持ち主で、一度決めたらやり抜きます。スタートは遅いけど、じわじわ追い返す持久力があります。' },
+  '戊申':{ group:'風 WIND ／ 会社員', catch:'決着がつくまで見守ってから出てくる、大物感漂う人。', personality:'冷静に全体を把握して、自分の出方を考えて行動します。そんなつもりはないのに、周りには戦略的だと思われます。口はうまいけど、少しマイペースすぎるところも。その日その日で判断して、いつでも柔軟に対応できます。' },
+  '己酉':{ group:'風 WIND ／ 会社員', catch:'自分の努力や経験をすべて土台にして切り開いていく人。', personality:'新しくてワクワクするような事にやりがいを感じます。地道にコツコツやるのは好きだけど、無駄は好みません。人に何と言われようと、できると思ったことはやり遂げます。スピードは遅いけど、一歩一歩着実に足場を固めます。' },
+  '庚戌':{ group:'風 WIND ／ 会社員', catch:'いざという時に本領を発揮する頭脳派。', personality:'物静かだけど、内面には強い信念を隠し持っています。基本的にまじめで、いつも周りを気にしながら行動します。頭脳を武器に静かに主張しながら、自分の世界を確立します。小さなことよりも、何かスケールのデカいことをさせてください。' },
+  '辛亥':{ group:'風 WIND ／ 会社員', catch:'ゆるく見えて、人の本質を見抜く不思議な力を持ってる人。', personality:'繊細でデリケートな感性の中から、第六感が磨かれます。性格は明るく気さくで、いい感じに力を抜ける大人です。本人はリラックスしてても、なぜか存在感があります。賢そうに見えて、どこかお茶目なところが愛されポイントです。' },
+  '壬子':{ group:'風 WIND ／ 会社員', catch:'みんなに愛されながら、豪快に引っ張っていく親分肌な人。', personality:'考えてるスケールがデカすぎて、たまに周りが驚くことも。勉強だけでなく、世間で身につけた独自の良さを持ちます。頼まれるとイヤと言えない、全方位的にみんなにやさしい人。既成概念にとらわれないような生き方をするのが合います。' },
+  '癸丑':{ group:'風 WIND ／ 会社員', catch:'若いのになぜか落ち着いてるギャップがかわいらしい人。', personality:'人情味があって、お酒を飲むと朝までずっと語りだします。ちょっと気になることがあると、急に頑固になったりします。でも悪気はないので、大丈夫だよって言ってあげてください。へこむたびにメンタルが鍛えられて、堂々としていきます。' },
+  '甲寅':{ group:'寒 COLD ／ 表現者', catch:'前向きでポジティブで明るい、マイペースな愛されキャラタイプ。', personality:'来る者は拒まず、どんな人でも受け入れる器のビッグな人です。イヤなことがあっても、寝て起きればわりとすぐ忘れます。イケイケどんどんな精神で、自分のペースを貫きます。いろんな人と出会う中で人脈ができれば、うまくいきます。' },
+  '乙卯':{ group:'寒 COLD ／ 表現者', catch:'気さくでほんわか癒し系の内側に、粘り強いパワーを持つ人。', personality:'一つ一つ着実に物事を積み重ねていく、堅実な努力派です。いつの間にか自分のペースに巻き込む才能があります。上下関係を大事にするので、中間管理職的な役が多いです。テキパキとそつなくこなせるので、余裕を持つとよいです。' },
+  '丙辰':{ group:'寒 COLD ／ 表現者', catch:'少しお節介だけど、面倒見の良いパワフルなお助けマン。', personality:'しっかり者で迷いが少ないので、はっきりと意見を言います。お世辞とかは言えないけど、その正直さが共感を呼びます。エネルギーが強く、一度走り出すと自分では止められません。自分の直感やスタイルを大事にすれば、うまくいきます。' },
+  '丁巳':{ group:'寒 COLD ／ 表現者', catch:'自尊心が強くプライドの高い、孤高で気高い人。', personality:'堂々としてて開けっぴろげで大胆なので、わりとモテます。理想が高いので、一人で抱え込みがちです。自分の感覚のセンスを分かってくれる人と一緒にいたいです。自分なりの世界を追求していると、いつの間にか注目されます。' },
+  '戊午':{ group:'寒 COLD ／ 表現者', catch:'どっしりと落ち着いた雰囲気の中に、強い個性と信念を持つ人。', personality:'冷静にデータを分析して、実行に移せる行動力があります。いざとなると、革命を起こせるくらいのパワーを持ってます。様々な分野の教養を身につけると、スケールが広がります。年齢を重ねるごとに深みを増し、だんだん運が強くなります。' },
+  '己未':{ group:'寒 COLD ／ 表現者', catch:'素朴な明るさの中にも、強い自信と度胸を持つゆとりの人。', personality:'自分に合うかどうかをじっくり見極めて、人と付き合います。不満がたまってくると、つい感情があふれてしまうことも。大人の階段を上る途中のどこかで、突如生まれ変わります。人の意見にとらわれず、負けない気持ちを持てるとよいです。' },
+  '庚申':{ group:'寒 COLD ／ 表現者', catch:'人の言葉の裏を読める、シャープな知性と直感力の勝負師。', personality:'人の良いところを上手く吸収して、自分の戦力にします。鉄壁の防御本能を持ってるので、逃げ足は軽いです。一本気で負けん気が強いので、みんなの先頭となって挑みます。知性と直感で勝負できれば、どこでも負け知らずで過ごせます。' },
+  '辛酉':{ group:'寒 COLD ／ 表現者', catch:'知的なセンスと、どこか洗練された雰囲気を持つ理数系な人。', personality:'人の気持ちにはやや鈍感なので、お世辞は苦手です。真面目な姿勢と、裏づいた信憑性のある言動で信頼されます。一つのことに真摯に向き合って、追求することが得意です。周りよりも自分は自分のスタンスでいくと、うまくいきます。' },
+  '壬戌':{ group:'寒 COLD ／ 表現者', catch:'五感でなんでも吸収してしまう才能を持った、感覚的な人。', personality:'思い立ったら理屈より行動するけど、なぜか勘は当たります。行動する時の、まわりを巻き込んでいく影響力はすごいです。困っている人を見ると、なんとかしてでも助けたくなります。感情の波が激しい時もあるけど、誠実なので好かれます。' },
+  '癸亥':{ group:'寒 COLD ／ 表現者', catch:'独自の道を行く、強靭な精神力と忍耐力のある超人。', personality:'相手の心理を読み、状況や流れを感じて自分を表現します。派手そうに見えて、意外と平和で庶民的な生活を好みます。何度でも這い上がれる人なので、挑戦する気持ちが大事です。世の中の主流よりも、普通じゃない場所で実力を発揮するとうまくいきます。' }
+};
+
+// =============================================
+// 計算・描画メイン関数
+// =============================================
+function calculate() {
+  const year  = parseInt(document.getElementById('year').value, 10);
+  const month = parseInt(document.getElementById('month').value, 10);
+  const day   = parseInt(document.getElementById('day').value, 10);
+  const errEl = document.getElementById('error');
+  errEl.textContent = '';
+
+  if (!year || !month || !day || year < 1910 || year > 2050 || month < 1 || month > 12 || day < 1 || day > 31) {
+    errEl.textContent = '正しい生年月日を入力してください（1910〜2050年）';
+    return;
+  }
+
+  // 年柱
+  const y = getYearKanShi(year, month, day);
+  // 月柱
+  const mShiIdx = getMonthShi(year, month, day);
+  const mKanIdx = getMonthKan(y.kanIdx, mShiIdx);
+  const m = { kan: KAN[mKanIdx], shi: SHI[mShiIdx], kanIdx: mKanIdx, shiIdx: mShiIdx };
+  // 日柱
+  const d = getDayKanShi(year, month, day);
+
+  // 命式グリッドを描画
+  const pillars = [
+    { id:'day',   k:d, label:'日 柱' },
+    { id:'month', k:m, label:'月 柱' },
+    { id:'year',  k:y, label:'年 柱' },
+  ];
+
+  pillars.forEach(({ id, k }) => {
+    const kanColor = KAN_COLOR[k.kan] || { bg:'#888', text:'#fff', label:'—' };
+    const shiColor = SHI_COLOR[k.shi] || { bg:'#888' };
+
+    const kc = document.getElementById(`${id}-kan-card`);
+    if (kc) {
+      kc.style.background = kanColor.bg;
+      document.getElementById(`${id}-kan-attr`).textContent  = kanColor.label;
+      document.getElementById(`${id}-kan`).textContent       = k.kan;
+      document.getElementById(`${id}-kan-symbol`).textContent = KAN_SYMBOL[k.kan] || '';
+    }
+    const sc = document.getElementById(`${id}-shi-card`);
+    if (sc) {
+      sc.style.background = shiColor.bg;
+      document.getElementById(`${id}-shi-attr`).textContent  = SHI_ATTR[k.shi] || '';
+      document.getElementById(`${id}-shi`).textContent       = k.shi;
+      document.getElementById(`${id}-shi-symbol`).textContent = SHI_SYMBOL[k.shi] || '';
+    }
+    const seasonEl = document.getElementById(`${id}-season`);
+    if (seasonEl) seasonEl.textContent = id === 'month' ? (SHI_SEASON[k.shi] || '') : '';
+  });
+
+  // 日柱基本設定（essenceブロック）
+  const dayKanshi = d.kan + d.shi;
+  const kanshiD   = KANSHI_DATA[dayKanshi];
+  const kanColor  = KAN_COLOR[d.kan] || { bg:'#888' };
+  const shiColor  = SHI_COLOR[d.shi] || { bg:'#888' };
+
+  // 60干支番号
+  {
+    const base60 = new Date(1900, 0, 1);
+    const tgt    = new Date(year, month - 1, day);
+    const diff   = Math.round((tgt - base60) / 86400000);
+    const idx60  = ((diff + 10) % 60 + 60) % 60;
+    const kanshiNo = idx60 + 1;
+    document.getElementById('essence-kanshi-no').textContent = kanshiNo;
+    document.getElementById('essence-kanshi-chars').textContent = dayKanshi;
+    const kanYomi = KAN_READ[d.kan] || '';
+    const shiYomi = SHI_READ[d.shi] || '';
+    document.getElementById('essence-kanshi-yomi-combined').textContent =
+      kanYomi && shiYomi ? `${kanYomi}・${shiYomi}` : kanYomi || shiYomi;
+  }
+
+  const essHeaderEl = document.getElementById('essence-header');
+  essHeaderEl.style.background = `linear-gradient(135deg, ${kanColor.bg} 0%, ${kanColor.bg} 45%, ${shiColor.bg} 100%)`;
+
+  document.getElementById('essence-eyebrow').textContent = `日 柱 ・ ${dayKanshi}`;
+  // essence-block-titleを「あなたの基本設定（日柱：〇〇）」に更新
+  const essBlockTitle = document.getElementById('essence-block-title');
+  if (essBlockTitle) essBlockTitle.textContent = `あなたの基本設定（日柱：${dayKanshi}）`;
+  if (kanshiD) {
+    document.getElementById('essence-group').textContent = kanshiD.group;
+    document.getElementById('essence-catch').textContent = kanshiD.catch;
+    document.getElementById('essence-text').textContent  = kanshiD.personality;
+  } else {
+    document.getElementById('essence-group').textContent = '';
+    document.getElementById('essence-catch').textContent = dayKanshi;
+    document.getElementById('essence-text').textContent  = '';
+  }
+
+  // 五行バランス
+  const allKan = [d.kan, m.kan, y.kan];
+  const allShi = [d.shi, m.shi, y.shi];
+  const count = { '木':0,'火':0,'土':0,'金':0,'水':0 };
+  allKan.forEach(k => { if (KAN_ELEM[k]) count[KAN_ELEM[k]]++; });
+  allShi.forEach(s => { if (SHI_ELEM[s]) count[SHI_ELEM[s]]++; });
+  const total = Object.values(count).reduce((a,b) => a+b, 0) || 1;
+  ['木','火','土','金','水'].forEach(en => {
+    const n = count[en] || 0;
+    const bar = document.getElementById('bar-' + { '木':'wood','火':'fire','土':'earth','金':'metal','水':'water' }[en]);
+    const cnt = document.getElementById('cnt-' + { '木':'wood','火':'fire','土':'earth','金':'metal','水':'water' }[en]);
+    if (bar) setTimeout(() => { bar.style.width = (n / total * 100) + '%'; }, 50);
+    if (cnt) cnt.textContent = n;
+  });
+
+  // 漢方体質タイプ
+  const mainKan = d.kan;
+  const mainT   = TAISHITSU[mainKan];
+  if (!mainT) { console.warn('TAISHITSU not found:', mainKan); }
+
+  const elemYo = mainT ? mainT.elem + '・陽' : '';
+  const elemIn = mainT ? mainT.elem + '・陰' : '';
+  const ELEM_YO_KAN = { '木':'甲','火':'丙','土':'戊','金':'庚','水':'壬' };
+  const subItems    = [];
+  const hiddenItems = [];
+
+  if (mainT) {
+    // ── 6要素を十干に変換して集計 ──
+    // 天干3（日干・月干・年干）＋地支3を蔵干本気で十干変換した3つ＝合計6要素
+    const shiToKan = s => {
+      const e = SHI_ELEM[s];
+      return e ? (SHI_YO[s] ? ELEM_YO_KAN[e] : ELEM_IN_KAN[e]) : null;
+    };
+    const allSixKan = [
+      d.kan, m.kan, y.kan,
+      shiToKan(d.shi), shiToKan(m.shi), shiToKan(y.shi)
+    ].filter(Boolean);
+
+    // 十干ごとのカウント
+    const kanCount = {};
+    allSixKan.forEach(k => { kanCount[k] = (kanCount[k] || 0) + 1; });
+
+    // サブ：日干以外で2以上のもの
+    Object.entries(kanCount).forEach(([k, cnt]) => {
+      if (k !== mainKan && cnt >= 2 && TAISHITSU[k]) {
+        const elem = KAN_ELEM[k] || '';
+        const yoIn = KAN_YO[k] ? '陽' : '陰';
+        subItems.push({ kan: k, trigger: `${k}（${elem}の${yoIn}）が${cnt}以上` });
+      }
+    });
+
+    // 隠れ：命式の6要素に含まれない五行の陰干
+    const presentElems = new Set(allSixKan.map(k => KAN_ELEM[k]).filter(Boolean));
+    ['木','火','土','金','水'].filter(e => e !== mainT.elem && !presentElems.has(e)).forEach(e => {
+      const inKan = ELEM_IN_KAN[e];
+      if (inKan) hiddenItems.push({ kan: inKan, trigger: `${e}が命式に存在しない` });
+    });
+  }
+
+  function taishitsuDetailHtml(t) {
+    if (!t) return '';
+    const food = (() => {
+      const raw = t.food || '';
+      const sep = raw.indexOf('【解説】');
+      return sep >= 0
+        ? { main: raw.slice(0,sep).trim(), note: raw.slice(sep + 4).trim() }
+        : { main: raw, note:'' };
+    })();
+    const tea = (() => {
+      const raw = t.tea || '';
+      const sep = raw.indexOf('【解説】');
+      return sep >= 0
+        ? { main: raw.slice(0,sep).trim(), note: raw.slice(sep + 4).trim() }
+        : { main: raw, note:'' };
+    })();
+    const foodLabelHtml = (t.foodLabel || []).map(fl =>
+      `<span class="food-label-badge ${fl.cls}">${fl.text}</span>`
+    ).join('');
+    const teaLinkHtml = t.teaUrl
+      ? `<a class="tea-link-btn" href="${t.teaUrl}" target="_blank" rel="noopener">オンラインストアで見る</a>`
+      : '';
+    const byoshoHtml = (t.byosho && t.byosho.length > 0)
+      ? `<div class="taishitsu-byosho">${t.byosho.map(b => `<span class="taishitsu-byosho-badge">${b}</span>`).join('')}</div>`
+      : '';
+    return `
+      <ul class="taishitsu-detail">
+        <li class="row-tendency"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🌿</span>体質の傾向</span><span class="taishitsu-detail-body">${t.tendency || ''}</span></li>
+        <li class="row-signs"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🔔</span>体からのサイン</span><span class="taishitsu-detail-body">${t.signs || ''}</span></li>
+        <li class="row-food"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🥢</span>整える食材</span><div class="food-label-row">${foodLabelHtml}</div><span class="taishitsu-detail-body">${food.main}</span>${food.note ? `<span class="taishitsu-detail-note">${food.note}</span>` : ''}</li>
+        <li class="row-tea"><span class="taishitsu-detail-label"><span class="taishitsu-detail-icon">🍵</span>おすすめ十干茶</span><span class="taishitsu-detail-body">${tea.main}</span>${tea.note ? `<span class="taishitsu-detail-note">${tea.note}</span>` : ''}${teaLinkHtml}</li>
+      </ul>`;
+  }
+
+  function taishitsuItemHtml(kan, t, _unused, trigger) {
+    const col = KAN_COLOR[kan] || { bg:'#888' };
+    const bgStyle = `background:${col.bg};`;
+    const triggerText = trigger ? `<span class="taishitsu-gogyou">${trigger}</span>` : '';
+    const byoshoHtml = (t && t.byosho && t.byosho.length > 0)
+      ? `<div class="taishitsu-byosho">${t.byosho.map(b => `<span class="taishitsu-byosho-badge">${b}</span>`).join('')}</div>`
+      : '';
+    return `
+      <div class="taishitsu-item">
+        <div class="taishitsu-item-header" style="${bgStyle}">
+          <div class="taishitsu-kan-badge">
+            <span class="taishitsu-kan-char">${kan}</span>
+            <span class="taishitsu-kan-read">${KAN_READ[kan] || ''}</span>
+          </div>
+          <div class="taishitsu-header-body">
+            ${triggerText}
+            <div class="taishitsu-type">${t ? t.type : ''}</div>
+            ${byoshoHtml}
+          </div>
+        </div>
+        <div class="taishitsu-item-body">${taishitsuDetailHtml(t)}</div>
+      </div>`;
+  }
+
+  const listEl = document.getElementById('taishitsu-list');
+  const mainHtml = `
+    <div class="taishitsu-section-label">メイン体質タイプ<span class="taishitsu-section-desc">特に出やすい、生まれ持った体質</span></div>
+    ${taishitsuItemHtml(mainKan, mainT, 'MAIN', `日干・${mainKan}（${KAN_SYMBOL[mainKan]}）`)}`;
+  const subHtml  = subItems.length > 0
+    ? `<div class="taishitsu-section-label" style="margin-top:36px;">サブ体質タイプ<span class="taishitsu-section-desc">よく出やすい、生まれ持った体質</span></div>`
+      + subItems.map(item => taishitsuItemHtml(item.kan, TAISHITSU[item.kan], 'SUB', item.trigger)).join('')
+    : '';
+  const hiddenHtml = hiddenItems.length > 0
+    ? `<div class="taishitsu-section-label hidden-label" style="margin-top:36px;">隠れ体質タイプ<span class="taishitsu-section-desc">気付きにくい、生まれ持った体質</span></div>`
+      + hiddenItems.map(item => taishitsuItemHtml(item.kan, TAISHITSU[item.kan], 'HIDDEN', item.trigger)).join('')
+    : '';
+  listEl.innerHTML = mainHtml + subHtml + hiddenHtml;
+
+  // 位相法（命式内）
+  const shiArr = [d.shi, m.shi, y.shi];
+  const { items: isouItems, alerts: isouAlerts } = buildIsou(shiArr, [d.kan, m.kan, y.kan]);
+  const isouCard = document.getElementById('isou-card');
+  const isouList = document.getElementById('isou-list');
+  const reachAlertEl = document.getElementById('reach-alert');
+
+  isouCard.style.display = 'block';
+  isouList.innerHTML = isouItems.length === 0
+    ? '<p class="isou-none">命式内に特記すべき地支の関係はありません</p>'
+    : isouItems.map(renderIsouItem).join('');
+
+  const alertHtml = renderAlerts(isouAlerts);
+  if (alertHtml) { reachAlertEl.innerHTML = alertHtml; reachAlertEl.style.display = 'block'; }
+  else { reachAlertEl.style.display = 'none'; }
+
+  // 運気とバイオリズム
+  buildBioSection(shiArr, d.kan, d.shi);
+
+  const result = document.getElementById('result');
+  result.classList.add('visible');
+  setTimeout(() => result.scrollIntoView({ behavior:'smooth', block:'start' }), 100);
+}
+
+// =============================================
+// ISOU_MASTER：大枠グループ情報（心・運勢テキスト）
+// =============================================
+const ISOU_MASTER = {
+  // ── 融合系 ──
+  sangi:    { label:'三合',     keyword:'爆発的拡大',   direction:'融合', dirCls:'bio-fusion',
+              heart:'爆発的に拡大する時。規格外に世界が広がります。',
+              bodyFallback:'エネルギーの過剰消耗に注意。反動で反対側の臓腑が弱りやすくなります。' },
+  hosan:    { label:'方三位',   keyword:'専門集中',     direction:'融合', dirCls:'bio-fusion',
+              heart:'五行の勢いが強まる時。専門的なことへの集中力が高まります。',
+              bodyFallback:'季節の気が揃い気が大きく偏るため、自律神経の過緊張に注意。' },
+  daihanka: { label:'大半会',   keyword:'規格外の展開', direction:'融合', dirCls:'bio-fusion',
+              heart:'新しい世界が広がる時。一貫性を持った挑戦が、異次元の広がりを見せます。',
+              bodyFallback:'一貫性と挑戦のエネルギーが高まりますが、過剰になると疲弊に注意。' },
+  hanka:    { label:'半会',     keyword:'急な展開',     direction:'融合', dirCls:'bio-fusion',
+              heart:'急に世界が広がる時。三合の一歩手前のような、新たな展開が起こります。',
+              bodyFallback:'三合に向かうエネルギーが蓄積し、特定の五行の気が高まりはじめます。' },
+  kango:    { label:'干合',     keyword:'引き合う',     direction:'融合', dirCls:'bio-fusion-teal',
+              heart:'気持ちが変わる、引かれる時。誰かとの強い精神的なつながりを感じやすくなります。',
+              bodyFallback:'天干の五行が変化するため、感情の振れ幅が大きくなる場合があります。' },
+  shigo:    { label:'支合',     keyword:'前へ進む',     direction:'融合', dirCls:'bio-fusion-teal',
+              heart:'つながる、前に進む時。物事がスムーズにまとまる安定期です。',
+              bodyFallback:'肉体的な充実感がある反面、安定しすぎて代謝が滞りやすくなります。' },
+  risshin:  { label:'律音',     keyword:'振り返り',     direction:'融合', dirCls:'bio-fusion-teal',
+              heart:'重なる、振り返る時。裏表なく自分を客観視できる再出発のタイミングです。',
+              bodyFallback:'客観視の力が高まりますが、停滞感を感じやすい面もあります。' },
+  // ── 分裂系 ──
+  chu:      { label:'対冲',     keyword:'ストップ',     direction:'分裂', dirCls:'bio-brake',
+              heart:'ぶつかる、不安定な時。物事が一度ストップし、リセットされるタイミング。',
+              bodyFallback:'正面衝突のような急な体調変化に注意。用心深く過ごすべき時です。' },
+  gai:      { label:'害',       keyword:'ストレス',     direction:'分裂', dirCls:'bio-brake-amber',
+              heart:'ストレス、すれ違いの時。内側でチグハグな感覚が溜まりやすい時期。',
+              bodyFallback:'心身のアンバランスから、なんとなくスッキリしない「未病」のサインに注意。' },
+  kei:      { label:'刑',       keyword:'強すぎる',     direction:'分裂', dirCls:'bio-brake',
+              heart:'勢いが強すぎるトラブルの時。やる気が空回りし、摩擦が起きやすい時期。',
+              bodyFallback:'環境のアンバランスが臓腑に負荷をかけます。計画の見直しが吉。' },
+  sankei:   { label:'三刑',     keyword:'強すぎる',     direction:'分裂', dirCls:'bio-brake',
+              heart:'勢いが強すぎるトラブルの時。やる気が空回りし、摩擦が起きやすい時期。',
+              bodyFallback:'環境のアンバランスが臓腑に負荷をかけます。計画の見直しが吉。' },
+  nacchin:  { label:'納音',     keyword:'リセット',     direction:'分裂', dirCls:'bio-brake',
+              heart:'リセット、やり直しの時。枠内での衝突が起きやすい時期です。無理は禁物。',
+              bodyFallback:'無理をせず、今の枠の中でできることを丁寧に積み上げましょう。' },
+  tenkoku:  { label:'天剋地冲', keyword:'チャレンジ',   direction:'分裂', dirCls:'bio-brake',
+              heart:'チャレンジ、負けて勝つ時。戦いの星——犠牲と勝利が交差する慎重な時期。',
+              bodyFallback:'強いエネルギーの消耗を伴います。慎重さと粘りが成果につながります。' },
+};
+
+// =============================================
+// ISOU_DETAIL：個別ペア情報（体・臓腑テキスト）
+// =============================================
+
+// ── 対冲 ──
+const CHU_DATA = [
+  { pair:['亥','巳'], organ:'腎と心',     bodyText:'水（腎）と火（心）が激しく衝突し、熱と水分のバランスが急激に崩れやすくなるため、冷えとほてりの混在、不眠、情緒の不安定に注意。' },
+  { pair:['寅','申'], organ:'胆と大腸',   bodyText:'金が木を剋すように決断力（胆）と排泄機能（大腸）がぶつかり、腸の働きが過敏になりやすいため、自律神経の乱れや腸のトラブルに注意。' },
+  { pair:['戌','辰'], organ:'三焦と胃',   bodyText:'同じ土同士がぶつかって水の通り道（三焦）と胃腸が乱れ、消化が停滞しやすくなるため、胃もたれ、消化不良、胸のつかえに注意。' },
+  { pair:['卯','酉'], organ:'肝と肺',     bodyText:'金が木を剋すように血の貯蔵（肝）と呼吸（肺）がぶつかり、気の巡りが急にストップしやすいため、気分の落ち込みや呼吸の浅さに注意。' },
+  { pair:['子','午'], organ:'膀胱と小腸', bodyText:'下半身の水（膀胱）と上半身の火（小腸）が衝突し、全身のエネルギーが乱れやすくなるため、血圧の上下やのぼせに注意。' },
+  { pair:['丑','未'], organ:'脾と心包',   bodyText:'同じ土同士がぶつかり、消化吸収（脾）と精神の安定や循環（心包）が衝突してストレスが胃腸に繋がるため、胃の重さや強い倦怠感に注意。' },
+];
+
+// ── 害 ──
+const GAI_DATA = [
+  { pair:['亥','申'], organ:'腎と大腸',   bodyText:'金から水への流れが乱れ、下半身と腸の水分代謝がチグハグになり必要な栄養が巡りにくくなるため、下痢やむくみ、疲労感に注意。' },
+  { pair:['寅','巳'], organ:'胆と心',     bodyText:'木が火を過剰に燃やしてしまい、無意識に上半身に熱がこもるため、熱による頭痛や焦り、多動に注意。' },
+  { pair:['戌','酉'], organ:'三焦と肺',   bodyText:'土から金への補給が滞り、気と水のバランスが乱れバリア機能に負担がかかるため、慢性的な疲労や神経過敏、息苦しさに注意。' },
+  { pair:['卯','辰'], organ:'肝と胃',     bodyText:'木が土を過剰に攻撃し、ストレス（肝）がそのまま胃（土）の働きを止めてしまうため、胃痛やお腹の張り、食欲不振に注意。' },
+  { pair:['子','未'], organ:'膀胱と心包', bodyText:'土が水を極端に抑え込み、下半身の水が偏ってデリケートな部分に負担がかかるため、膀胱炎や結石などのトラブルに注意。' },
+  { pair:['丑','午'], organ:'脾と小腸',   bodyText:'火が土を乾かしすぎ、湿気と熱が体内にこもって栄養を吸収できなくなるため、吸収の低下や胃腸炎、軟便に注意。' },
+];
+
+// ── 支合 ──
+// bodyText は「強まる五行：〇｜」冒頭＋心（前半）＋「その分、」以降が体テキスト
+const SHIGO_DATA = [
+  { pair:['子','丑'], elem:'水', bodyText:'強まる五行：水｜深く考え込んだり内面を探求する思考が強まる分、水分をためこみやすくなり、冷えや重だるさを感じることがあります。' },
+  { pair:['寅','亥'], elem:'木', bodyText:'強まる五行：木｜目標に向かって前進する行動力が強まる分、無意識に気が張り詰め、肩や首のこりを感じることがあります。' },
+  { pair:['卯','戌'], elem:'土', bodyText:'強まる五行：土｜現状を維持し、蓄積していく行動が強まる分、体にいろいろなものをためこみやすくなり、胃腸が重く感じることがあります。' },
+  { pair:['辰','酉'], elem:'土', bodyText:'強まる五行：土｜現状を維持し、蓄積していく行動が強まる分、体にいろいろなものをためこみやすくなり、胃腸が重く感じることがあります。' },
+  { pair:['巳','申'], elem:'金', bodyText:'強まる五行：金｜白黒をはっきりさせ、無駄を省く合理的な思考が強まる分、バリア機能が過敏になり、お肌や呼吸器の乾燥を感じることがあります。' },
+  { pair:['午','未'], elem:'火', bodyText:'強まる五行：火｜感情が豊かになり、外へ向けた自己表現の情熱が強まる分、体に熱がこもりやすく、のぼせや動悸を感じることがあります。' },
+];
+// 支合：バイオ用に体の部分だけを抽出（「その分、」以降）
+function shigo_body(bt) {
+  return bt.includes('その分、') ? 'その分、' + bt.split('その分、')[1].trim() : bt;
+}
+// 支合：命式表示用（全文）
+function shigo_full(bt) { return bt; }
+
+// ── 三合 ──
+const SANGI_DATA = [
+  { shi:['申','子','辰'], elem:'水', suppress:'火（心）',
+    happen:'エネルギーの過剰消耗に注意。反動で火（心）の働きが弱りやすくなります。',
+    symptom:'冷えや強力なむくみが出やすく、血の巡りが悪くなることがあります。',
+    bodyText:'エネルギーの過剰消耗に注意。反動で火（心）の働きが弱り、冷えや強力なむくみが出やすくなります。' },
+  { shi:['亥','卯','未'], elem:'木', suppress:'土（胃腸）',
+    happen:'エネルギーの過剰消耗に注意。反動で土（胃腸）の働きが弱りやすくなります。',
+    symptom:'自律神経の緊張や胃腸トラブルが出やすくなります。',
+    bodyText:'エネルギーの過剰消耗に注意。反動で土（胃腸）の働きが弱り、自律神経の緊張や胃腸トラブルが出やすくなります。' },
+  { shi:['寅','午','戌'], elem:'火', suppress:'金（肺・大腸）',
+    happen:'エネルギーの過剰消耗に注意。反動で金（肺・大腸）の働きが弱りやすくなります。',
+    symptom:'熱による強い炎症や動悸が出やすく、乾燥しやすくなります。',
+    bodyText:'エネルギーの過剰消耗に注意。反動で金（肺・大腸）の働きが弱り、強い炎症や乾燥が出やすくなります。' },
+  { shi:['巳','酉','丑'], elem:'金', suppress:'木（肝・胆）',
+    happen:'エネルギーの過剰消耗に注意。反動で木（肝・胆）の働きが弱りやすくなります。',
+    symptom:'アレルギー反応が出やすく、気の巡りが滞りやすくなります。',
+    bodyText:'エネルギーの過剰消耗に注意。反動で木（肝・胆）の働きが弱り、アレルギー反応や気の滞りが出やすくなります。' },
+];
+
+// ── 方三位 ──
+const HOSAN_DATA = [
+  { shi:['寅','卯','辰'], season:'春', elem:'木',
+    bodyText:'季節の気が揃い、木へ気が大きく偏るため、「自律神経系」の過緊張に注意。イライラやうつうつが出やすくなります。' },
+  { shi:['巳','午','未'], season:'夏', elem:'火',
+    bodyText:'季節の気が揃い、火へ気が大きく偏るため、「循環器系」の過剰な働きに注意。動悸や熱のこもりが出やすくなります。' },
+  { shi:['申','酉','戌'], season:'秋', elem:'金',
+    bodyText:'季節の気が揃い、金へ気が大きく偏るため、「呼吸器・免疫系」の過敏反応に注意。ムズムズやひりひりが出やすくなります。' },
+  { shi:['亥','子','丑'], season:'冬', elem:'水',
+    bodyText:'季節の気が揃い、水へ気が大きく偏るため、「泌尿器・生命機能系」のバランスの乱れに注意。ポヨポヨやからからが出やすくなります。' },
+];
+
+// ── 刑 ──
+const SANKEI_DATA = [
+  { shi:['寅','巳','申'], name:'火の三刑',
+    bodyText:'火のエネルギーが極限まで高まり、心身が過熱することで強烈な炎症や消耗が起きやすいため、十分な休息が必要。' },
+  { shi:['丑','戌','未'], name:'土の三刑',
+    bodyText:'土のエネルギーが全方向から重なり、気血の巡りが完全に滞るため、強いむくみや重だるさ、慢性的な胃腸障害に注意。' },
+];
+
+// ── 刑：ペアの刑データ（三刑成立時は除外する）──
+const KEI_PAIR_DATA = [
+  // 火の三刑の構成ペア
+  { pair:['巳','申'], organ:'心と大腸',   bodyText:'火（心）が金（大腸・肺）を溶かすように内側で摩擦が起き、呼吸が浅くなりやすいため、免疫力の低下や消耗に注意。' },
+  { pair:['寅','巳'], organ:'胆と心',     bodyText:'木（胆）が火（心）を過剰に燃やしてしまい、上半身に気が上りやすくなるため、動悸や強い炎症に注意。' },
+  { pair:['寅','申'], organ:'胆と大腸',   bodyText:'金（大腸）と木（胆）が鋭く摩擦を起こして交感神経が優位になりやすいため、自律神経の乱れや腸の過敏反応に注意。' },
+  // 土の三刑の構成ペア
+  { pair:['丑','戌'], organ:'脾と胃',     bodyText:'冷たい土と乾いた土が摩擦を起こし、気血の巡りが滞りやすくなるため、水分代謝の悪化や胃腸の機能低下に注意。' },
+  { pair:['戌','未'], organ:'胃と心包',   bodyText:'熱い土同士が摩擦を起こし、熱とストレスがこもるため、自律神経の過緊張からくる胃腸障害や炎症に注意。' },
+  { pair:['丑','未'], organ:'脾と心包',   bodyText:'性質の違う土同士が反発してエネルギーがうまく作れなくなるため、消化吸収へのダメージや強い倦怠感に注意。' },
+];
+const JIKEI_SHI  = ['亥','辰','酉','午'];
+const JIKEI_BODY = '同じエネルギーが過剰に溢れ、自分のこだわりや感情を持て余して空回りしやすくなります。その臓腑特有の不調に注意。';
+const KOMOKEI    = ['子','卯'];
+const KOMOKEI_BODY = '水と木のエネルギーが不調和を起こし、理不尽なすれ違いやデリケートな問題が生じやすくなります。下半身の冷えに注意。';
+
+// =============================================
+// 命式内位相法判定（buildIsou）
+// 表示文脈：命式内（生まれ持った本質）
+// =============================================
+function buildIsou(shiArr, kanArr) {
+  const items  = [];
+  const alerts = [];
+
+  // ── 対冲 ──
+  CHU_DATA.forEach(({ pair, organ, bodyText }) => {
+    if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
+      items.push({
+        group: 'chu',
+        pairLabel: `${pair[0]}×${pair[1]}`,
+        organ,
+        heartText: ISOU_MASTER.chu.heart,
+        bodyText,
+        isChange: false,
+      });
+    }
+  });
+
+  // ── 害 ──
+  GAI_DATA.forEach(({ pair, organ, bodyText }) => {
+    if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
+      items.push({
+        group: 'gai',
+        pairLabel: `${pair[0]}×${pair[1]}`,
+        organ,
+        heartText: ISOU_MASTER.gai.heart,
+        bodyText,
+        isChange: false,
+      });
+    }
+  });
+
+  // ── 支合 ──
+  SHIGO_DATA.forEach(({ pair, elem, bodyText }) => {
+    if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
+      items.push({
+        group: 'shigo',
+        pairLabel: `${pair[0]}×${pair[1]}（${elem}が強まる）`,
+        organ: '—',
+        heartText: ISOU_MASTER.shigo.heart,
+        bodyText: shigo_full(bodyText),
+        isChange: true,
+      });
+    }
+  });
+
+  // ── 三合（3つ揃い）＋ 半会（2つ → リーチ）──
+  SANGI_DATA.forEach(({ shi, elem, suppress, happen, symptom, bodyText }) => {
+    const matched = shi.filter(s => shiArr.includes(s));
+    if (matched.length === 3) {
+      items.push({
+        group: 'sangi',
+        pairLabel: `${shi.join('・')}（${elem}局）`,
+        organ: `${elem}の気が強まり、${suppress}を抑制`,
+        heartText: ISOU_MASTER.sangi.heart,
+        bodyText,
+        isChange: false,
+      });
+    } else if (matched.length === 2) {
+      const missing = shi.find(s => !shiArr.includes(s));
+      alerts.push({ type:'sangi', title:`${elem}局の半会`, matched, missing,
+                    missingMonth: SHI_MONTH[missing], elem, suppress, happen, symptom });
+    }
+  });
+
+  // ── 方三位（3つ揃い）＋ リーチ（2つ）──
+  HOSAN_DATA.forEach(({ shi, season, elem, bodyText }) => {
+    const matched = shi.filter(s => shiArr.includes(s));
+    if (matched.length === 3) {
+      items.push({
+        group: 'hosan',
+        pairLabel: `${shi.join('・')}（${season}の${elem}）`,
+        organ: `${season}の気が定着し、${elem}の気が強まる`,
+        heartText: ISOU_MASTER.hosan.heart,
+        bodyText,
+        isChange: false,
+      });
+    } else if (matched.length === 2) {
+      const missing = shi.find(s => !shiArr.includes(s));
+      const symptom = bodyText;
+      alerts.push({ type:'hosan', title:`${season}の${elem}のリーチ`, matched, missing,
+                    missingMonth: SHI_MONTH[missing], season, elem, happen: bodyText, symptom: bodyText });
+    }
+  });
+
+  // ── 刑：三刑（成立した三刑グループを記録してペア刑除外に使う）──
+  const activeSankeiGroups = [];
+  SANKEI_DATA.forEach(({ shi, name, bodyText }) => {
+    if (shi.every(s => shiArr.includes(s))) {
+      activeSankeiGroups.push(shi);
+      items.push({
+        group: 'sankei',
+        pairLabel: `${name}（${shi.join('・')}）`,
+        organ: 'エネルギーの過剰滞留',
+        heartText: ISOU_MASTER.kei.heart,
+        bodyText,
+        isChange: false,
+      });
+    } else {
+      // 2支一致 → リーチアラート
+      const matched = shi.filter(s => shiArr.includes(s));
+      if (matched.length === 2) {
+        const missing = shi.find(s => !shiArr.includes(s));
+        alerts.push({
+          type: 'sankei',
+          title: `${name}のリーチ`,
+          matched,
+          missing,
+          missingMonth: SHI_MONTH[missing],
+          name,
+          bodyText,
+        });
+      }
+    }
+  });
+
+  // ── 刑：ペア刑（三刑の構成要素になっている場合は除外）──
+  KEI_PAIR_DATA.forEach(({ pair, organ, bodyText }) => {
+    // このペアが既成立の三刑に完全に包含される場合はスキップ
+    const absorbedByTri = activeSankeiGroups.some(grp =>
+      pair.every(s => grp.includes(s))
+    );
+    if (absorbedByTri) return;
+    if (shiArr.includes(pair[0]) && shiArr.includes(pair[1])) {
+      items.push({
+        group: 'kei',
+        pairLabel: `${pair[0]}×${pair[1]}`,
+        organ,
+        heartText: ISOU_MASTER.kei.heart,
+        bodyText,
+        isChange: false,
+      });
+    }
+  });
+
+  // ── 刑：自刑 ──
+  const seen = {};
+  shiArr.forEach(s => { seen[s] = (seen[s] || 0) + 1; });
+  JIKEI_SHI.forEach(s => {
+    if (seen[s] >= 2) {
+      items.push({
+        group: 'kei',
+        pairLabel: `自刑（${s}）`,
+        organ: `${s}の臓腑（働きすぎ）`,
+        heartText: ISOU_MASTER.kei.heart,
+        bodyText: JIKEI_BODY,
+        isChange: false,
+      });
+    }
+  });
+
+  // ── 刑：子卯の刑 ──
+  if (shiArr.includes('子') && shiArr.includes('卯')) {
+    items.push({
+      group: 'kei',
+      pairLabel: '子卯の刑',
+      organ: '膀胱と肝',
+      heartText: ISOU_MASTER.kei.heart,
+      bodyText: KOMOKEI_BODY,
+      isChange: false,
+    });
+  }
+
+  // ── 天干条件の位相法（干合・大半会・律音・納音・天剋地冲）──
+  // ※ shiArrとともに kanArr（天干配列）が渡された場合のみ判定
+  if (typeof kanArr !== 'undefined' && kanArr && kanArr.length === 3) {
+    const [dKan, mKan, yKan] = kanArr;
+    const [dShi, mShi, yShi] = shiArr;
+    const kanShiPairs = [[dKan,dShi],[mKan,mShi],[yKan,yShi]];
+
+    // ── 干合：天干ペアが干合の組み合わせ（甲×己・乙×庚・丙×辛・丁×壬・戊×癸）──
+    const KANGO_PAIRS = [['甲','己'],['乙','庚'],['丙','辛'],['丁','壬'],['戊','癸']];
+    [[dKan,mKan,'日干×月干'],[dKan,yKan,'日干×年干'],[mKan,yKan,'月干×年干']].forEach(([a,b,lbl]) => {
+      if (KANGO_PAIRS.some(p => (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a))) {
+        items.push({
+          group: 'kango',
+          pairLabel: `${a}×${b}（${lbl}）`,
+          organ: '—',
+          heartText: ISOU_MASTER.kango.heart,
+          bodyText: ISOU_MASTER.kango.bodyFallback,
+          isChange: false,
+        });
+      }
+    });
+
+    // ── 律音：天干と地支がともに同じ（同一干支が命式に2柱以上）──
+    kanShiPairs.forEach(([ka,sa], i) => {
+      kanShiPairs.forEach(([kb,sb], j) => {
+        if (i >= j) return;
+        if (ka === kb && sa === sb) {
+          items.push({
+            group: 'risshin',
+            pairLabel: `${ka}${sa}（同一干支）`,
+            organ: '—',
+            heartText: ISOU_MASTER.risshin.heart,
+            bodyText: ISOU_MASTER.risshin.bodyFallback,
+            isChange: false,
+          });
+        }
+      });
+    });
+
+    // ── 大半会：天干が同じ + 地支が三合の2支（半会）──
+    const SANGI_GRPS = [['申','子','辰'],['亥','卯','未'],['寅','午','戌'],['巳','酉','丑']];
+    kanShiPairs.forEach(([ka,sa], i) => {
+      kanShiPairs.forEach(([kb,sb], j) => {
+        if (i >= j) return;
+        if (ka === kb && sa !== sb) {
+          SANGI_GRPS.forEach(grp => {
+            if (grp.includes(sa) && grp.includes(sb)) {
+              items.push({
+                group: 'daihanka',
+                pairLabel: `${ka}${sa}×${kb}${sb}`,
+                organ: '—',
+                heartText: ISOU_MASTER.daihanka.heart,
+                bodyText: ISOU_MASTER.daihanka.bodyFallback,
+                isChange: false,
+              });
+            }
+          });
+        }
+      });
+    });
+
+    // ── 納音：天干が同じ + 地支が対冲（同五行・陰陽逆で衝突）──
+    const CHU_PAIRS_S = [['子','午'],['丑','未'],['寅','申'],['卯','酉'],['辰','戌'],['巳','亥']];
+    kanShiPairs.forEach(([ka,sa], i) => {
+      kanShiPairs.forEach(([kb,sb], j) => {
+        if (i >= j) return;
+        if (ka === kb && sa !== sb &&
+            CHU_PAIRS_S.some(p => (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa))) {
+          items.push({
+            group: 'nacchin',
+            pairLabel: `${ka}${sa}×${kb}${sb}`,
+            organ: '—',
+            heartText: ISOU_MASTER.nacchin.heart,
+            bodyText: ISOU_MASTER.nacchin.bodyFallback,
+            isChange: false,
+          });
+        }
+      });
+    });
+
+    // ── 天剋地冲：天干が五行相剋の関係 + 地支が対冲 ──
+    // 五行相剋の方向（剋する側→剋される側）
+    // 木剋土・土剋水・水剋火・火剋金・金剋木
+    const GOKOKU_PAIRS = [
+      ['甲','戊'],['甲','己'],['乙','戊'],['乙','己'],  // 木剋土
+      ['戊','壬'],['戊','癸'],['己','壬'],['己','癸'],  // 土剋水
+      ['壬','丙'],['壬','丁'],['癸','丙'],['癸','丁'],  // 水剋火
+      ['丙','庚'],['丙','辛'],['丁','庚'],['丁','辛'],  // 火剋金
+      ['庚','甲'],['庚','乙'],['辛','甲'],['辛','乙'],  // 金剋木
+    ];
+    kanShiPairs.forEach(([ka,sa], i) => {
+      kanShiPairs.forEach(([kb,sb], j) => {
+        if (i >= j) return;
+        const isGokoku = GOKOKU_PAIRS.some(p =>
+          (p[0]===ka&&p[1]===kb)||(p[0]===kb&&p[1]===ka)
+        );
+        const isChu = CHU_PAIRS_S.some(p =>
+          (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa)
+        );
+        if (isGokoku && isChu) {
+          items.push({
+            group: 'tenkoku',
+            pairLabel: `${ka}${sa}×${kb}${sb}`,
+            organ: '—',
+            heartText: ISOU_MASTER.tenkoku.heart,
+            bodyText: ISOU_MASTER.tenkoku.bodyFallback,
+            isChange: false,
+          });
+        }
+      });
+    });
+  }
+
+  return { items, alerts };
+}
+
+// isou-card用HTML（命式内・生まれ持った本質）
+// 語尾変換：「注意。」→「という性質があります。」等、生まれ持った傾向表現に変換
+function toMeishikiTone(text) {
+  if (!text) return text;
+  return text
+    .replace(/に注意が必要です。$/,   'という性質があります。')
+    .replace(/に注意が必要です$/,    'という性質があります')
+    .replace(/に注意。$/,            'といった傾向を持っています。')
+    .replace(/に注意$/,              'といった傾向を持っています')
+    .replace(/が求められる体質です。$/, 'が求められる体質です。')
+    .replace(/が必要。$/,            'が求められる体質です。')
+    .replace(/が必要$/,              'が求められる体質です')
+    .replace(/に注意が必要です。/g,  'という性質があります。')
+    .replace(/に注意。/g,            'といった傾向を持っています。');
+}
+
+function renderIsouItem({ group, pairLabel, organ, heartText, bodyText, isChange }) {
+  const m = ISOU_MASTER[group] || {};
+  const organSuffix = organ && organ !== '—' ? `（${organ}）` : '';
+  const bodyConverted = toMeishikiTone(bodyText);
+  return `
+    <div class="isou-item ${group}">
+      <div class="isou-item-header">
+        <span class="isou-kind">${m.label || group}</span>
+        <span class="isou-pair">${pairLabel}${organSuffix}</span>
+        ${m.keyword ? `<span class="isou-direction ${m.dirCls || ''}">${m.keyword}</span>` : ''}
+      </div>
+      <ul class="isou-desc-list">
+        <li>${bodyConverted}</li>
+      </ul>
+    </div>`;
+}
+
+// アラートHTML
+function renderAlerts(alerts) {
+  if (alerts.length === 0) return '';
+  const inner = alerts.map(a => {
+    if (a.type === 'sankei') {
+      return `
+        <div class="reach-alert-item">
+          <div class="reach-alert-item-title">${a.title}</div>
+          <p class="reach-alert-desc">あなたの命式には「${a.matched[0]}」と「${a.matched[1]}」があります。</p>
+          <ul class="reach-alert-list">
+            <li><b>要注意の月：</b>${a.missingMonth}月（${a.missing}の月）</li>
+            <li><b>起こりやすい変化：</b>この月に「${a.name}」が成立します。${a.bodyText}</li>
+          </ul>
+        </div>`;
+    } else if (a.type === 'sangi') {
+      return `
+        <div class="reach-alert-item">
+          <div class="reach-alert-item-title">${a.title}</div>
+          <p class="reach-alert-desc">あなたの命式には「${a.matched[0]}」と「${a.matched[1]}」があります。</p>
+          <ul class="reach-alert-list">
+            <li><b>要注意の月：</b>${a.missingMonth}月（${a.missing}の月）</li>
+            <li><b>起こりやすい変化：</b>この月は「${a.elem}」の気が極端に強まり、${a.symptom} さらに「${a.suppress}」の働きが抑え込まれるため注意してください。</li>
+          </ul>
+        </div>`;
+    } else {
+      return `
+        <div class="reach-alert-item">
+          <div class="reach-alert-item-title">${a.title}</div>
+          <p class="reach-alert-desc">あなたの命式には「${a.matched[0]}」と「${a.matched[1]}」があります。</p>
+          <ul class="reach-alert-list">
+            <li><b>要注意の月・季節：</b>${a.missingMonth}月（${a.missing}の月）および${a.season}の季節</li>
+            <li><b>起こりやすい変化：</b>この時期は「${a.elem}」の気がさらに強まります。${a.symptom}</li>
+          </ul>
+        </div>`;
+    }
+  }).join('');
+  return `
+    <div class="reach-alert-title">気をつけたい時期のサイン</div>
+    ${inner}`;
+}
+
+// =============================================
+// 月別節月の季節クラス
+// =============================================
+const SHI_SEASON_CLS = {
+  '丑':'bio-season-winter','寅':'bio-season-spring','卯':'bio-season-spring',
+  '辰':'bio-season-spring','巳':'bio-season-summer','午':'bio-season-summer',
+  '未':'bio-season-summer','申':'bio-season-autumn','酉':'bio-season-autumn',
+  '戌':'bio-season-autumn','亥':'bio-season-winter','子':'bio-season-winter',
+};
+
+const PILLAR_LABEL = ['日支','月支','年支'];
+
+// =============================================
+// 月運判定（getIsouType）
+// 地支6種のみ（三合・方三位は3揃いのみ、半会スキップ）
+// =============================================
+function getIsouType(targetShi, shiArr) {
+  const map = {};
+
+  const addHit = (groupKey, msShi, bodyText) => {
+    if (!map[groupKey]) map[groupKey] = { withSet: new Set(), bodyTextSet: new Set() };
+    const idx = shiArr.indexOf(msShi);
+    if (idx !== -1) map[groupKey].withSet.add(PILLAR_LABEL[idx] + '（' + msShi + '）');
+    if (bodyText) map[groupKey].bodyTextSet.add(bodyText);
+  };
+
+  // 対冲（ペアごとに1回）
+  CHU_DATA.forEach(({ pair, bodyText }) => {
+    let hit = null;
+    for (const ms of shiArr) {
+      if ((pair[0]===targetShi&&pair[1]===ms)||(pair[0]===ms&&pair[1]===targetShi)) { hit = ms; break; }
+    }
+    if (hit) addHit('chu', hit, bodyText);
+  });
+
+  // 害（ペアごとに1回）
+  GAI_DATA.forEach(({ pair, bodyText }) => {
+    let hit = null;
+    for (const ms of shiArr) {
+      if ((pair[0]===targetShi&&pair[1]===ms)||(pair[0]===ms&&pair[1]===targetShi)) { hit = ms; break; }
+    }
+    if (hit) addHit('gai', hit, bodyText);
+  });
+
+  // 支合（体テキストは「その分、」以降のみ）
+  SHIGO_DATA.forEach(({ pair, elem, bodyText }) => {
+    let hit = null;
+    for (const ms of shiArr) {
+      if ((pair[0]===targetShi&&pair[1]===ms)||(pair[0]===ms&&pair[1]===targetShi)) { hit = ms; break; }
+    }
+    if (hit) {
+      // withPillsに「強まる五行：〇」ラベルを追加
+      if (!map['shigo']) map['shigo'] = { withSet: new Set(), bodyTextSet: new Set() };
+      const idx = shiArr.indexOf(hit);
+      if (idx !== -1) map['shigo'].withSet.add(PILLAR_LABEL[idx] + '（' + hit + '）');
+      map['shigo'].withSet.add(`強まる五行：${elem}`);
+      const bt = shigo_body(bodyText);
+      if (bt) map['shigo'].bodyTextSet.add(bt);
+    }
+  });
+
+  // 三合（3揃いのみ、半会スキップ）
+  SANGI_DATA.forEach(({ shi: grp, bodyText }) => {
+    if (grp.includes(targetShi)) {
+      const others = grp.filter(s => s !== targetShi);
+      if (others.every(s => shiArr.includes(s))) {
+        let added = false;
+        others.forEach(s => { addHit('sangi', s, added ? null : bodyText); added = true; });
+      }
+    }
+  });
+
+  // 方三位（3揃いのみ）
+  HOSAN_DATA.forEach(({ shi: grp, bodyText }) => {
+    if (grp.includes(targetShi)) {
+      const others = grp.filter(s => s !== targetShi);
+      if (others.every(s => shiArr.includes(s))) {
+        let added = false;
+        others.forEach(s => { addHit('hosan', s, added ? null : bodyText); added = true; });
+      }
+    }
+  });
+
+  // 刑：三刑（1グループ1回）成立した三刑グループを記録
+  const activeSankeiGrps = [];
+  SANKEI_DATA.forEach(({ shi: grp, name, bodyText }) => {
+    if (grp.includes(targetShi)) {
+      const others = grp.filter(s => s !== targetShi);
+      if (others.every(s => shiArr.includes(s))) {
+        activeSankeiGrps.push(grp);
+        // sankeiグループとして出力（三刑名をwithPillsに追加）
+        if (!map['sankei']) map['sankei'] = { withSet: new Set(), bodyTextSet: new Set() };
+        map['sankei'].withSet.add(name);
+        others.forEach(s => {
+          const idx = shiArr.indexOf(s);
+          if (idx !== -1) map['sankei'].withSet.add(PILLAR_LABEL[idx] + '（' + s + '）');
+        });
+        if (bodyText) map['sankei'].bodyTextSet.add(bodyText);
+      }
+    }
+  });
+
+  // 刑：ペア刑（三刑成立時はそのペアを除外）
+  KEI_PAIR_DATA.forEach(({ pair, bodyText }) => {
+    // 月の地支がペアの片方に一致するか確認
+    let hit = null;
+    if (pair[0] === targetShi && shiArr.includes(pair[1])) hit = pair[1];
+    else if (pair[1] === targetShi && shiArr.includes(pair[0])) hit = pair[0];
+    if (!hit) return;
+    // 三刑に包含されるペアはスキップ
+    const absorbedByTri = activeSankeiGrps.some(grp =>
+      pair.every(s => grp.includes(s))
+    );
+    if (absorbedByTri) return;
+    addHit('kei', hit, bodyText);
+  });
+
+  // 刑：自刑（巡る月の地支が命式と同じ場合）
+  if (JIKEI_SHI.includes(targetShi) && shiArr.includes(targetShi)) {
+    const idx = shiArr.indexOf(targetShi);
+    addHit('kei', targetShi, JIKEI_BODY);
+  }
+
+  // 刑：子卯
+  if (targetShi==='子' && shiArr.includes('卯')) addHit('kei','卯', KOMOKEI_BODY);
+  if (targetShi==='卯' && shiArr.includes('子')) addHit('kei','子', KOMOKEI_BODY);
+
+  return Object.entries(map).map(([groupKey, { withSet, bodyTextSet }]) => ({
+    groupKey,
+    withPills: [...withSet],
+    bodyText: bodyTextSet.size > 0 ? [...bodyTextSet].join('　') : null,
+  }));
+}
+
+// =============================================
+// 年運判定（2026年 丙午）天干条件込み
+// =============================================
+function getYearIsouType(dayKan, dayShi, shiArr) {
+  const YEAR_KAN = '丙', YEAR_SHI = '午';
+  const items = [];
+  items.push(...getIsouType(YEAR_SHI, shiArr));
+
+  // 大半会：天干が丙で地支が半会（寅・戌）
+  if (dayKan === YEAR_KAN) {
+    ['寅','戌'].forEach(s => {
+      if (shiArr.includes(s)) {
+        const idx = shiArr.indexOf(s);
+        items.push({ groupKey:'daihanka', withPills:[PILLAR_LABEL[idx]+'（'+s+'）'], bodyText:null });
+      }
+    });
+  }
+  if (dayKan === '辛') items.push({ groupKey:'kango',   withPills:['日干（辛）'],   bodyText:null });
+  if (dayKan === YEAR_KAN && dayShi === YEAR_SHI)
+    items.push({ groupKey:'risshin', withPills:['日柱（丙午）'], bodyText:null });
+  if (dayKan === YEAR_KAN && shiArr.includes('子')) {
+    const idx = shiArr.indexOf('子');
+    items.push({ groupKey:'nacchin', withPills:[PILLAR_LABEL[idx]+'（子）'], bodyText:null });
+  }
+  if (['壬','庚'].includes(dayKan) && shiArr.includes('子')) {
+    const idx = shiArr.indexOf('子');
+    items.push({ groupKey:'tenkoku', withPills:['日干（'+dayKan+'）×'+PILLAR_LABEL[idx]+'（子）'], bodyText:null });
+  }
+
+  // 重複除去
+  const merged = {};
+  items.forEach(it => {
+    if (!merged[it.groupKey]) merged[it.groupKey] = { withSet: new Set(), bodyTextSet: new Set() };
+    it.withPills.forEach(p => merged[it.groupKey].withSet.add(p));
+    if (it.bodyText) merged[it.groupKey].bodyTextSet.add(it.bodyText);
+  });
+  return Object.entries(merged).map(([groupKey, { withSet, bodyTextSet }]) => ({
+    groupKey,
+    withPills: [...withSet],
+    bodyText: bodyTextSet.size > 0 ? [...bodyTextSet].join('　') : null,
+  }));
+}
+
+// =============================================
+// 位相チップHTML（バイオリズム用）
+// 表示文脈：運気ブロック
+// =============================================
+// 語尾変換：バイオリズム用「〜という時期」表現に変換
+function toUnkiTone(text) {
+  if (!text) return text;
+  return text
+    .replace(/という性質があります。$/,      'という時期です。')
+    .replace(/という性質があります$/,       'という時期です')
+    .replace(/といった傾向を持っています。$/, 'という時期です。')
+    .replace(/といった傾向を持っています$/,  'という時期です')
+    .replace(/に注意が必要です。$/,          'に注意が必要な時期です。')
+    .replace(/に注意が必要です$/,           'に注意が必要な時期です')
+    .replace(/に注意。$/,                   'に注意が必要な時期です。')
+    .replace(/に注意$/,                    'に注意が必要な時期です')
+    .replace(/が必要。$/,                   'が必要な時期です。')
+    .replace(/が必要$/,                    'が必要な時期です');
+}
+
+function renderIsouChip(item) {
+  const m = ISOU_MASTER[item.groupKey];
+  if (!m) return '';
+  // 命式地支のwithPillsを表示（「強まる五行：〇」は除外）
+  const pillHtml = item.withPills
+    .filter(w => !w.startsWith('強まる五行：'))
+    .map(w => `<span class="bio-isou-with">${w}</span>`).join('');
+  const rawBody = item.bodyText || m.bodyFallback;
+  const bodyText = toUnkiTone(rawBody);
+  const heartText = toUnkiTone(m.heart);
+  return `
+    <div class="bio-isou-chip ${m.dirCls}">
+      <div class="bio-isou-chip-header">
+        <span class="bio-isou-chip-label">${m.label}</span>
+        ${m.keyword ? `<span class="bio-isou-keyword">${m.keyword}</span>` : ''}
+        ${pillHtml}
+      </div>
+      <div class="bio-isou-rows">
+        <div class="bio-isou-row">
+          <span class="bio-isou-row-text">${heartText}</span>
+        </div>
+        <div class="bio-isou-row">
+          <span class="bio-isou-row-text">${bodyText}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+// =============================================
+// 運気カードを描画（buildBioSection）
+// =============================================
+function buildBioSection(shiArr, dayKan, dayShi) {
+  const yearItems = getYearIsouType(dayKan, dayShi, shiArr);
+  const yearIsouHtml = yearItems.length > 0
+    ? `<div class="bio-year-isou">
+        <span class="bio-year-isou-title">✦ 命式との関係</span>
+        ${yearItems.map(renderIsouChip).join('')}
+       </div>`
+    : '';
+
+  document.getElementById('bio-year-card').innerHTML = `
+    <span class="bio-year-eyebrow">2 0 2 6 年 の 運 気 と か ら だ</span>
+    <span class="bio-year-title">2026年（丙午の年）</span>
+    <span class="bio-year-theme">テーマ：「情熱と決断」</span>
+    <div class="bio-year-items">
+      <div class="bio-year-item"><span class="bio-year-item-label">心と環境</span><span class="bio-year-item-text">物事がスピーディーに動き、隠れていたものが明るみに出る飛躍の年。</span></div>
+      <div class="bio-year-item"><span class="bio-year-item-label">体のサイン</span><span class="bio-year-item-text">上半身の熱のこもり、動悸、目の疲れに注意。</span></div>
+      <div class="bio-year-item"><span class="bio-year-item-label">過ごし方のコツ</span><span class="bio-year-item-text">意識的に「クールダウン」する時間を作りましょう。</span></div>
+    </div>
+    ${yearIsouHtml}`;
+
+  const MONTH_LIST = [
+    {no:1,shi:'丑'},{no:2,shi:'寅'},{no:3,shi:'卯'},
+    {no:4,shi:'辰'},{no:5,shi:'巳'},{no:6,shi:'午'},
+    {no:7,shi:'未'},{no:8,shi:'申'},{no:9,shi:'酉'},
+    {no:10,shi:'戌'},{no:11,shi:'亥'},{no:12,shi:'子'},
+  ];
+
+  document.getElementById('bio-month-list').innerHTML = MONTH_LIST.map(({ no, shi }) => {
+    const seasonCls = SHI_SEASON_CLS[shi] || '';
+    const isouItems = getIsouType(shi, shiArr);
+    if (isouItems.length === 0) {
+      return `<div class="bio-month-item ${seasonCls}"><span class="bio-month-no">${no}</span><span class="bio-month-shi-label">月（${shi}）</span><span class="bio-month-calm-text">穏やかに自分らしく過ごせる月です。</span></div>`;
+    }
+    const badgeHtml = isouItems.map(it => {
+      const m = ISOU_MASTER[it.groupKey];
+      if (!m) return '';
+      const bc = m.direction === '融合' ? 'bio-badge-fusion' : 'bio-badge-brake';
+      return `<span class="bio-month-isou-badge ${bc}">${m.label}</span>`;
+    }).join('');
+    return `
+      <div class="bio-month-item has-isou ${seasonCls}">
+        <div class="bio-month-header ${seasonCls}">
+          <span class="bio-month-no">${no}</span>
+          <span class="bio-month-shi-label">月（${shi}）</span>
+          ${badgeHtml}
+        </div>
+        <div class="bio-month-body">${isouItems.map(renderIsouChip).join('')}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('bio-section').style.display = 'block';
+}
+
+// Enterキー対応
+document.addEventListener('keydown', e => { if (e.key === 'Enter') calculate(); });
+</script>
+</body>
+</html>

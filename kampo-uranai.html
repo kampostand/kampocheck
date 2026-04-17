@@ -332,11 +332,26 @@
     letter-spacing: 0.35em;
     color: var(--muted);
     margin-bottom: 6px;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .pillar-sublabel {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    opacity: 0.6;
+    font-weight: 400;
   }
   .pillar:first-child .pillar-label {
     color: var(--gold);
     font-weight: 500;
+  }
+  .pillar:first-child .pillar-sublabel {
+    color: var(--gold);
+    opacity: 0.6;
   }
 
   /* 天干・地支カード — 真四角・金罫 */
@@ -474,7 +489,7 @@
     font-family: 'Noto Sans JP', sans-serif;
     font-size: 10px;
     letter-spacing: 0.18em;
-    color: rgba(255,255,255,0.5);
+    color: #fff !important;
     margin-bottom: 7px;
     display: block;
   }
@@ -484,7 +499,8 @@
     font-size: clamp(13px, 2.8vw, 16px);
     font-weight: 600;
     line-height: 1.75;
-    color: #fff;
+    color: #fff !important;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
     display: block;
   }
 
@@ -671,7 +687,7 @@
     font-family: 'Noto Serif JP', serif;
     font-size: 17px;
     font-weight: 700;
-    color: #fff;
+    color: #fff !important;
     line-height: 1.4;
     letter-spacing: 0.04em;
   }
@@ -1500,7 +1516,7 @@
     .taishitsu-detail-body { color: #1a1614 !important; }
     .taishitsu-detail-note { background-color: #f8f4ec !important; color: #3a3028 !important; }
     .taishitsu-detail-label { color: #9a7a40 !important; }
-    .taishitsu-type { color: #f0e8d0 !important; }
+    .taishitsu-type { color: #fff !important; }
     .taishitsu-section-label { color: #1a1614 !important; }
     .taishitsu-section-desc { color: #7a6a56 !important; }
     .isou-desc-list li { color: #3a3028 !important; }
@@ -1554,7 +1570,7 @@
       <span class="card-eyebrow">命 式</span>
       <div class="pillars" id="pillars-grid">
         <div class="pillar">
-          <span class="pillar-label">日 柱</span>
+          <span class="pillar-label">日 柱<span class="pillar-sublabel">本 質</span></span>
           <div class="eto-card" id="day-kan-card">
             <span class="eto-attr" id="day-kan-attr"></span>
             <span class="eto-char" id="day-kan">—</span>
@@ -1568,7 +1584,7 @@
           <span class="pillar-season" id="day-season"></span>
         </div>
         <div class="pillar">
-          <span class="pillar-label">月 柱</span>
+          <span class="pillar-label">月 柱<span class="pillar-sublabel">個 人</span></span>
           <div class="eto-card" id="month-kan-card">
             <span class="eto-attr" id="month-kan-attr"></span>
             <span class="eto-char" id="month-kan">—</span>
@@ -1582,7 +1598,7 @@
           <span class="pillar-season" id="month-season"></span>
         </div>
         <div class="pillar">
-          <span class="pillar-label">年 柱</span>
+          <span class="pillar-label">年 柱<span class="pillar-sublabel">社 会</span></span>
           <div class="eto-card" id="year-kan-card">
             <span class="eto-attr" id="year-kan-attr"></span>
             <span class="eto-char" id="year-kan">—</span>
@@ -2053,7 +2069,7 @@ function calculate() {
       document.getElementById(`${id}-shi-symbol`).textContent = SHI_SYMBOL[k.shi] || '';
     }
     const seasonEl = document.getElementById(`${id}-season`);
-    if (seasonEl) seasonEl.textContent = SHI_SEASON[k.shi] || '';
+    if (seasonEl) seasonEl.textContent = id === 'month' ? (SHI_SEASON[k.shi] || '') : '';
   });
 
   // 日柱基本設定（essenceブロック）
@@ -2388,8 +2404,12 @@ const KEI_PAIR_DATA = [
   { pair:['戌','未'], organ:'胃と心包',   bodyText:'熱い土同士が摩擦を起こし、熱とストレスがこもるため、自律神経の過緊張からくる胃腸障害や炎症に注意。' },
   { pair:['丑','未'], organ:'脾と心包',   bodyText:'性質の違う土同士が反発してエネルギーがうまく作れなくなるため、消化吸収へのダメージや強い倦怠感に注意。' },
 ];
-const JIKEI_SHI  = ['亥','辰','酉','午'];
-const JIKEI_BODY = '同じエネルギーが過剰に溢れ、自分のこだわりや感情を持て余して空回りしやすくなります。その臓腑特有の不調に注意。';
+const JIKEI_DATA = {
+  '亥': { organ:'腎', bodyText:'水のエネルギーが過剰に溢れ、腎に負担がかかりやすくなります。むくみや冷え、下半身の重だるさに注意が必要な時期です。' },
+  '辰': { organ:'胃', bodyText:'土のエネルギーが過剰に溢れ、胃に負担がかかりやすくなります。消化不良や胃のもたれ、食欲の乱れに注意が必要な時期です。' },
+  '酉': { organ:'肺', bodyText:'金のエネルギーが過剰に溢れ、肺に負担がかかりやすくなります。皮膚のかゆみや呼吸の浅さ、乾燥に注意が必要な時期です。' },
+  '午': { organ:'小腸', bodyText:'火のエネルギーが過剰に溢れ、小腸に負担がかかりやすくなります。動悸やのぼせ、消化吸収の低下に注意が必要な時期です。' },
+};
 const KOMOKEI    = ['子','卯'];
 const KOMOKEI_BODY = '水と木のエネルギーが不調和を起こし、理不尽なすれ違いやデリケートな問題が生じやすくなります。下半身の冷えに注意。';
 
@@ -2535,14 +2555,15 @@ function buildIsou(shiArr, kanArr) {
   // ── 刑：自刑 ──
   const seen = {};
   shiArr.forEach(s => { seen[s] = (seen[s] || 0) + 1; });
-  JIKEI_SHI.forEach(s => {
+  Object.keys(JIKEI_DATA).forEach(s => {
     if (seen[s] >= 2) {
+      const jd = JIKEI_DATA[s];
       items.push({
         group: 'kei',
         pairLabel: `自刑（${s}）`,
-        organ: `${s}の臓腑（働きすぎ）`,
+        organ: jd.organ,
         heartText: ISOU_MASTER.kei.heart,
-        bodyText: JIKEI_BODY,
+        bodyText: jd.bodyText,
         isChange: false,
       });
     }
@@ -2852,30 +2873,45 @@ function getIsouType(targetShi, shiArr) {
     }
   });
 
-  // 刑：ペア刑（三刑成立時はそのペアを除外）
+  // 刑：ペア刑（三刑成立時はそのペアを除外）—ペアごとに独立したグループキー
   KEI_PAIR_DATA.forEach(({ pair, bodyText }) => {
-    // 月の地支がペアの片方に一致するか確認
     let hit = null;
     if (pair[0] === targetShi && shiArr.includes(pair[1])) hit = pair[1];
     else if (pair[1] === targetShi && shiArr.includes(pair[0])) hit = pair[0];
     if (!hit) return;
-    // 三刑に包含されるペアはスキップ
     const absorbedByTri = activeSankeiGrps.some(grp =>
       pair.every(s => grp.includes(s))
     );
     if (absorbedByTri) return;
-    addHit('kei', hit, bodyText);
+    // ペアをソートしてユニークキーを生成
+    const pairKey = 'kei_' + [targetShi, hit].sort().join('_');
+    if (!map[pairKey]) map[pairKey] = { withSet: new Set(), bodyTextSet: new Set() };
+    const idx = shiArr.indexOf(hit);
+    if (idx !== -1) map[pairKey].withSet.add(PILLAR_LABEL[idx] + '（' + hit + '）');
+    if (bodyText) map[pairKey].bodyTextSet.add(bodyText);
   });
 
-  // 刑：自刑（巡る月の地支が命式と同じ場合）
-  if (JIKEI_SHI.includes(targetShi) && shiArr.includes(targetShi)) {
+  // 刑：自刑—地支ごとにユニークキー
+  if (JIKEI_DATA[targetShi] && shiArr.includes(targetShi)) {
+    const jikeiKey = 'kei_jikei_' + targetShi;
+    if (!map[jikeiKey]) map[jikeiKey] = { withSet: new Set(), bodyTextSet: new Set() };
     const idx = shiArr.indexOf(targetShi);
-    addHit('kei', targetShi, JIKEI_BODY);
+    if (idx !== -1) map[jikeiKey].withSet.add(PILLAR_LABEL[idx] + '（' + targetShi + '）');
+    map[jikeiKey].bodyTextSet.add(JIKEI_DATA[targetShi].bodyText);
   }
 
-  // 刑：子卯
-  if (targetShi==='子' && shiArr.includes('卯')) addHit('kei','卯', KOMOKEI_BODY);
-  if (targetShi==='卯' && shiArr.includes('子')) addHit('kei','子', KOMOKEI_BODY);
+  // 刑：子卯—ユニークキー
+  const addKomokei = (msTarget, msHit) => {
+    if (targetShi === msTarget && shiArr.includes(msHit)) {
+      const komokeiKey = 'kei_子卯';
+      if (!map[komokeiKey]) map[komokeiKey] = { withSet: new Set(), bodyTextSet: new Set() };
+      const idx = shiArr.indexOf(msHit);
+      if (idx !== -1) map[komokeiKey].withSet.add(PILLAR_LABEL[idx] + '（' + msHit + '）');
+      map[komokeiKey].bodyTextSet.add(KOMOKEI_BODY);
+    }
+  };
+  addKomokei('子', '卯');
+  addKomokei('卯', '子');
 
   return Object.entries(map).map(([groupKey, { withSet, bodyTextSet }]) => ({
     groupKey,
@@ -2948,7 +2984,8 @@ function toUnkiTone(text) {
 }
 
 function renderIsouChip(item) {
-  const m = ISOU_MASTER[item.groupKey];
+  const masterKey = item.groupKey.startsWith('kei_') ? 'kei' : item.groupKey;
+  const m = ISOU_MASTER[masterKey];
   if (!m) return '';
   // 命式地支のwithPillsを表示（「強まる五行：〇」は除外）
   const pillHtml = item.withPills
@@ -3012,7 +3049,8 @@ function buildBioSection(shiArr, dayKan, dayShi) {
       return `<div class="bio-month-item ${seasonCls}"><span class="bio-month-no">${no}</span><span class="bio-month-shi-label">月（${shi}）</span><span class="bio-month-calm-text">穏やかに自分らしく過ごせる月です。</span></div>`;
     }
     const badgeHtml = isouItems.map(it => {
-      const m = ISOU_MASTER[it.groupKey];
+      const masterKey = it.groupKey.startsWith('kei_') ? 'kei' : it.groupKey;
+      const m = ISOU_MASTER[masterKey];
       if (!m) return '';
       const bc = m.direction === '融合' ? 'bio-badge-fusion' : 'bio-badge-brake';
       return `<span class="bio-month-isou-badge ${bc}">${m.label}</span>`;

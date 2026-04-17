@@ -2496,14 +2496,15 @@ function buildIsou(shiArr, kanArr) {
   if (typeof kanArr !== 'undefined' && kanArr && kanArr.length === 3) {
     const [dKan, mKan, yKan] = kanArr;
     const [dShi, mShi, yShi] = shiArr;
-    // 干合ペア（甲×己、乙×庚、丙×辛、丁×壬、戊×癸）
+    const kanShiPairs = [[dKan,dShi],[mKan,mShi],[yKan,yShi]];
+
+    // ── 干合：天干ペアが干合の組み合わせ（甲×己・乙×庚・丙×辛・丁×壬・戊×癸）──
     const KANGO_PAIRS = [['甲','己'],['乙','庚'],['丙','辛'],['丁','壬'],['戊','癸']];
-    const allKanPairs = [[dKan,mKan],[dKan,yKan],[mKan,yKan]];
-    allKanPairs.forEach(([a,b]) => {
+    [[dKan,mKan,'日干×月干'],[dKan,yKan,'日干×年干'],[mKan,yKan,'月干×年干']].forEach(([a,b,lbl]) => {
       if (KANGO_PAIRS.some(p => (p[0]===a&&p[1]===b)||(p[0]===b&&p[1]===a))) {
         items.push({
           group: 'kango',
-          pairLabel: `干合｜${a}×${b}`,
+          pairLabel: `干合｜${a}×${b}（${lbl}）`,
           organ: '—',
           heartText: ISOU_MASTER.kango.heart,
           bodyText: ISOU_MASTER.kango.bodyFallback,
@@ -2511,31 +2512,35 @@ function buildIsou(shiArr, kanArr) {
         });
       }
     });
-    // 律音：同じ天干（日干=月干 or 日干=年干 or 月干=年干）
-    [[dKan,mKan,'日干×月干'],[dKan,yKan,'日干×年干'],[mKan,yKan,'月干×年干']].forEach(([a,b,label]) => {
-      if (a && a === b) {
-        items.push({
-          group: 'risshin',
-          pairLabel: `律音｜${label}（${a}）`,
-          organ: '—',
-          heartText: ISOU_MASTER.risshin.heart,
-          bodyText: ISOU_MASTER.risshin.bodyFallback,
-          isChange: false,
-        });
-      }
-    });
-    // 大半会：同一天干で地支が三合の半会ペア
-    const SANGI_GRPS = [['申','子','辰'],['亥','卯','未'],['寅','午','戌'],['巳','酉','丑']];
-    const kanShiPairs = [[dKan,dShi],[mKan,mShi],[yKan,yShi]];
+
+    // ── 律音：天干と地支がともに同じ（同一干支が命式に2柱以上）──
     kanShiPairs.forEach(([ka,sa], i) => {
       kanShiPairs.forEach(([kb,sb], j) => {
         if (i >= j) return;
-        if (ka === kb) { // 同一天干
+        if (ka === kb && sa === sb) {
+          items.push({
+            group: 'risshin',
+            pairLabel: `律音｜${ka}${sa}（同一干支）`,
+            organ: '—',
+            heartText: ISOU_MASTER.risshin.heart,
+            bodyText: ISOU_MASTER.risshin.bodyFallback,
+            isChange: false,
+          });
+        }
+      });
+    });
+
+    // ── 大半会：天干が同じ + 地支が三合の2支（半会）──
+    const SANGI_GRPS = [['申','子','辰'],['亥','卯','未'],['寅','午','戌'],['巳','酉','丑']];
+    kanShiPairs.forEach(([ka,sa], i) => {
+      kanShiPairs.forEach(([kb,sb], j) => {
+        if (i >= j) return;
+        if (ka === kb && sa !== sb) {
           SANGI_GRPS.forEach(grp => {
-            if (grp.includes(sa) && grp.includes(sb) && sa !== sb) {
+            if (grp.includes(sa) && grp.includes(sb)) {
               items.push({
                 group: 'daihanka',
-                pairLabel: `大半会｜${ka}（${sa}×${sb}）`,
+                pairLabel: `大半会｜${ka}${sa}×${kb}${sb}`,
                 organ: '—',
                 heartText: ISOU_MASTER.daihanka.heart,
                 bodyText: ISOU_MASTER.daihanka.bodyFallback,
@@ -2546,15 +2551,17 @@ function buildIsou(shiArr, kanArr) {
         }
       });
     });
-    // 納音：同じ天干で地支が対冲
+
+    // ── 納音：天干が同じ + 地支が対冲（同五行・陰陽逆で衝突）──
     const CHU_PAIRS_S = [['子','午'],['丑','未'],['寅','申'],['卯','酉'],['辰','戌'],['巳','亥']];
     kanShiPairs.forEach(([ka,sa], i) => {
       kanShiPairs.forEach(([kb,sb], j) => {
         if (i >= j) return;
-        if (ka === kb && CHU_PAIRS_S.some(p => (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa))) {
+        if (ka === kb && sa !== sb &&
+            CHU_PAIRS_S.some(p => (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa))) {
           items.push({
             group: 'nacchin',
-            pairLabel: `納音｜${ka}（${sa}×${sb}）`,
+            pairLabel: `納音｜${ka}${sa}×${kb}${sb}`,
             organ: '—',
             heartText: ISOU_MASTER.nacchin.heart,
             bodyText: ISOU_MASTER.nacchin.bodyFallback,
@@ -2563,13 +2570,26 @@ function buildIsou(shiArr, kanArr) {
         }
       });
     });
-    // 天剋地冲：天干が相剋かつ地支が対冲
-    const GOKOKU = [['甲','庚'],['乙','辛'],['丙','壬'],['丁','癸'],['戊','甲'],['己','乙'],['庚','丙'],['辛','丁'],['壬','戊'],['癸','己']];
+
+    // ── 天剋地冲：天干が五行相剋の関係 + 地支が対冲 ──
+    // 五行相剋の方向（剋する側→剋される側）
+    // 木剋土・土剋水・水剋火・火剋金・金剋木
+    const GOKOKU_PAIRS = [
+      ['甲','戊'],['甲','己'],['乙','戊'],['乙','己'],  // 木剋土
+      ['戊','壬'],['戊','癸'],['己','壬'],['己','癸'],  // 土剋水
+      ['壬','丙'],['壬','丁'],['癸','丙'],['癸','丁'],  // 水剋火
+      ['丙','庚'],['丙','辛'],['丁','庚'],['丁','辛'],  // 火剋金
+      ['庚','甲'],['庚','乙'],['辛','甲'],['辛','乙'],  // 金剋木
+    ];
     kanShiPairs.forEach(([ka,sa], i) => {
       kanShiPairs.forEach(([kb,sb], j) => {
         if (i >= j) return;
-        const isGokoku = GOKOKU.some(p => (p[0]===ka&&p[1]===kb)||(p[0]===kb&&p[1]===ka));
-        const isChu    = CHU_PAIRS_S.some(p => (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa));
+        const isGokoku = GOKOKU_PAIRS.some(p =>
+          (p[0]===ka&&p[1]===kb)||(p[0]===kb&&p[1]===ka)
+        );
+        const isChu = CHU_PAIRS_S.some(p =>
+          (p[0]===sa&&p[1]===sb)||(p[0]===sb&&p[1]===sa)
+        );
         if (isGokoku && isChu) {
           items.push({
             group: 'tenkoku',

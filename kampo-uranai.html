@@ -2488,6 +2488,21 @@ function buildIsou(shiArr, kanArr) {
         bodyText,
         isChange: false,
       });
+    } else {
+      // 2支一致 → リーチアラート
+      const matched = shi.filter(s => shiArr.includes(s));
+      if (matched.length === 2) {
+        const missing = shi.find(s => !shiArr.includes(s));
+        alerts.push({
+          type: 'sankei',
+          title: `${name}のリーチ`,
+          matched,
+          missing,
+          missingMonth: SHI_MONTH[missing],
+          name,
+          bodyText,
+        });
+      }
     }
   });
 
@@ -2691,7 +2706,17 @@ function renderIsouItem({ group, pairLabel, organ, heartText, bodyText, isChange
 function renderAlerts(alerts) {
   if (alerts.length === 0) return '';
   const inner = alerts.map(a => {
-    if (a.type === 'sangi') {
+    if (a.type === 'sankei') {
+      return `
+        <div class="reach-alert-item">
+          <div class="reach-alert-item-title">${a.title}</div>
+          <p class="reach-alert-desc">あなたの命式には「${a.matched[0]}」と「${a.matched[1]}」があります。</p>
+          <ul class="reach-alert-list">
+            <li><b>要注意の月：</b>${a.missingMonth}月（${a.missing}の月）</li>
+            <li><b>起こりやすい変化：</b>この月に「${a.name}」が成立します。${a.bodyText}</li>
+          </ul>
+        </div>`;
+    } else if (a.type === 'sangi') {
       return `
         <div class="reach-alert-item">
           <div class="reach-alert-item-title">${a.title}</div>
@@ -2803,16 +2828,19 @@ function getIsouType(targetShi, shiArr) {
 
   // 刑：三刑（1グループ1回）成立した三刑グループを記録
   const activeSankeiGrps = [];
-  SANKEI_DATA.forEach(({ shi: grp, bodyText }) => {
-    if (grp.every(s => s === targetShi || shiArr.includes(s))) {
-      // 月の地支を含めて3支揃う場合のみ
-      if (grp.includes(targetShi)) {
-        const others = grp.filter(s => s !== targetShi);
-        if (others.every(s => shiArr.includes(s))) {
-          activeSankeiGrps.push(grp);
-          let added = false;
-          others.forEach(s => { addHit('kei', s, added ? null : bodyText); added = true; });
-        }
+  SANKEI_DATA.forEach(({ shi: grp, name, bodyText }) => {
+    if (grp.includes(targetShi)) {
+      const others = grp.filter(s => s !== targetShi);
+      if (others.every(s => shiArr.includes(s))) {
+        activeSankeiGrps.push(grp);
+        // sankeiグループとして出力（三刑名をwithPillsに追加）
+        if (!map['sankei']) map['sankei'] = { withSet: new Set(), bodyTextSet: new Set() };
+        map['sankei'].withSet.add(name);
+        others.forEach(s => {
+          const idx = shiArr.indexOf(s);
+          if (idx !== -1) map['sankei'].withSet.add(PILLAR_LABEL[idx] + '（' + s + '）');
+        });
+        if (bodyText) map['sankei'].bodyTextSet.add(bodyText);
       }
     }
   });

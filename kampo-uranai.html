@@ -357,12 +357,13 @@
   /* 天干・地支カード — 真四角・金罫 */
   .eto-card {
     width: 100%;
-    padding: 12px 6px 10px;
+    aspect-ratio: 1 / 1;
+    padding: 10px 6px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 4px;
-    flex: 1;
     border: 1px solid rgba(255,255,255,0.2);
   }
 
@@ -1189,7 +1190,7 @@
   }
   .bio-month-shi-label {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 11px;
+    font-size: 14px;
     color: var(--muted);
     flex-shrink: 0;
     letter-spacing: 0.05em;
@@ -1238,7 +1239,7 @@
   .bio-month-item.has-isou.bio-season-winter .bio-month-header { border-bottom-color: var(--line-dark); }
   .bio-month-isou-badge {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 10.5px;
+    font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.12em;
     padding: 2px 9px;
@@ -1270,14 +1271,14 @@
   }
   .bio-isou-chip-label {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 11px;
+    font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.18em;
   }
   /* キーワードバッジ */
   .bio-isou-keyword {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 10.5px;
+    font-size: 12.5px;
     font-weight: 500;
     letter-spacing: 0.08em;
     padding: 1px 8px;
@@ -1287,7 +1288,7 @@
 
   .bio-isou-with {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 10.5px;
+    font-size: 12.5px;
     font-weight: 500;
     padding: 1px 7px;
     border: 1px solid;
@@ -1305,7 +1306,7 @@
   }
   .bio-isou-row-label {
     font-family: 'Noto Sans JP', sans-serif;
-    font-size: 10.5px;
+    font-size: 12.5px;
     font-weight: 700;
     letter-spacing: 0.18em;
     flex-shrink: 0;
@@ -2302,7 +2303,7 @@ const ISOU_MASTER = {
   kei:      { label:'刑',       keyword:'強すぎる',     direction:'分裂', dirCls:'bio-brake',
               heart:'特定の気が強すぎて摩擦を起こす時期です。やる気が空回りし、物事や人間関係にトラブルが起きやすくなります。',
               bodyFallback:'強まりすぎた五行に対応する臓腑に負荷がかかりやすく、炎症・過敏反応・巡りの滞りなどが出やすくなります。計画の見直しが吉。' },
-  sankei:   { label:'三刑',     keyword:'強すぎる',     direction:'分裂', dirCls:'bio-brake',
+  sankei:   { label:'三刑',     keyword:'',             direction:'分裂', dirCls:'bio-brake',
               heart:'同じ気が3方向から重なる時期です。エネルギーが非常に強まり、自他に摩擦が起きやすくなります。',
               bodyFallback:'集中した五行に対応する臓腑に強めの負担がかかり、炎症や疲れ、不調が続きやすくなります。十分な休息を心がけたい時期です。' },
   nacchin:  { label:'納音',     keyword:'リセット',     direction:'分裂', dirCls:'bio-brake',
